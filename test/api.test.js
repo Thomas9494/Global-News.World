@@ -202,6 +202,20 @@ test("searching a town asks the map to fly to the town", async () => {
   assert.deepEqual(body.place.ll, [8.31, 47.05]);
 });
 
+test("a town is found by the name its own press uses", async () => {
+  // German, French and native spellings all have to reach the same place
+  for (const q of ["Luzern", "Lucerne", "Lucerna"]) {
+    const { body } = await get(`/api/search?q=${encodeURIComponent(q)}`);
+    assert.equal(body.type, "place", `"${q}" should resolve to a place`);
+    assert.equal(body.place.name, "Lucerne");
+  }
+  const zurich = await get("/api/search?q=" + encodeURIComponent("Zürich"));
+  assert.equal(zurich.body.place.name, "Zurich");
+
+  const places = (await get("/api/places?q=Luzern")).body.places;
+  assert.ok(places.some((p) => p.name === "Lucerne"));
+});
+
 test("the bundle tells the client which places can be zoomed into", async () => {
   const { body } = await get("/api/bootstrap");
   const names = body.cities.map((c) => c.name).sort();

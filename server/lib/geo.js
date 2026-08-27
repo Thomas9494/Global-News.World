@@ -50,7 +50,7 @@ export const CITIES = gazetteer.cities.map(([name, ccn3, lng, lat, capital]) => 
  * Native and historic spellings ("Luzern" → "Lucerne", "Київ" → "Kyiv").
  * Feeds publish in their own language, the map labels stay consistent.
  */
-const CITY_ALIASES = gazetteer.aliases || {};
+export const CITY_ALIASES = gazetteer.aliases || {};
 const cityByName = new Map(CITIES.map((c) => [c.name.toLowerCase(), c]));
 
 /** Every string that should resolve to a given city, per country. */

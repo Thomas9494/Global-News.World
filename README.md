@@ -6,7 +6,7 @@
 
 [Why this exists](#why-this-exists) · [How it works](#how-it-works) · [Quick start](#quick-start) · [API](#http-api) · [Write a plugin](#writing-a-news-plugin) · [Contributing](CONTRIBUTING.md)
 
-![license](https://img.shields.io/badge/license-MIT-0052cc) ![node](https://img.shields.io/badge/node-%E2%89%A520.6-0d9488) ![countries](https://img.shields.io/badge/countries-192%2F194%20UN%20members-0052cc) ![outlets](https://img.shields.io/badge/outlets-1034-0d9488) ![cities](https://img.shields.io/badge/cities-440%20live-0052cc) ![tests](https://img.shields.io/badge/tests-119-0d9488)
+![license](https://img.shields.io/badge/license-MIT-0052cc) ![node](https://img.shields.io/badge/node-%E2%89%A520.6-0d9488) ![countries](https://img.shields.io/badge/countries-192%2F194%20UN%20members-0052cc) ![outlets](https://img.shields.io/badge/outlets-1034-0d9488) ![cities](https://img.shields.io/badge/cities-440%20live-0052cc) ![tests](https://img.shields.io/badge/tests-120-0d9488)
 
 </div>
 
@@ -470,7 +470,7 @@ behaviour lives in `public/app.js`.
 npm test
 ```
 
-119 tests, no network required:
+120 tests, no network required:
 
 - **pipeline** — parsers for all four feed formats, charset decoding, entity-heavy feeds, date shapes, language identification, topic classification, place resolution, de-duplication, reader-language detection
 - **api** — every endpoint, including all three search intents, city filtering and the sources contract

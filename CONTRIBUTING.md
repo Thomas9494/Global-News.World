@@ -159,7 +159,7 @@ npm install
 npm run build:catalog
 npm run ingest          # real feeds, ~80 s
 npm start               # http://localhost:8787
-npm test                # 119 tests, no network needed
+npm test                # 120 tests, no network needed
 ```
 
 `npm test` must pass before you open a pull request. `npm run check:feeds` talks to the

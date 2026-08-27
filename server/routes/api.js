@@ -3,7 +3,15 @@ import { config } from "../config.js";
 import * as store from "../lib/store.js";
 import { loadSources, runIngest } from "../ingest.js";
 import { CATEGORIES } from "../lib/categorize.js";
-import { REGIONS, CITIES, ccn3ForSourceKey, isGroupKey, citiesForArticles, cityLocation } from "../lib/geo.js";
+import {
+  REGIONS,
+  CITIES,
+  CITY_ALIASES,
+  ccn3ForSourceKey,
+  isGroupKey,
+  citiesForArticles,
+  cityLocation,
+} from "../lib/geo.js";
 import { pluginInfo } from "../plugins/index.js";
 import { translationStatus, supportedTargets } from "../lib/translate.js";
 import { translateArticle, translationCacheStats } from "../lib/articletranslate.js";
@@ -239,21 +247,34 @@ function matchCountries(needle) {
 
 function matchPlaces(needle) {
   const n = deaccent(needle);
-  const out = [];
-  for (const c of CITIES) {
-    const name = deaccent(c.name);
-    if (!name.includes(n)) continue;
-    out.push({
-      name: c.name,
-      ccn3: c.ccn3,
-      country: REGIONS[c.ccn3]?.name || "",
-      ll: c.ll,
-      capital: c.capital,
-      exact: name === n,
-      startsWith: name.startsWith(n),
-    });
+  const out = new Map();
+
+  const consider = (city, matchedOn) => {
+    const label = deaccent(matchedOn);
+    if (!label.includes(n)) return;
+    const prev = out.get(city.name);
+    const hit = {
+      name: city.name,
+      ccn3: city.ccn3,
+      country: REGIONS[city.ccn3]?.name || "",
+      ll: city.ll,
+      capital: city.capital,
+      exact: label === n,
+      startsWith: label.startsWith(n),
+    };
+    // a town matched on its own name outranks one matched on an alias
+    if (!prev || hit.exact > prev.exact || hit.startsWith > prev.startsWith) out.set(city.name, hit);
+  };
+
+  for (const c of CITIES) consider(c, c.name);
+  // people search for Luzern, Zürich, Kyiv or München the way their own press
+  // writes them, so every spelling the gazetteer knows has to find the place
+  for (const [alias, canonical] of Object.entries(CITY_ALIASES)) {
+    const city = CITIES.find((c) => c.name === canonical);
+    if (city) consider(city, alias);
   }
-  return out.sort(
+
+  return [...out.values()].sort(
     (a, b) => b.exact - a.exact || b.startsWith - a.startsWith || b.capital - a.capital || a.name.localeCompare(b.name)
   );
 }
