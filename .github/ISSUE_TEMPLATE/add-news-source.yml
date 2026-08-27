@@ -1,0 +1,78 @@
+name: 📰 Add a news source
+description: Suggest an outlet for a country — no coding needed
+title: "[source] "
+labels: ["source", "good first issue"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping widen the map. You can also open a pull request directly
+        against [`data/sources.json`](../../blob/main/data/sources.json) — see
+        [CONTRIBUTING.md](../../blob/main/CONTRIBUTING.md).
+
+  - type: input
+    id: country
+    attributes:
+      label: Country
+      description: The country whose readers this outlet serves.
+      placeholder: Kenya
+    validations:
+      required: true
+
+  - type: input
+    id: outlet
+    attributes:
+      label: Outlet name
+      placeholder: The Standard
+    validations:
+      required: true
+
+  - type: input
+    id: feed
+    attributes:
+      label: RSS / Atom feed URL
+      description: Leave blank if the outlet publishes no feed — say so below and we will note it in the catalog.
+      placeholder: https://www.standardmedia.co.ke/rss/headlines.php
+    validations:
+      required: false
+
+  - type: input
+    id: site
+    attributes:
+      label: Homepage
+      placeholder: https://www.standardmedia.co.ke/
+    validations:
+      required: true
+
+  - type: input
+    id: language
+    attributes:
+      label: Publishing language
+      description: Two-letter code, or a couple if the outlet publishes in more than one.
+      placeholder: EN
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What is it?
+      description: >
+        One or two sentences. Who runs it, roughly what kind of outlet it is, and why a
+        reader trying to understand this country should see it. Ownership matters —
+        state-owned and partisan outlets are welcome, they just get labelled honestly.
+      placeholder: Daily broadsheet, privately owned, one of the two largest national papers. Strong on politics and courts.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you submit
+      options:
+        - label: It is a real newsroom, not an aggregator or a content farm
+          required: true
+        - label: It updates at least daily
+          required: true
+        - label: The feed (if any) is public and does not need a login
+          required: true

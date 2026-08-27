@@ -1,0 +1,658 @@
+{"Switzerland": {
+"Zurich":[{"m":"NZZ – Neue Zürcher Zeitung","l":"DE","r":"https://www.nzz.ch/zuerich.rss","w":"https://www.nzz.ch"},
+{"m":"NZZ – Neueste Artikel","l":"DE","r":"https://www.nzz.ch/recent.rss","w":"https://www.nzz.ch"},
+{"m":"Tages-Anzeiger","l":"DE","r":"https://partner-feeds.publishing.tamedia.ch/rss/tagesanzeiger/zuerich","w":"https://www.tagesanzeiger.ch"},
+{"m":"20 Minuten","l":"DE","r":"https://partner-feeds.20min.ch/rss/20minuten","w":"https://www.20min.ch"},
+{"m":"SRF News","l":"DE","r":"https://www.srf.ch/news/bnf/rss/1646","w":"https://www.srf.ch/news"},
+{"m":"Watson","l":"DE","r":"https://www.watson.ch/api/1.0/rss/index.xml","w":"https://www.watson.ch"},
+{"m":"Blick","l":"DE","r":"https://www.blick.ch/news/rss.xml","w":"https://www.blick.ch"}],
+"Bern":[{"m":"Berner Zeitung","l":"DE","r":"https://partner-feeds.publishing.tamedia.ch/rss/bernerzeitung/bern","w":"https://www.bernerzeitung.ch"},
+{"m":"Berner Zeitung – Aufmacher","l":"DE","r":"https://partner-feeds.publishing.tamedia.ch/rss/bernerzeitung/","w":"https://www.bernerzeitung.ch"},
+{"m":"Der Bund","l":"DE","r":"https://partner-feeds.publishing.tamedia.ch/rss/derbund/","w":"https://www.derbund.ch"}],
+"Lucerne":[{"m":"Luzerner Zeitung","l":"DE","r":"https://www.luzernerzeitung.ch/zentralschweiz/luzern.rss","w":"https://www.luzernerzeitung.ch"},
+{"m":"Luzerner Zeitung – Zentralschweiz","l":"DE","r":"https://www.luzernerzeitung.ch/zentralschweiz.rss","w":"https://www.luzernerzeitung.ch"}],
+"Zug":[{"m":"Zuger Zeitung","l":"DE","r":"https://www.zugerzeitung.ch/zentralschweiz/zug.rss","w":"https://www.zugerzeitung.ch"},
+{"m":"Zentralplus","l":"DE","r":"https://www.zentralplus.ch/feed/","w":"https://www.zentralplus.ch"}],
+"Aarau":[{"m":"Aargauer Zeitung","l":"DE","r":"https://www.aargauerzeitung.ch/aargau.rss","w":"https://www.aargauerzeitung.ch"}],
+"Liestal":[{"m":"bz Basel (Baselland)","l":"DE","r":"https://www.bzbasel.ch/basel/baselland.rss","w":"https://www.bzbasel.ch"}],
+"Basel":[{"m":"Basler Zeitung","l":"DE","r":"https://partner-feeds.publishing.tamedia.ch/rss/bazonline/basel","w":"https://www.bazonline.ch"},
+{"m":"bz Basel","l":"DE","r":"https://www.bzbasel.ch/basel.rss","w":"https://www.bzbasel.ch"}],
+"Geneva":[{"m":"Tribune de Genève","l":"FR","r":"https://partner-feeds.publishing.tamedia.ch/rss/tdg/geneve","w":"https://www.tdg.ch"},
+{"m":"Le Temps","l":"FR","r":"https://www.letemps.ch/articles.rss","w":"https://www.letemps.ch"}],
+"Stans":[{"m":"Nidwaldner Zeitung","l":"DE","r":"https://www.nidwaldnerzeitung.ch/zentralschweiz/nidwalden.rss","w":"https://www.nidwaldnerzeitung.ch"}],
+"Sarnen":[{"m":"Obwaldner Zeitung","l":"DE","r":"https://www.obwaldnerzeitung.ch/zentralschweiz/obwalden.rss","w":"https://www.obwaldnerzeitung.ch"}],
+"Solothurn":[{"m":"Solothurner Zeitung","l":"DE","r":"https://www.solothurnerzeitung.ch/solothurn.rss","w":"https://www.solothurnerzeitung.ch"}],
+"St. Gallen":[{"m":"St. Galler Tagblatt","l":"DE","r":"https://www.tagblatt.ch/ostschweiz/stgallen.rss","w":"https://www.tagblatt.ch"}],
+"Frauenfeld":[{"m":"Thurgauer Zeitung","l":"DE","r":"https://www.thurgauerzeitung.ch/ostschweiz/thurgau.rss","w":"https://www.thurgauerzeitung.ch"}],
+"Altdorf":[{"m":"Urner Zeitung","l":"DE","r":"https://www.urnerzeitung.ch/zentralschweiz/uri.rss","w":"https://www.urnerzeitung.ch"}]},"Germany": {
+"Berlin":[{"m":"Der Tagesspiegel","l":"DE","r":"https://www.tagesspiegel.de/contentexport/feed/home","w":"https://www.tagesspiegel.de"},
+{"m":"Berliner Zeitung","l":"DE","r":"https://www.berliner-zeitung.de/feed.xml","w":"https://www.berliner-zeitung.de"},
+{"m":"rbb24","l":"DE","r":"https://www.rbb24.de/aktuell/index.xml/feed=rss.xml","w":"https://www.rbb24.de"},
+{"m":"tagesschau.de","l":"DE","r":"https://www.tagesschau.de/xml/rss2/","w":"https://www.tagesschau.de"},
+{"m":"Der Spiegel","l":"DE","r":"https://www.spiegel.de/schlagzeilen/index.rss","w":"https://www.spiegel.de"},
+{"m":"Die Zeit","l":"DE","r":"https://newsfeed.zeit.de/index","w":"https://www.zeit.de"},
+{"m":"Deutsche Welle","l":"DE","r":"https://rss.dw.com/rdf/rss-de-all","w":"https://www.dw.com"}],
+"Munich":[{"m":"Süddeutsche Zeitung – München","l":"DE","r":"https://rss.sueddeutsche.de/rss/Muenchen","w":"https://www.sueddeutsche.de"},
+{"m":"Süddeutsche Zeitung – Topthemen","l":"DE","r":"https://rss.sueddeutsche.de/rss/Topthemen","w":"https://www.sueddeutsche.de"},
+{"m":"Münchner Merkur","l":"DE","r":"https://www.merkur.de/lokales/muenchen/rssfeed.rdf","w":"https://www.merkur.de"}],
+"Düsseldorf":[{"m":"Rheinische Post","l":"DE","r":"https://rp-online.de/feed.rss","w":"https://rp-online.de"},
+{"m":"WDR Nachrichten","l":"DE","r":"https://www1.wdr.de/nachrichten/uebersicht-nachrichten-100.feed","w":"https://www1.wdr.de"}],
+"Hannover":[{"m":"Hannoversche Allgemeine (HAZ)","l":"DE","r":"https://www.haz.de/arc/outboundfeeds/rss/","w":"https://www.haz.de"},
+{"m":"NDR Niedersachsen","l":"DE","r":"https://www.ndr.de/nachrichten/niedersachsen/index-rss.xml","w":"https://www.ndr.de"}],
+"Wiesbaden":[{"m":"hessenschau","l":"DE","r":"https://www.hessenschau.de/index.rss","w":"https://www.hessenschau.de"}],
+"Saarbrücken":[{"m":"Saarbrücker Zeitung","l":"DE","r":"https://www.saarbruecker-zeitung.de/feed.rss","w":"https://www.saarbruecker-zeitung.de"}],
+"Dresden":[{"m":"MDR Sachsen","l":"DE","r":"https://www.mdr.de/nachrichten/sachsen/index-rss.xml","w":"https://www.mdr.de"}],
+"Erfurt":[{"m":"Thüringer Allgemeine","l":"DE","r":"https://www.thueringer-allgemeine.de/rss","w":"https://www.thueringer-allgemeine.de"}],
+"Potsdam":[{"m":"Märkische Allgemeine (MAZ)","l":"DE","r":"https://www.maz-online.de/arc/outboundfeeds/rss/","w":"https://www.maz-online.de"}],
+"Kiel":[{"m":"Kieler Nachrichten","l":"DE","r":"https://www.kn-online.de/arc/outboundfeeds/rss/","w":"https://www.kn-online.de"}],
+"Hamburg":[{"m":"Hamburger Abendblatt","l":"DE","r":"https://www.abendblatt.de/rss","w":"https://www.abendblatt.de"},
+{"m":"NDR Hamburg","l":"DE","r":"https://www.ndr.de/nachrichten/hamburg/index-rss.xml","w":"https://www.ndr.de"}],
+"Frankfurt":[{"m":"FAZ – Rhein-Main","l":"DE","r":"https://www.faz.net/rss/aktuell/rhein-main/","w":"https://www.faz.net"},
+{"m":"FAZ – Aktuell","l":"DE","r":"https://www.faz.net/rss/aktuell/","w":"https://www.faz.net"},
+{"m":"Frankfurter Rundschau","l":"DE","r":"https://www.fr.de/rssfeed.rdf","w":"https://www.fr.de"}],
+"Leipzig":[{"m":"Leipziger Volkszeitung","l":"DE","r":"https://www.lvz.de/arc/outboundfeeds/rss/","w":"https://www.lvz.de"}]},"Austria": {
+"Vienna":[{"m":"Der Standard","l":"DE","r":"https://www.derstandard.at/rss","w":"https://www.derstandard.at"},
+{"m":"ORF News","l":"DE","r":"https://rss.orf.at/news.xml","w":"https://orf.at"},
+{"m":"Kurier","l":"DE","r":"https://kurier.at/xml/rss","w":"https://kurier.at"}],
+"Graz":[{"m":"Kleine Zeitung","l":"DE","r":"https://www.kleinezeitung.at/rss/steiermark","w":"https://www.kleinezeitung.at"}],
+"Linz":[{"m":"Oberösterreichische Nachrichten","l":"DE","r":"https://www.nachrichten.at/storage/rss/rss/nachrichten.xml","w":"https://www.nachrichten.at"}],
+"Klagenfurt":[{"m":"Kleine Zeitung – Kärnten","l":"DE","r":"https://www.kleinezeitung.at/rss/kaernten","w":"https://www.kleinezeitung.at"}]},"France": {
+"Paris":[{"m":"Le Monde","l":"FR","r":"https://www.lemonde.fr/rss/une.xml","w":"https://www.lemonde.fr"},
+{"m":"Le Figaro","l":"FR","r":"https://www.lefigaro.fr/rss/figaro_actualites.xml","w":"https://www.lefigaro.fr"},
+{"m":"Le Parisien","l":"FR","r":"https://feeds.leparisien.fr/leparisien/rss","w":"https://www.leparisien.fr"},
+{"m":"France 24","l":"FR","r":"https://www.france24.com/fr/rss","w":"https://www.france24.com"},
+{"m":"France Info","l":"FR","r":"https://www.francetvinfo.fr/titres.rss","w":"https://www.francetvinfo.fr"},
+{"m":"Libération","l":"FR","r":"https://www.liberation.fr/arc/outboundfeeds/rss/","w":"https://www.liberation.fr"}],
+"Lyon":[{"m":"Le Progrès","l":"FR","r":"https://www.leprogres.fr/rss","w":"https://www.leprogres.fr"}],
+"Toulouse":[{"m":"La Dépêche du Midi","l":"FR","r":"https://www.ladepeche.fr/rss.xml","w":"https://www.ladepeche.fr"}],
+"Strasbourg":[{"m":"Dernières Nouvelles d'Alsace","l":"FR","r":"https://www.dna.fr/rss","w":"https://www.dna.fr"}],
+"Nice":[{"m":"Nice-Matin","l":"FR","r":"https://www.nicematin.com/rss","w":"https://www.nicematin.com"}],
+"Nantes":[{"m":"Ouest-France","l":"FR","r":"https://www.ouest-france.fr/rss/une","w":"https://www.ouest-france.fr"}]},"Italy": {
+"Rome":[{"m":"La Repubblica","l":"IT","r":"https://www.repubblica.it/rss/homepage/rss2.0.xml","w":"https://www.repubblica.it"},
+{"m":"Il Messaggero","l":"IT","r":"https://www.ilmessaggero.it/rss/home.xml","w":"https://www.ilmessaggero.it"},
+{"m":"ANSA","l":"IT","r":"https://www.ansa.it/sito/ansait_rss.xml","w":"https://www.ansa.it"},
+{"m":"RAI News","l":"IT","r":"https://www.rainews.it/rss/tutti","w":"https://www.rainews.it"}],
+"Milan":[{"m":"Corriere della Sera","l":"IT","r":"https://xml2.corriereobjects.it/rss/homepage.xml","w":"https://www.corriere.it"},
+{"m":"Il Sole 24 Ore","l":"IT","r":"https://www.ilsole24ore.com/rss/italia.xml","w":"https://www.ilsole24ore.com"}],
+"Naples":[{"m":"Il Mattino","l":"IT","r":"https://www.ilmattino.it/rss/home.xml","w":"https://www.ilmattino.it"}],
+"Florence":[{"m":"La Nazione","l":"IT","r":"https://www.lanazione.it/rss","w":"https://www.lanazione.it"}],
+"Venice":[{"m":"Il Gazzettino","l":"IT","r":"https://www.ilgazzettino.it/rss/home.xml","w":"https://www.ilgazzettino.it"}],
+"Bologna":[{"m":"Il Resto del Carlino","l":"IT","r":"https://www.ilrestodelcarlino.it/rss","w":"https://www.ilrestodelcarlino.it"}]},"Spain": {
+"Madrid":[{"m":"El País","l":"ES","r":"https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/portada","w":"https://elpais.com"},
+{"m":"El Mundo","l":"ES","r":"https://e00-elmundo.uecdn.es/elmundo/rss/portada.xml","w":"https://www.elmundo.es"},
+{"m":"ABC","l":"ES","r":"https://www.abc.es/rss/feeds/abcPortada.xml","w":"https://www.abc.es"}],
+"Barcelona":[{"m":"La Vanguardia","l":"ES","r":"https://www.lavanguardia.com/rss/home.xml","w":"https://www.lavanguardia.com"}],
+"Valencia":[{"m":"Las Provincias","l":"ES","r":"https://www.lasprovincias.es/rss/2.0/portada","w":"https://www.lasprovincias.es"}],
+"Seville":[{"m":"Diario de Sevilla","l":"ES","r":"https://www.diariodesevilla.es/rss","w":"https://www.diariodesevilla.es"}],
+"Bilbao":[{"m":"El Correo","l":"ES","r":"https://www.elcorreo.com/rss/2.0/portada","w":"https://www.elcorreo.com"}]},"Portugal": {
+"Lisbon":[{"m":"Público","l":"PT","r":"https://feeds.feedburner.com/PublicoRSS","w":"https://www.publico.pt"},
+{"m":"RTP Notícias","l":"PT","r":"https://www.rtp.pt/noticias/rss","w":"https://www.rtp.pt/noticias"},
+{"m":"Observador","l":"PT","r":"https://observador.pt/feed/","w":"https://observador.pt"}]},"United Kingdom": {
+"London":[{"m":"BBC News","l":"EN","r":"https://feeds.bbci.co.uk/news/rss.xml","w":"https://www.bbc.com/news"},
+{"m":"BBC News – London","l":"EN","r":"https://feeds.bbci.co.uk/news/england/london/rss.xml","w":"https://www.bbc.com/news/england/london"},
+{"m":"The Guardian","l":"EN","r":"https://www.theguardian.com/uk/rss","w":"https://www.theguardian.com"},
+{"m":"Evening Standard","l":"EN","r":"https://www.standard.co.uk/rss","w":"https://www.standard.co.uk"},
+{"m":"The Independent","l":"EN","r":"https://www.independent.co.uk/rss","w":"https://www.independent.co.uk"},
+{"m":"The Telegraph","l":"EN","r":"https://www.telegraph.co.uk/rss.xml","w":"https://www.telegraph.co.uk"},
+{"m":"Sky News","l":"EN","r":"https://feeds.skynews.com/feeds/rss/home.xml","w":"https://news.sky.com"}],
+"Edinburgh":[{"m":"The Scotsman","l":"EN","r":"https://www.scotsman.com/rss","w":"https://www.scotsman.com"},
+{"m":"BBC Scotland","l":"EN","r":"https://feeds.bbci.co.uk/news/scotland/rss.xml","w":"https://www.bbc.com/news/scotland"}],
+"Cardiff":[{"m":"WalesOnline","l":"EN","r":"https://www.walesonline.co.uk/?service=rss","w":"https://www.walesonline.co.uk"},
+{"m":"BBC Wales","l":"EN","r":"https://feeds.bbci.co.uk/news/wales/rss.xml","w":"https://www.bbc.com/news/wales"}],
+"Belfast":[{"m":"Belfast Telegraph","l":"EN","r":"https://www.belfasttelegraph.co.uk/rss/","w":"https://www.belfasttelegraph.co.uk"},
+{"m":"BBC Northern Ireland","l":"EN","r":"https://feeds.bbci.co.uk/news/northern_ireland/rss.xml","w":"https://www.bbc.com/news/northern_ireland"}],
+"Manchester":[{"m":"Manchester Evening News","l":"EN","r":"https://www.manchestereveningnews.co.uk/?service=rss","w":"https://www.manchestereveningnews.co.uk"}],
+"Birmingham":[{"m":"Birmingham Live","l":"EN","r":"https://www.birminghammail.co.uk/?service=rss","w":"https://www.birminghammail.co.uk"}]},"Ireland": {
+"Dublin":[{"m":"The Irish Times","l":"EN","r":"https://www.irishtimes.com/arc/outboundfeeds/feed-irish-news/","w":"https://www.irishtimes.com"},
+{"m":"RTÉ News","l":"EN","r":"https://www.rte.ie/news/rss/news-headlines.xml","w":"https://www.rte.ie/news"},
+{"m":"Irish Independent","l":"EN","r":"https://www.independent.ie/rss/","w":"https://www.independent.ie"},
+{"m":"TheJournal.ie","l":"EN","r":"https://www.thejournal.ie/feed/","w":"https://www.thejournal.ie"}]},"Netherlands": {
+"Amsterdam":[{"m":"Het Parool","l":"NL","r":"https://www.parool.nl/rss.xml","w":"https://www.parool.nl"},
+{"m":"NOS","l":"NL","r":"https://feeds.nos.nl/nosnieuwsalgemeen","w":"https://nos.nl"},
+{"m":"De Telegraaf","l":"NL","r":"https://www.telegraaf.nl/rss","w":"https://www.telegraaf.nl"},
+{"m":"NU.nl","l":"NL","r":"https://www.nu.nl/rss/Algemeen","w":"https://www.nu.nl"},
+{"m":"DutchNews.nl","l":"EN","r":"https://www.dutchnews.nl/feed/","w":"https://www.dutchnews.nl"}],
+"The Hague":[{"m":"NRC","l":"NL","r":"https://www.nrc.nl/rss/","w":"https://www.nrc.nl"},
+{"m":"AD (Algemeen Dagblad)","l":"NL","r":"https://www.ad.nl/rss.xml","w":"https://www.ad.nl"}]},"Belgium": {
+"Brussels":[{"m":"VRT NWS","l":"NL","r":"https://www.vrt.be/vrtnws/nl.rss.headlines.xml","w":"https://www.vrt.be/vrtnws"}],
+"Antwerp":[{"m":"Gazet van Antwerpen","l":"NL","r":"https://www.gva.be/rss","w":"https://www.gva.be"}]},"Luxembourg": {
+"Luxembourg":[{"m":"Luxemburger Wort","l":"DE","r":"https://www.wort.lu/rss","w":"https://www.wort.lu"}]},"Monaco": {
+"Monaco":[{"m":"Monaco-Matin","l":"FR","r":"https://www.monacomatin.mc/rss","w":"https://www.monacomatin.mc"},
+{"m":"Monaco Tribune","l":"FR","r":"https://www.monaco-tribune.com/feed/","w":"https://www.monaco-tribune.com"}]},"Andorra": {
+"Andorra la Vella":[{"m":"El Periòdic d'Andorra","l":"CA","r":"https://www.elperiodic.ad/rss","w":"https://www.elperiodic.ad"}]},"San Marino": {
+"San Marino":[{"m":"Libertas","l":"IT","r":"https://www.libertas.sm/feed/","w":"https://www.libertas.sm"}]},"Vatican City": {
+"Vatican City":[{"m":"Vatican News (DE)","l":"DE","r":"https://www.vaticannews.va/de.rss.xml","w":"https://www.vaticannews.va/de.html"},
+{"m":"Vatican News (EN)","l":"EN","r":"https://www.vaticannews.va/en.rss.xml","w":"https://www.vaticannews.va/en.html"}]},"Denmark": {
+"Copenhagen":[{"m":"DR Nyheder","l":"DA","r":"https://www.dr.dk/nyheder/service/feeds/allenyheder","w":"https://www.dr.dk/nyheder"},
+{"m":"Politiken","l":"DA","r":"https://politiken.dk/rss/senestenyt.rss","w":"https://politiken.dk"},
+{"m":"Berlingske","l":"DA","r":"https://www.berlingske.dk/content/rss","w":"https://www.berlingske.dk"}]},"Sweden": {
+"Stockholm":[{"m":"Dagens Nyheter","l":"SV","r":"https://www.dn.se/rss/","w":"https://www.dn.se"},
+{"m":"Svenska Dagbladet","l":"SV","r":"https://www.svd.se/feed/articles.rss","w":"https://www.svd.se"},
+{"m":"SVT Nyheter","l":"SV","r":"https://www.svt.se/nyheter/rss.xml","w":"https://www.svt.se/nyheter"},
+{"m":"Sveriges Radio (Ekot)","l":"SV","r":"https://api.sr.se/api/rss/program/83","w":"https://sverigesradio.se"},
+{"m":"The Local Sweden","l":"EN","r":"https://www.thelocal.se/feeds/rss.php","w":"https://www.thelocal.se"}],
+"Malmö":[{"m":"Sydsvenskan","l":"SV","r":"https://www.sydsvenskan.se/feeds/feed.xml","w":"https://www.sydsvenskan.se"}]},"Norway": {
+"Oslo":[{"m":"Aftenposten","l":"NO","r":"https://www.aftenposten.no/rss","w":"https://www.aftenposten.no"},
+{"m":"NRK Nyheter","l":"NO","r":"https://www.nrk.no/nyheter/siste.rss","w":"https://www.nrk.no"},
+{"m":"VG","l":"NO","r":"https://www.vg.no/rss/feed","w":"https://www.vg.no"}],
+"Bergen":[{"m":"Bergens Tidende","l":"NO","r":"https://www.bt.no/rss","w":"https://www.bt.no"}],
+"Trondheim":[{"m":"Adresseavisen","l":"NO","r":"https://www.adressa.no/rss","w":"https://www.adressa.no"}]},"Finland": {
+"Helsinki":[{"m":"Helsingin Sanomat","l":"FI","r":"https://www.hs.fi/rss/tuoreimmat.xml","w":"https://www.hs.fi"},
+{"m":"Yle Uutiset","l":"FI","r":"https://feeds.yle.fi/uutiset/v1/majorHeadlines/YLE_UUTISET.rss","w":"https://yle.fi/uutiset"},
+{"m":"Yle News (EN)","l":"EN","r":"https://feeds.yle.fi/uutiset/v1/recent.rss?publisherIds=YLE_NEWS","w":"https://yle.fi/news"},
+{"m":"Hufvudstadsbladet","l":"SV","r":"https://www.hbl.fi/rss","w":"https://www.hbl.fi"}],
+"Tampere":[{"m":"Aamulehti","l":"FI","r":"https://www.aamulehti.fi/rss/tuoreimmat.xml","w":"https://www.aamulehti.fi"}]},"Iceland": {
+"Reykjavík":[{"m":"RÚV","l":"IS","r":"https://www.ruv.is/rss/frettir","w":"https://www.ruv.is"},
+{"m":"Morgunblaðið (mbl.is)","l":"IS","r":"https://www.mbl.is/feeds/fp/","w":"https://www.mbl.is"},
+{"m":"Vísir","l":"IS","r":"https://www.visir.is/rss/allt","w":"https://www.visir.is"}]},"Poland": {
+"Warsaw":[{"m":"Rzeczpospolita","l":"PL","r":"https://www.rp.pl/rss_main","w":"https://www.rp.pl"},
+{"m":"TVN24","l":"PL","r":"https://tvn24.pl/najnowsze.xml","w":"https://tvn24.pl"},
+{"m":"Notes from Poland","l":"EN","r":"https://notesfrompoland.com/feed/","w":"https://notesfrompoland.com"}],
+"Kraków":[{"m":"Gazeta Krakowska","l":"PL","r":"https://gazetakrakowska.pl/rss","w":"https://gazetakrakowska.pl"}],
+"Gdańsk":[{"m":"Dziennik Bałtycki","l":"PL","r":"https://dziennikbaltycki.pl/rss","w":"https://dziennikbaltycki.pl"}],
+"Wrocław":[{"m":"Gazeta Wrocławska","l":"PL","r":"https://gazetawroclawska.pl/rss","w":"https://gazetawroclawska.pl"}]},"Czechia": {
+"Prague":[{"m":"iDNES.cz","l":"CS","r":"https://servis.idnes.cz/rss.aspx?c=zpravodaj","w":"https://www.idnes.cz"},
+{"m":"ČT24","l":"CS","r":"https://ct24.ceskatelevize.cz/rss/hlavni-zpravy","w":"https://ct24.ceskatelevize.cz"},
+{"m":"Seznam Zprávy","l":"CS","r":"https://www.seznamzpravy.cz/rss","w":"https://www.seznamzpravy.cz"},
+{"m":"Deník N","l":"CS","r":"https://denikn.cz/rss/","w":"https://denikn.cz"}]},"Slovakia": {
+"Bratislava":[{"m":"SME","l":"SK","r":"https://www.sme.sk/rss","w":"https://www.sme.sk"},
+{"m":"Pravda","l":"SK","r":"https://www.pravda.sk/rss/xml/","w":"https://www.pravda.sk"},
+{"m":"The Slovak Spectator","l":"EN","r":"https://spectator.sme.sk/rss","w":"https://spectator.sme.sk"},
+{"m":"TASR (teraz.sk)","l":"SK","r":"https://www.teraz.sk/rss/slovensko.rss","w":"https://www.teraz.sk"}]},"Hungary": {
+"Budapest":[{"m":"Telex","l":"HU","r":"https://telex.hu/rss","w":"https://telex.hu"},
+{"m":"Index","l":"HU","r":"https://index.hu/24ora/rss/","w":"https://index.hu"},
+{"m":"HVG","l":"HU","r":"https://hvg.hu/rss","w":"https://hvg.hu"},
+{"m":"Hungary Today","l":"EN","r":"https://hungarytoday.hu/feed/","w":"https://hungarytoday.hu"},
+{"m":"444.hu","l":"HU","r":"https://444.hu/feed","w":"https://444.hu"}]},"Romania": {
+"Bucharest":[{"m":"Digi24","l":"RO","r":"https://www.digi24.ro/rss","w":"https://www.digi24.ro"},
+{"m":"Adevărul","l":"RO","r":"https://adevarul.ro/rss","w":"https://adevarul.ro"},
+{"m":"HotNews","l":"RO","r":"https://hotnews.ro/rss","w":"https://hotnews.ro"},
+{"m":"G4Media","l":"RO","r":"https://www.g4media.ro/feed","w":"https://www.g4media.ro"}]},"Bulgaria": {
+"Sofia":[{"m":"Dnevnik","l":"BG","r":"https://www.dnevnik.bg/rss/","w":"https://www.dnevnik.bg"},
+{"m":"Mediapool","l":"BG","r":"https://www.mediapool.bg/rss/","w":"https://www.mediapool.bg"}],
+"Plovdiv":[{"m":"Maritsa","l":"BG","r":"https://www.marica.bg/rss","w":"https://www.marica.bg"}]},"Greece": {
+"Athens":[{"m":"ERT News","l":"EL","r":"https://www.ertnews.gr/feed/","w":"https://www.ertnews.gr"},
+{"m":"To Vima","l":"EL","r":"https://www.tovima.gr/feed/","w":"https://www.tovima.gr"}],
+"Thessaloniki":[{"m":"Makedonia","l":"EL","r":"https://www.makthes.gr/feed","w":"https://www.makthes.gr"}]},"Cyprus": {
+"Nicosia":[{"m":"Cyprus Mail","l":"EN","r":"https://cyprus-mail.com/feed/","w":"https://cyprus-mail.com"},
+{"m":"Philenews","l":"EL","r":"https://www.philenews.com/feed/","w":"https://www.philenews.com"},
+{"m":"in-cyprus","l":"EN","r":"https://in-cyprus.philenews.com/feed/","w":"https://in-cyprus.philenews.com"}]},"Croatia": {
+"Zagreb":[{"m":"Index.hr","l":"HR","r":"https://www.index.hr/rss","w":"https://www.index.hr"},
+{"m":"Večernji list","l":"HR","r":"https://www.vecernji.hr/feeds/latest","w":"https://www.vecernji.hr"},
+{"m":"Total Croatia News","l":"EN","r":"https://total-croatia-news.com/feed/","w":"https://total-croatia-news.com"}],
+"Split":[{"m":"Slobodna Dalmacija","l":"HR","r":"https://slobodnadalmacija.hr/feed","w":"https://slobodnadalmacija.hr"}]},"Slovenia": {
+"Ljubljana":[{"m":"Delo","l":"SL","r":"https://www.delo.si/rss/","w":"https://www.delo.si"},
+{"m":"RTV Slovenija","l":"SL","r":"https://img.rtvslo.si/feeds/00.xml","w":"https://www.rtvslo.si"},
+{"m":"24ur","l":"SL","r":"https://www.24ur.com/rss","w":"https://www.24ur.com"}]},"Serbia": {
+"Belgrade":[{"m":"B92","l":"SR","r":"https://www.b92.net/info/rss/","w":"https://www.b92.net"},
+{"m":"N1 Srbija","l":"SR","r":"https://n1info.rs/feed/","w":"https://n1info.rs"},
+{"m":"Danas","l":"SR","r":"https://www.danas.rs/feed/","w":"https://www.danas.rs"}]},"Bosnia and Herzegovina": {
+"Sarajevo":[{"m":"Klix.ba","l":"BS","r":"https://www.klix.ba/rss","w":"https://www.klix.ba"},
+{"m":"Dnevni avaz","l":"BS","r":"https://avaz.ba/rss","w":"https://avaz.ba"},
+{"m":"N1 BiH","l":"BS","r":"https://n1info.ba/feed/","w":"https://n1info.ba"},
+{"m":"Sarajevo Times","l":"EN","r":"https://sarajevotimes.com/feed/","w":"https://sarajevotimes.com"}]},"Montenegro": {
+"Podgorica":[{"m":"Vijesti","l":"SR","r":"https://www.vijesti.me/rss","w":"https://www.vijesti.me"}],
+"Cetinje":[{"m":"CdM (Cafe del Montenegro)","l":"SR","r":"https://www.cdm.me/feed/","w":"https://www.cdm.me"}]},"North Macedonia": {
+"Skopje":[{"m":"Nova Makedonija","l":"MK","r":"https://novamakedonija.com.mk/feed/","w":"https://novamakedonija.com.mk"},
+{"m":"Sloboden Pečat","l":"MK","r":"https://www.slobodenpecat.mk/feed/","w":"https://www.slobodenpecat.mk"}]},"Albania": {
+"Tirana":[{"m":"Balkanweb","l":"SQ","r":"https://www.balkanweb.com/feed/","w":"https://www.balkanweb.com"}]},"Moldova": {
+"Chișinău":[{"m":"Ziarul de Gardă","l":"RO","r":"https://www.zdg.md/feed/","w":"https://www.zdg.md"},
+{"m":"NewsMaker","l":"RO","r":"https://newsmaker.md/feed/","w":"https://newsmaker.md"}]},"Ukraine": {
+"Kyiv":[{"m":"Ukrainska Pravda","l":"UK","r":"https://www.pravda.com.ua/rss/","w":"https://www.pravda.com.ua"},
+{"m":"Kyiv Post","l":"EN","r":"https://www.kyivpost.com/feed","w":"https://www.kyivpost.com"}],
+"Odesa":[{"m":"Dumskaya","l":"RU","r":"https://dumskaya.net/rss/","w":"https://dumskaya.net"}],
+"Kharkiv":[{"m":"Google News – Kharkiv","l":"UK","r":"https://news.google.com/rss/search?q=%D0%A5%D0%B0%D1%80%D0%BA%D1%96%D0%B2&hl=uk&gl=UA&ceid=UA:uk","w":"https://news.google.com"}]},"Belarus": {
+"Minsk":[{"m":"Zerkalo.io","l":"RU","r":"https://news.zerkalo.io/rss/","w":"https://news.zerkalo.io"}]},"Russia": {
+"Moscow":[{"m":"Kommersant","l":"RU","r":"https://www.kommersant.ru/RSS/news.xml","w":"https://www.kommersant.ru"},
+{"m":"TASS (EN)","l":"EN","r":"https://tass.com/rss/v2.xml","w":"https://tass.com"},
+{"m":"RBC","l":"RU","r":"https://rssexport.rbc.ru/rbcnews/news/30/full.rss","w":"https://www.rbc.ru"},
+{"m":"Meduza (Exil-Medium)","l":"RU","r":"https://meduza.io/rss/all","w":"https://meduza.io"},
+{"m":"Interfax","l":"RU","r":"https://www.interfax.ru/rss.asp","w":"https://www.interfax.ru"},
+{"m":"The Moscow Times","l":"EN","r":"https://www.themoscowtimes.com/rss/news","w":"https://www.themoscowtimes.com"},
+{"m":"Vedomosti","l":"RU","r":"https://www.vedomosti.ru/rss/news","w":"https://www.vedomosti.ru"}],
+"Vladivostok":[{"m":"VL.ru","l":"RU","r":"https://www.newsvl.ru/rss/","w":"https://www.newsvl.ru"}]},"Estonia": {
+"Tallinn":[{"m":"Postimees","l":"ET","r":"https://www.postimees.ee/rss","w":"https://www.postimees.ee"}],
+"Tartu":[{"m":"Tartu Postimees","l":"ET","r":"https://tartu.postimees.ee/rss","w":"https://tartu.postimees.ee"}]},"Latvia": {
+"Riga":[{"m":"LSM (Public Broadcasting)","l":"EN","r":"https://eng.lsm.lv/rss/","w":"https://eng.lsm.lv"},
+{"m":"Diena","l":"LV","r":"https://www.diena.lv/rss","w":"https://www.diena.lv"},
+{"m":"TVNET","l":"LV","r":"https://www.tvnet.lv/rss","w":"https://www.tvnet.lv"}]},"Lithuania": {
+"Vilnius":[{"m":"LRT (English)","l":"EN","r":"https://www.lrt.lt/en/news-in-english?rss","w":"https://www.lrt.lt/en"},
+{"m":"15min","l":"LT","r":"https://www.15min.lt/rss","w":"https://www.15min.lt"},
+{"m":"Delfi Lithuania","l":"LT","r":"https://www.delfi.lt/rss/","w":"https://www.delfi.lt"}],
+"Kaunas":[{"m":"Kauno diena","l":"LT","r":"https://kauno.diena.lt/rss","w":"https://kauno.diena.lt"}]},"Türkiye": {
+"Ankara":[{"m":"Anadolu Agency","l":"TR","r":"https://www.aa.com.tr/tr/rss/default?cat=guncel","w":"https://www.aa.com.tr"},
+{"m":"Hürriyet","l":"TR","r":"https://www.hurriyet.com.tr/rss/anasayfa","w":"https://www.hurriyet.com.tr"},
+{"m":"TRT Haber","l":"TR","r":"https://www.trthaber.com/manset_articles.rss","w":"https://www.trthaber.com"},
+{"m":"Daily Sabah","l":"EN","r":"https://www.dailysabah.com/rssFeed/turkey","w":"https://www.dailysabah.com"}],
+"Istanbul":[{"m":"Sabah","l":"TR","r":"https://www.sabah.com.tr/rss/anasayfa.xml","w":"https://www.sabah.com.tr"},
+{"m":"Cumhuriyet","l":"TR","r":"https://www.cumhuriyet.com.tr/rss/son_dakika.xml","w":"https://www.cumhuriyet.com.tr"},
+{"m":"Milliyet","l":"TR","r":"https://www.milliyet.com.tr/rss/rssNew/gundemRss.xml","w":"https://www.milliyet.com.tr"}],
+"Izmir":[{"m":"Yeni Asır","l":"TR","r":"https://www.yeniasir.com.tr/rss/anasayfa.xml","w":"https://www.yeniasir.com.tr"}]},"Georgia": {
+"Tbilisi":[{"m":"Civil.ge","l":"EN","r":"https://civil.ge/feed","w":"https://civil.ge"}]},"Armenia": {
+"Yerevan":[{"m":"News.am","l":"EN","r":"https://news.am/eng/rss/","w":"https://news.am/eng/"},
+{"m":"Aravot","l":"HY","r":"https://www.aravot.am/feed/","w":"https://www.aravot.am"}]},"Azerbaijan": {
+"Baku":[{"m":"Trend News Agency","l":"EN","r":"https://www.trend.az/feeds/index.rss","w":"https://en.trend.az"},
+{"m":"Report.az","l":"EN","r":"https://report.az/en/rss","w":"https://report.az/en"}]},"Kazakhstan": {
+"Astana":[{"m":"The Astana Times","l":"EN","r":"https://astanatimes.com/feed/","w":"https://astanatimes.com"}],
+"Almaty":[{"m":"Kursiv","l":"RU","r":"https://kz.kursiv.media/feed/","w":"https://kz.kursiv.media"}]},"Uzbekistan": {
+"Tashkent":[{"m":"Gazeta.uz","l":"RU","r":"https://www.gazeta.uz/ru/rss/","w":"https://www.gazeta.uz"},
+{"m":"UzDaily","l":"EN","r":"https://www.uzdaily.uz/en/rss","w":"https://www.uzdaily.uz/en"},
+{"m":"UzA (National News Agency)","l":"EN","r":"https://uza.uz/en/rss","w":"https://uza.uz/en"}],
+"Samarkand":[{"m":"Podrobno.uz","l":"RU","r":"https://podrobno.uz/rss","w":"https://podrobno.uz"}]},"Kyrgyzstan": {
+"Bishkek":[{"m":"24.kg","l":"RU","r":"https://24.kg/rss/","w":"https://24.kg"},
+{"m":"AKIpress","l":"EN","r":"https://akipress.com/rss/","w":"https://akipress.com"},
+{"m":"Kloop","l":"RU","r":"https://kloop.kg/feed/","w":"https://kloop.kg"}]},"Tajikistan": {
+"Dushanbe":[{"m":"Asia-Plus","l":"EN","r":"https://asiaplustj.info/en/rss","w":"https://asiaplustj.info/en"},
+{"m":"Google News – Dushanbe","l":"RU","r":"https://news.google.com/rss/search?q=%D0%94%D1%83%D1%88%D0%B0%D0%BD%D0%B1%D0%B5&hl=ru&gl=TJ&ceid=TJ:ru","w":"https://news.google.com"}]},"Turkmenistan": {
+"Ashgabat":[{"m":"Chronicles of Turkmenistan (Exil)","l":"RU","r":"https://www.hronikatm.com/feed/","w":"https://www.hronikatm.com"}]},"Mongolia": {
+"Ulaanbaatar":[{"m":"iKon.mn","l":"MN","r":"https://ikon.mn/rss","w":"https://ikon.mn"}]},"China": {
+"Beijing":[{"m":"China Daily","l":"EN","r":"https://www.chinadaily.com.cn/rss/china_rss.xml","w":"https://www.chinadaily.com.cn"},
+{"m":"Global Times","l":"EN","r":"https://www.globaltimes.cn/rss/outbrain.xml","w":"https://www.globaltimes.cn"},
+{"m":"People's Daily (EN)","l":"EN","r":"http://en.people.cn/rss/China.xml","w":"http://en.people.cn"},
+{"m":"CGTN","l":"EN","r":"https://www.cgtn.com/subscribe/rss/section/china.xml","w":"https://www.cgtn.com"}],
+"Shanghai":[{"m":"Sixth Tone","l":"EN","r":"https://www.sixthtone.com/rss","w":"https://www.sixthtone.com"}],
+"Chengdu":[{"m":"Google News – Chengdu","l":"ZH","r":"https://news.google.com/rss/search?q=%E6%88%90%E9%83%BD&hl=zh-CN&gl=CN&ceid=CN:zh-Hans","w":"https://news.google.com"}]},"Hong Kong": {
+"Hong Kong":[{"m":"South China Morning Post","l":"EN","r":"https://www.scmp.com/rss/2/feed","w":"https://www.scmp.com"},
+{"m":"Hong Kong Free Press","l":"EN","r":"https://hongkongfp.com/feed/","w":"https://hongkongfp.com"},
+{"m":"RTHK News","l":"EN","r":"https://rthk.hk/rthk/news/rss/e_expressnews_elocal.xml","w":"https://news.rthk.hk"},
+{"m":"Ming Pao","l":"ZH","r":"https://news.mingpao.com/rss/ins/s00001.xml","w":"https://news.mingpao.com"}]},"Macau": {
+"Macau":[{"m":"Macau Daily Times","l":"EN","r":"https://macaudailytimes.com.mo/feed","w":"https://macaudailytimes.com.mo"},
+{"m":"Macao News","l":"EN","r":"https://macaonews.org/feed/","w":"https://macaonews.org"}]},"Taiwan": {
+"Taipei":[{"m":"Taipei Times","l":"EN","r":"https://www.taipeitimes.com/xml/index.rss","w":"https://www.taipeitimes.com"},
+{"m":"United Daily News (聯合新聞網)","l":"ZH","r":"https://udn.com/rssfeed/news/2/6638?ch=news","w":"https://udn.com"},
+{"m":"Liberty Times (自由時報)","l":"ZH","r":"https://news.ltn.com.tw/rss/all.xml","w":"https://www.ltn.com.tw"}],
+"Kaohsiung":[{"m":"Google News – Kaohsiung","l":"ZH","r":"https://news.google.com/rss/search?q=%E9%AB%98%E9%9B%84&hl=zh-TW&gl=TW&ceid=TW:zh-Hant","w":"https://news.google.com"}]},"Japan": {
+"Tokyo":[{"m":"NHK News","l":"JA","r":"https://www3.nhk.or.jp/rss/news/cat0.xml","w":"https://www3.nhk.or.jp/news/"},
+{"m":"The Japan Times","l":"EN","r":"https://www.japantimes.co.jp/feed/","w":"https://www.japantimes.co.jp"},
+{"m":"Asahi Shimbun","l":"JA","r":"https://www.asahi.com/rss/asahi/newsheadlines.rdf","w":"https://www.asahi.com"},
+{"m":"Mainichi","l":"JA","r":"https://mainichi.jp/rss/etc/mainichi-flash.rss","w":"https://mainichi.jp"},
+{"m":"The Mainichi (EN)","l":"EN","r":"https://mainichi.jp/english/rss/etc/english_latest.rss","w":"https://mainichi.jp/english/"},
+{"m":"Nikkei Asia","l":"EN","r":"https://asia.nikkei.com/rss/feed/nar","w":"https://asia.nikkei.com"}]},"South Korea": {
+"Seoul":[{"m":"Yonhap News (EN)","l":"EN","r":"https://en.yna.co.kr/RSS/news.xml","w":"https://en.yna.co.kr"},
+{"m":"The Korea Times","l":"EN","r":"https://www.koreatimes.co.kr/www/rss/rss.xml","w":"https://www.koreatimes.co.kr"},
+{"m":"Hankyoreh (EN)","l":"EN","r":"https://english.hani.co.kr/rss/","w":"https://english.hani.co.kr"},
+{"m":"KBS World","l":"EN","r":"https://world.kbs.co.kr/rss/rss_news.htm?lang=e","w":"https://world.kbs.co.kr"}]},"North Korea": {
+"Pyongyang":[{"m":"NK News (extern)","l":"EN","r":"https://www.nknews.org/feed/","w":"https://www.nknews.org"},
+{"m":"Daily NK (extern)","l":"EN","r":"https://www.dailynk.com/english/feed/","w":"https://www.dailynk.com/english/"}]},"India": {
+"New Delhi":[{"m":"The Times of India","l":"EN","r":"https://timesofindia.indiatimes.com/rssfeedstopstories.cms","w":"https://timesofindia.indiatimes.com"},
+{"m":"Hindustan Times","l":"EN","r":"https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml","w":"https://www.hindustantimes.com"},
+{"m":"NDTV","l":"EN","r":"https://feeds.feedburner.com/ndtvnews-top-stories","w":"https://www.ndtv.com"},
+{"m":"The Indian Express","l":"EN","r":"https://indianexpress.com/feed/","w":"https://indianexpress.com"},
+{"m":"The Hindu","l":"EN","r":"https://www.thehindu.com/feeder/default.rss","w":"https://www.thehindu.com"}],
+"Mumbai":[{"m":"The Economic Times","l":"EN","r":"https://economictimes.indiatimes.com/rssfeedstopstories.cms","w":"https://economictimes.indiatimes.com"},
+{"m":"Times of India – Mumbai","l":"EN","r":"https://timesofindia.indiatimes.com/rssfeeds/-2128838597.cms","w":"https://timesofindia.indiatimes.com/city/mumbai"}],
+"Hyderabad":[{"m":"Telangana Today","l":"EN","r":"https://telanganatoday.com/feed","w":"https://telanganatoday.com"}],
+"Chennai":[{"m":"The Hindu – Chennai","l":"EN","r":"https://www.thehindu.com/news/cities/chennai/feeder/default.rss","w":"https://www.thehindu.com/news/cities/chennai/"}]},"Pakistan": {
+"Islamabad":[{"m":"Dawn","l":"EN","r":"https://www.dawn.com/feeds/home","w":"https://www.dawn.com"},
+{"m":"The Express Tribune","l":"EN","r":"https://tribune.com.pk/feed/home","w":"https://tribune.com.pk"},
+{"m":"Geo News","l":"EN","r":"https://www.geo.tv/rss/1/1","w":"https://www.geo.tv"},
+{"m":"The News International","l":"EN","r":"https://www.thenews.com.pk/rss/1/1","w":"https://www.thenews.com.pk"},
+{"m":"APP (Associated Press of Pakistan)","l":"EN","r":"https://www.app.com.pk/feed/","w":"https://www.app.com.pk"}],
+"Lahore":[{"m":"The Express Tribune – Lahore","l":"EN","r":"https://tribune.com.pk/feed/lahore","w":"https://tribune.com.pk/lahore"}]},"Bangladesh": {
+"Dhaka":[{"m":"The Daily Star","l":"EN","r":"https://www.thedailystar.net/frontpage/rss.xml","w":"https://www.thedailystar.net"}],
+"Chittagong":[{"m":"Google News – Chattogram","l":"EN","r":"https://news.google.com/rss/search?q=Chattogram&hl=en&gl=BD&ceid=BD:en","w":"https://news.google.com"}]},"Sri Lanka": {
+"Colombo":[{"m":"Ada Derana","l":"EN","r":"https://www.adaderana.lk/rss.php","w":"https://www.adaderana.lk"},
+{"m":"The Island","l":"EN","r":"https://island.lk/feed/","w":"https://island.lk"}]},"Nepal": {
+"Kathmandu":[{"m":"The Kathmandu Post","l":"EN","r":"https://kathmandupost.com/rss","w":"https://kathmandupost.com"},
+{"m":"Online Khabar (EN)","l":"EN","r":"https://english.onlinekhabar.com/feed","w":"https://english.onlinekhabar.com"}]},"Bhutan": {
+"Thimphu":[{"m":"The Bhutanese","l":"EN","r":"https://thebhutanese.bt/feed/","w":"https://thebhutanese.bt"},
+{"m":"BBS (Bhutan Broadcasting Service)","l":"EN","r":"https://www.bbs.bt/feed/","w":"https://www.bbs.bt"}]},"Afghanistan": {
+"Kabul":[{"m":"TOLOnews","l":"EN","r":"https://tolonews.com/rss.xml","w":"https://tolonews.com"},
+{"m":"Ariana News","l":"EN","r":"https://www.ariananews.af/feed/","w":"https://www.ariananews.af"},
+{"m":"Amu TV","l":"EN","r":"https://amu.tv/feed/","w":"https://amu.tv"},
+{"m":"Hasht-e Subh (8am)","l":"EN","r":"https://8am.media/eng/feed/","w":"https://8am.media/eng/"}]},"Iran": {
+"Tehran":[{"m":"Tehran Times","l":"EN","r":"https://www.tehrantimes.com/rss","w":"https://www.tehrantimes.com"},
+{"m":"IRNA (EN)","l":"EN","r":"https://en.irna.ir/rss","w":"https://en.irna.ir"},
+{"m":"Mehr News (EN)","l":"EN","r":"https://en.mehrnews.com/rss","w":"https://en.mehrnews.com"},
+{"m":"ISNA (EN)","l":"EN","r":"https://en.isna.ir/rss","w":"https://en.isna.ir"}],
+"Isfahan":[{"m":"Google News – Isfahan","l":"FA","r":"https://news.google.com/rss/search?q=%D8%A7%D8%B5%D9%81%D9%87%D8%A7%D9%86&hl=fa&gl=IR&ceid=IR:fa","w":"https://news.google.com"}]},"Iraq": {
+"Baghdad":[{"m":"Iraqi News","l":"EN","r":"https://www.iraqinews.com/feed/","w":"https://www.iraqinews.com"},
+{"m":"Al-Mada","l":"AR","r":"https://almadapaper.net/feed/","w":"https://almadapaper.net"}],
+"Basra":[{"m":"Google News – Basra","l":"AR","r":"https://news.google.com/rss/search?q=%D8%A7%D9%84%D8%A8%D8%B5%D8%B1%D8%A9&hl=ar&gl=IQ&ceid=IQ:ar","w":"https://news.google.com"}]},"Syria": {
+"Damascus":[{"m":"SANA (EN)","l":"EN","r":"https://sana.sy/en/?feed=rss2","w":"https://sana.sy/en/"},
+{"m":"Enab Baladi (EN)","l":"EN","r":"https://english.enabbaladi.net/feed/","w":"https://english.enabbaladi.net"},
+{"m":"Syria Direct","l":"EN","r":"https://syriadirect.org/feed/","w":"https://syriadirect.org"}]},"Lebanon": {
+"Beirut":[{"m":"The961","l":"EN","r":"https://www.the961.com/feed/","w":"https://www.the961.com"}]},"Jordan": {
+"Amman":[{"m":"Jordan News","l":"EN","r":"https://www.jordannews.jo/RSS","w":"https://www.jordannews.jo"},
+{"m":"Roya News","l":"EN","r":"https://en.royanews.tv/rss","w":"https://en.royanews.tv"}]},"Israel": {
+"Jerusalem":[{"m":"The Jerusalem Post","l":"EN","r":"https://www.jpost.com/rss/rssfeedsfrontpage.aspx","w":"https://www.jpost.com"},
+{"m":"Ynetnews","l":"EN","r":"https://www.ynetnews.com/Integration/StoryRss3082.xml","w":"https://www.ynetnews.com"}]},"Palestine": {
+"Ramallah":[{"m":"Al-Quds","l":"AR","r":"https://www.alquds.com/rss","w":"https://www.alquds.com"}]},"Saudi Arabia": {
+"Riyadh":[{"m":"Saudi Gazette","l":"EN","r":"https://saudigazette.com.sa/rssFeed/74","w":"https://saudigazette.com.sa"}]},"United Arab Emirates": {
+"Dubai":[{"m":"Arabian Business","l":"EN","r":"https://www.arabianbusiness.com/feed","w":"https://www.arabianbusiness.com"}]},"Qatar": {
+"Doha":[{"m":"Al Jazeera (EN)","l":"EN","r":"https://www.aljazeera.com/xml/rss/all.xml","w":"https://www.aljazeera.com"},
+{"m":"Doha News","l":"EN","r":"https://dohanews.co/feed/","w":"https://dohanews.co"}]},"Kuwait": {
+"Kuwait City":[{"m":"Times Kuwait","l":"EN","r":"https://timeskuwait.com/feed/","w":"https://timeskuwait.com"}]},"Yemen": {
+"Aden":[{"m":"Aden Al-Ghad","l":"AR","r":"https://adenalghad.net/feed","w":"https://adenalghad.net"},
+{"m":"Yemen Online","l":"EN","r":"https://yemenonline.info/feed/","w":"https://yemenonline.info"}]},"Timor-Leste": {
+"Dili":[{"m":"Tatoli (Agência Noticiosa de Timor-Leste)","l":"EN","r":"https://en.tatoli.tl/feed/","w":"https://en.tatoli.tl"},
+{"m":"Google News – Dili","l":"PT","r":"https://news.google.com/rss/search?q=Dili+Timor-Leste&hl=pt-PT&gl=TL&ceid=TL:pt-150","w":"https://news.google.com"}]},"Indonesia": {
+"Jakarta":[{"m":"Tempo","l":"ID","r":"https://rss.tempo.co/","w":"https://www.tempo.co"},
+{"m":"Antara News (EN)","l":"EN","r":"https://en.antaranews.com/rss/news.xml","w":"https://en.antaranews.com"}],
+"Nusantara":[{"m":"Google News – IKN Nusantara","l":"ID","r":"https://news.google.com/rss/search?q=IKN+Nusantara&hl=id&gl=ID&ceid=ID:id","w":"https://news.google.com"}],
+"Denpasar":[{"m":"Coconuts Bali","l":"EN","r":"https://coconuts.co/bali/feed/","w":"https://coconuts.co/bali/"}]},"Malaysia": {
+"Kuala Lumpur":[{"m":"Malay Mail","l":"EN","r":"https://www.malaymail.com/feed/rss/malaysia","w":"https://www.malaymail.com"}],
+"George Town":[{"m":"Buletin Mutiara","l":"EN","r":"https://www.buletinmutiara.com/feed/","w":"https://www.buletinmutiara.com"}],
+"Kuching":[{"m":"The Borneo Post","l":"EN","r":"https://www.theborneopost.com/feed/","w":"https://www.theborneopost.com"}]},"Singapore": {
+"Singapore":[{"m":"The Straits Times","l":"EN","r":"https://www.straitstimes.com/news/singapore/rss.xml","w":"https://www.straitstimes.com"},
+{"m":"CNA (Channel NewsAsia)","l":"EN","r":"https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=10416","w":"https://www.channelnewsasia.com"},
+{"m":"Mothership","l":"EN","r":"https://mothership.sg/feed/","w":"https://mothership.sg"},
+{"m":"The Business Times","l":"EN","r":"https://www.businesstimes.com.sg/rss/top-stories","w":"https://www.businesstimes.com.sg"}]},"Brunei": {
+"Bandar Seri Begawan":[{"m":"The Scoop","l":"EN","r":"https://thescoop.co/feed/","w":"https://thescoop.co"},
+{"m":"RTB News","l":"EN","r":"https://www.rtbnews.rtb.gov.bn/feed/","w":"https://www.rtbnews.rtb.gov.bn"}]},"Philippines": {
+"Manila":[{"m":"Philippine Daily Inquirer","l":"EN","r":"https://www.inquirer.net/fullfeed","w":"https://www.inquirer.net"},
+{"m":"The Philippine Star","l":"EN","r":"https://www.philstar.com/rss/headlines","w":"https://www.philstar.com"},
+{"m":"Rappler","l":"EN","r":"https://www.rappler.com/feed/","w":"https://www.rappler.com"},
+{"m":"GMA News","l":"EN","r":"https://data.gmanetwork.com/gno/rss/news/feed.xml","w":"https://www.gmanetwork.com/news"}],
+"Cebu":[{"m":"Cebu Daily News (Inquirer)","l":"EN","r":"https://cebudailynews.inquirer.net/feed","w":"https://cebudailynews.inquirer.net"}],
+"Davao":[{"m":"Mindanao Times","l":"EN","r":"https://mindanaotimes.com.ph/feed/","w":"https://mindanaotimes.com.ph"}]},"Thailand": {
+"Bangkok":[{"m":"Bangkok Post","l":"EN","r":"https://www.bangkokpost.com/rss/data/topstories.xml","w":"https://www.bangkokpost.com"},
+{"m":"Khaosod English","l":"EN","r":"https://www.khaosodenglish.com/feed/","w":"https://www.khaosodenglish.com"},
+{"m":"Thairath","l":"TH","r":"https://www.thairath.co.th/rss/news","w":"https://www.thairath.co.th"},
+{"m":"Matichon","l":"TH","r":"https://www.matichon.co.th/feed","w":"https://www.matichon.co.th"},
+{"m":"The Thaiger","l":"EN","r":"https://thethaiger.com/feed","w":"https://thethaiger.com"}],
+"Chiang Mai":[{"m":"Chiang Mai CityLife","l":"EN","r":"https://www.chiangmaicitylife.com/feed/","w":"https://www.chiangmaicitylife.com"}]},"Vietnam": {
+"Hanoi":[{"m":"VnExpress","l":"VI","r":"https://vnexpress.net/rss/tin-moi-nhat.rss","w":"https://vnexpress.net"},
+{"m":"VnExpress International","l":"EN","r":"https://e.vnexpress.net/rss/news.rss","w":"https://e.vnexpress.net"},
+{"m":"Viet Nam News","l":"EN","r":"https://vietnamnews.vn/rss/politics-laws.rss","w":"https://vietnamnews.vn"},
+{"m":"Tuoi Tre","l":"VI","r":"https://tuoitre.vn/rss/tin-moi-nhat.rss","w":"https://tuoitre.vn"}],
+"Ho Chi Minh City":[{"m":"Thanh Nien","l":"VI","r":"https://thanhnien.vn/rss/home.rss","w":"https://thanhnien.vn"},
+{"m":"Saigon Giai Phong (EN)","l":"EN","r":"https://en.sggp.org.vn/rss/home.rss","w":"https://en.sggp.org.vn"},
+{"m":"Tuoi Tre – Thời sự","l":"VI","r":"https://tuoitre.vn/rss/thoi-su.rss","w":"https://tuoitre.vn"}]},"Laos": {
+"Vientiane":[{"m":"The Laotian Times","l":"EN","r":"https://laotiantimes.com/feed/","w":"https://laotiantimes.com"},
+{"m":"Vientiane Times (via Google News)","l":"EN","r":"https://news.google.com/rss/search?q=%22Vientiane+Times%22&hl=en&gl=LA&ceid=LA:en","w":"https://www.vientianetimes.org.la"}],
+"Luang Prabang":[{"m":"Google News – Luang Prabang","l":"EN","r":"https://news.google.com/rss/search?q=%22Luang+Prabang%22&hl=en&gl=LA&ceid=LA:en","w":"https://news.google.com"}]},"Cambodia": {
+"Phnom Penh":[{"m":"Khmer Times","l":"EN","r":"https://www.khmertimeskh.com/feed/","w":"https://www.khmertimeskh.com"},
+{"m":"The Phnom Penh Post","l":"EN","r":"https://www.phnompenhpost.com/rss","w":"https://www.phnompenhpost.com"},
+{"m":"CamboJA News","l":"EN","r":"https://cambojanews.com/feed/","w":"https://cambojanews.com"}],
+"Siem Reap":[{"m":"Google News – Siem Reap","l":"EN","r":"https://news.google.com/rss/search?q=%22Siem+Reap%22&hl=en&gl=KH&ceid=KH:en","w":"https://news.google.com"}]},"Myanmar": {
+"Naypyidaw":[{"m":"Google News – Naypyidaw","l":"EN","r":"https://news.google.com/rss/search?q=Naypyidaw&hl=en&gl=MM&ceid=MM:en","w":"https://news.google.com"}],
+"Yangon":[{"m":"Myanmar Now","l":"EN","r":"https://myanmar-now.org/en/feed/","w":"https://myanmar-now.org/en/"}],
+"Mandalay":[{"m":"Google News – Mandalay","l":"EN","r":"https://news.google.com/rss/search?q=Mandalay&hl=en&gl=MM&ceid=MM:en","w":"https://news.google.com"}]},"Egypt": {
+"Cairo":[{"m":"Daily News Egypt","l":"EN","r":"https://dailynewsegypt.com/feed/","w":"https://dailynewsegypt.com"},
+{"m":"Egypt Independent","l":"EN","r":"https://egyptindependent.com/feed/","w":"https://egyptindependent.com"},
+{"m":"Mada Masr","l":"EN","r":"https://www.madamasr.com/en/feed/","w":"https://www.madamasr.com/en/"}]},"Libya": {
+"Tripoli":[{"m":"Libya Herald","l":"EN","r":"https://libyaherald.com/feed/","w":"https://libyaherald.com"},
+{"m":"Libya Update","l":"EN","r":"https://libyaupdate.com/feed/","w":"https://libyaupdate.com"}],
+"Benghazi":[{"m":"Libya Review","l":"EN","r":"https://libyareview.com/feed/","w":"https://libyareview.com"}]},"Tunisia": {
+"Tunis":[{"m":"Kapitalis","l":"FR","r":"https://kapitalis.com/tunisie/feed/","w":"https://kapitalis.com"},
+{"m":"La Presse de Tunisie","l":"FR","r":"https://lapresse.tn/feed/","w":"https://lapresse.tn"},
+{"m":"Mosaïque FM","l":"FR","r":"https://www.mosaiquefm.net/fr/rss","w":"https://www.mosaiquefm.net"}]},"Algeria": {
+"Algiers":[{"m":"TSA – Tout sur l'Algérie","l":"FR","r":"https://www.tsa-algerie.com/feed/","w":"https://www.tsa-algerie.com"}]},"Morocco": {
+"Rabat":[{"m":"Hespress (EN)","l":"EN","r":"https://en.hespress.com/feed","w":"https://en.hespress.com"}],
+"Marrakesh":[{"m":"Hespress (FR)","l":"FR","r":"https://fr.hespress.com/feed","w":"https://fr.hespress.com"}]},"Mauritania": {
+"Nouakchott":[{"m":"AMI (Agence Mauritanienne d'Information)","l":"FR","r":"https://ami.mr/fr/feed","w":"https://ami.mr/fr"},
+{"m":"Sahara Medias","l":"FR","r":"https://fr.saharamedias.net/feed/","w":"https://fr.saharamedias.net"},
+{"m":"Le Calame","l":"FR","r":"https://lecalame.info/?q=rss.xml","w":"https://lecalame.info"}]},"Mali": {
+"Bamako":[{"m":"Journal du Mali","l":"FR","r":"https://www.journaldumali.com/feed/","w":"https://www.journaldumali.com"},
+{"m":"Malijet","l":"FR","r":"https://malijet.com/rss","w":"https://malijet.com"},
+{"m":"Studio Tamani","l":"FR","r":"https://www.studiotamani.org/rss","w":"https://www.studiotamani.org"}]},"Senegal": {
+"Dakar":[{"m":"Le Soleil","l":"FR","r":"https://lesoleil.sn/feed/","w":"https://lesoleil.sn"},
+{"m":"APS (Agence de Presse Sénégalaise)","l":"FR","r":"https://aps.sn/feed/","w":"https://aps.sn"},
+{"m":"Dakaractu","l":"FR","r":"https://www.dakaractu.com/xml/syndication.rss","w":"https://www.dakaractu.com"},
+{"m":"Le Quotidien","l":"FR","r":"https://lequotidien.sn/feed/","w":"https://lequotidien.sn"}]},"Gambia": {
+"Banjul":[{"m":"Foroyaa","l":"EN","r":"https://foroyaa.net/feed/","w":"https://foroyaa.net"},
+{"m":"The Standard","l":"EN","r":"https://standard.gm/feed/","w":"https://standard.gm"},
+{"m":"Kerr Fatou","l":"EN","r":"https://www.kerrfatou.com/feed/","w":"https://www.kerrfatou.com"}]},"Guinea-Bissau": {
+"Bissau":[{"m":"ANG (Agência de Notícias da Guiné)","l":"PT","r":"https://www.ang.gw/feed/","w":"https://www.ang.gw"},
+{"m":"Google News – Bissau","l":"PT","r":"https://news.google.com/rss/search?q=Bissau&hl=pt-PT&gl=GW&ceid=GW:pt-150","w":"https://news.google.com"}]},"Guinea": {
+"Conakry":[{"m":"Guinéenews","l":"FR","r":"https://guineenews.org/feed/","w":"https://guineenews.org"},
+{"m":"Guineematin","l":"FR","r":"https://guineematin.com/feed/","w":"https://guineematin.com"},
+{"m":"Mosaiqueguinee","l":"FR","r":"https://mosaiqueguinee.com/feed/","w":"https://mosaiqueguinee.com"}]},"Sierra Leone": {
+"Freetown":[{"m":"The Sierra Leone Telegraph","l":"EN","r":"https://www.thesierraleonetelegraph.com/feed/","w":"https://www.thesierraleonetelegraph.com"}]},"Liberia": {
+"Monrovia":[{"m":"FrontPage Africa","l":"EN","r":"https://frontpageafricaonline.com/feed/","w":"https://frontpageafricaonline.com"},
+{"m":"The New Dawn","l":"EN","r":"https://thenewdawnliberia.com/feed/","w":"https://thenewdawnliberia.com"}]},"Ghana": {
+"Accra":[{"m":"MyJoyOnline","l":"EN","r":"https://www.myjoyonline.com/feed/","w":"https://www.myjoyonline.com"}],
+"Kumasi":[{"m":"Ghanaian Times","l":"EN","r":"https://www.ghanaiantimes.com.gh/feed/","w":"https://www.ghanaiantimes.com.gh"}]},"Togo": {
+"Lomé":[{"m":"ATOP (Agence Togolaise de Presse)","l":"FR","r":"https://atop.tg/feed/","w":"https://atop.tg"}]},"Benin": {
+"Cotonou":[{"m":"24h au Bénin","l":"FR","r":"https://www.24haubenin.info/spip.php?page=backend","w":"https://www.24haubenin.info"},
+{"m":"Matin Libre","l":"FR","r":"https://matinlibre.com/feed/","w":"https://matinlibre.com"}]},"Burkina Faso": {
+"Ouagadougou":[{"m":"LeFaso.net","l":"FR","r":"https://lefaso.net/spip.php?page=backend","w":"https://lefaso.net"},
+{"m":"Sidwaya","l":"FR","r":"https://www.sidwaya.info/feed/","w":"https://www.sidwaya.info"},
+{"m":"AIB (Agence d'Information du Burkina)","l":"FR","r":"https://www.aib.media/feed/","w":"https://www.aib.media"},
+{"m":"Burkina24","l":"FR","r":"https://burkina24.com/feed/","w":"https://burkina24.com"}]},"Niger": {
+"Niamey":[{"m":"ANP (Agence Nigérienne de Presse)","l":"FR","r":"https://www.anp.ne/feed/","w":"https://www.anp.ne"},
+{"m":"Le Sahel","l":"FR","r":"https://www.lesahel.org/feed/","w":"https://www.lesahel.org"},
+{"m":"Studio Kalangou","l":"FR","r":"https://www.studiokalangou.org/rss","w":"https://www.studiokalangou.org"}]},"Nigeria": {
+"Abuja":[{"m":"Daily Trust","l":"EN","r":"https://dailytrust.com/feed/","w":"https://dailytrust.com"},
+{"m":"Premium Times","l":"EN","r":"https://www.premiumtimesng.com/feed","w":"https://www.premiumtimesng.com"},
+{"m":"Leadership","l":"EN","r":"https://leadership.ng/feed/","w":"https://leadership.ng"},
+{"m":"NAN (News Agency of Nigeria)","l":"EN","r":"https://nannews.ng/feed/","w":"https://nannews.ng"},
+{"m":"Channels TV","l":"EN","r":"https://www.channelstv.com/feed/","w":"https://www.channelstv.com"}],
+"Lagos":[{"m":"Punch","l":"EN","r":"https://punchng.com/feed/","w":"https://punchng.com"},
+{"m":"Vanguard","l":"EN","r":"https://www.vanguardngr.com/feed/","w":"https://www.vanguardngr.com"},
+{"m":"ThisDay","l":"EN","r":"https://www.thisdaylive.com/index.php/feed/","w":"https://www.thisdaylive.com"},
+{"m":"BusinessDay","l":"EN","r":"https://businessday.ng/feed/","w":"https://businessday.ng"}],
+"Kano":[{"m":"Aminiya (Daily Trust, Hausa)","l":"HA","r":"https://aminiya.dailytrust.com/feed/","w":"https://aminiya.dailytrust.com"}],
+"Port Harcourt":[{"m":"The Tide","l":"EN","r":"https://www.thetidenewsonline.com/feed/","w":"https://www.thetidenewsonline.com"}]},"Cameroon": {
+"Yaoundé":[{"m":"Journal du Cameroun","l":"FR","r":"https://www.journalducameroun.com/feed/","w":"https://www.journalducameroun.com"},
+{"m":"Actu Cameroun","l":"FR","r":"https://actucameroun.com/feed/","w":"https://actucameroun.com"},
+{"m":"Cameroon News Agency","l":"EN","r":"https://cameroonnewsagency.com/feed/","w":"https://cameroonnewsagency.com"}],
+"Douala":[{"m":"Mimi Mefo Info","l":"EN","r":"https://mimimefoinfos.com/feed/","w":"https://mimimefoinfos.com"}]},"Chad": {
+"N'Djamena":[{"m":"Tchadinfos","l":"FR","r":"https://tchadinfos.com/feed/","w":"https://tchadinfos.com"},
+{"m":"Le Pays (Tchad)","l":"FR","r":"https://lepaystchad.com/feed/","w":"https://lepaystchad.com"}]},"Central African Republic": {
+"Bangui":[{"m":"Corbeau News Centrafrique","l":"FR","r":"https://corbeaunews-centrafrique.org/feed/","w":"https://corbeaunews-centrafrique.org"},
+{"m":"Radio Ndeke Luka","l":"FR","r":"https://www.radiondekeluka.org/rss","w":"https://www.radiondekeluka.org"},
+{"m":"Oubangui Médias","l":"FR","r":"https://oubanguimedias.com/feed/","w":"https://oubanguimedias.com"}]},"Gabon": {
+"Libreville":[{"m":"Gabonreview","l":"FR","r":"https://www.gabonreview.com/feed/","w":"https://www.gabonreview.com"},
+{"m":"Gabonactu","l":"FR","r":"https://gabonactu.com/feed/","w":"https://gabonactu.com"}]},"Equatorial Guinea": {
+"Malabo":[{"m":"Ahora EG","l":"ES","r":"https://ahoraeg.com/feed/","w":"https://ahoraeg.com"}],
+"Ciudad de la Paz":[{"m":"Google News – Ciudad de la Paz","l":"ES","r":"https://news.google.com/rss/search?q=%22Ciudad+de+la+Paz%22+Guinea+Ecuatorial&hl=es&gl=GQ&ceid=GQ:es","w":"https://news.google.com"}]},"São Tomé and Príncipe": {
+"São Tomé":[{"m":"Téla Nón","l":"PT","r":"https://www.telanon.info/feed/","w":"https://www.telanon.info"},
+{"m":"STP-Press","l":"PT","r":"https://www.stp-press.st/feed/","w":"https://www.stp-press.st"}]},"Republic of the Congo": {
+"Brazzaville":[{"m":"Les Dépêches de Brazzaville (ADIAC)","l":"FR","r":"https://www.adiac-congo.com/rss.xml","w":"https://www.adiac-congo.com"},
+{"m":"Vox Congo","l":"FR","r":"https://www.vox.cg/feed/","w":"https://www.vox.cg"}]},"DR Congo": {
+"Kinshasa":[{"m":"Actualite.cd","l":"FR","r":"https://actualite.cd/rss.xml","w":"https://actualite.cd"},
+{"m":"Radio Okapi","l":"FR","r":"https://www.radiookapi.net/rss.xml","w":"https://www.radiookapi.net"},
+{"m":"Le Potentiel","l":"FR","r":"https://lepotentiel.cd/feed/","w":"https://lepotentiel.cd"}],
+"Lubumbashi":[{"m":"Google News – Lubumbashi","l":"FR","r":"https://news.google.com/rss/search?q=Lubumbashi&hl=fr&gl=CD&ceid=CD:fr","w":"https://news.google.com"}],
+"Goma":[{"m":"Google News – Goma","l":"FR","r":"https://news.google.com/rss/search?q=Goma+Nord-Kivu&hl=fr&gl=CD&ceid=CD:fr","w":"https://news.google.com"}]},"Namibia": {
+"Windhoek":[{"m":"New Era","l":"EN","r":"https://neweralive.na/feed","w":"https://neweralive.na"}]},"Botswana": {
+"Gaborone":[{"m":"Sunday Standard","l":"EN","r":"https://www.sundaystandard.info/feed/","w":"https://www.sundaystandard.info"},
+{"m":"The Voice","l":"EN","r":"https://news.thevoicebw.com/feed/","w":"https://news.thevoicebw.com"}]},"South Africa": {
+"Pretoria":[{"m":"SABC News","l":"EN","r":"https://www.sabcnews.com/sabcnews/feed/","w":"https://www.sabcnews.com"},
+{"m":"SAnews (Government)","l":"EN","r":"https://www.sanews.gov.za/rss.xml","w":"https://www.sanews.gov.za"}],
+"Cape Town":[{"m":"Daily Maverick","l":"EN","r":"https://www.dailymaverick.co.za/dmrss/","w":"https://www.dailymaverick.co.za"}],
+"Bloemfontein":[{"m":"Bloemfontein Courant","l":"EN","r":"https://www.bloemfonteincourant.co.za/feed/","w":"https://www.bloemfonteincourant.co.za"}]},"Lesotho": {
+"Maseru":[{"m":"Public Eye","l":"EN","r":"https://publiceyenews.com/feed/","w":"https://publiceyenews.com"}]},"Eswatini": {
+"Mbabane":[{"m":"Times of Eswatini","l":"EN","r":"https://www.times.co.sz/rss","w":"https://www.times.co.sz"}],
+"Lobamba":[{"m":"Google News – Lobamba","l":"EN","r":"https://news.google.com/rss/search?q=Lobamba+Eswatini&hl=en&gl=SZ&ceid=SZ:en","w":"https://news.google.com"}]},"Zimbabwe": {
+"Harare":[{"m":"NewsDay","l":"EN","r":"https://www.newsday.co.zw/feed","w":"https://www.newsday.co.zw"},
+{"m":"The Zimbabwe Independent","l":"EN","r":"https://www.theindependent.co.zw/feed","w":"https://www.theindependent.co.zw"}]},"Zambia": {
+"Lusaka":[{"m":"Lusaka Times","l":"EN","r":"https://www.lusakatimes.com/feed/","w":"https://www.lusakatimes.com"},
+{"m":"Zambia Daily Mail","l":"EN","r":"https://www.daily-mail.co.zm/feed/","w":"https://www.daily-mail.co.zm"},
+{"m":"News Diggers!","l":"EN","r":"https://diggers.news/feed/","w":"https://diggers.news"},
+{"m":"Mwebantu","l":"EN","r":"https://www.mwebantu.com/feed/","w":"https://www.mwebantu.com"}]},"Malawi": {
+"Lilongwe":[{"m":"Nyasa Times","l":"EN","r":"https://www.nyasatimes.com/feed/","w":"https://www.nyasatimes.com"},
+{"m":"The Nation","l":"EN","r":"https://mwnation.com/feed/","w":"https://mwnation.com"},
+{"m":"Malawi24","l":"EN","r":"https://malawi24.com/feed/","w":"https://malawi24.com"}],
+"Blantyre":[{"m":"The Times (Malawi)","l":"EN","r":"https://times.mw/feed/","w":"https://times.mw"}]},"Mozambique": {
+"Maputo":[{"m":"Notícias","l":"PT","r":"https://www.jornalnoticias.co.mz/rss","w":"https://www.jornalnoticias.co.mz"},
+{"m":"O País","l":"PT","r":"https://opais.co.mz/feed/","w":"https://opais.co.mz"},
+{"m":"Club of Mozambique","l":"EN","r":"https://clubofmozambique.com/feed/","w":"https://clubofmozambique.com"}]},"Madagascar": {
+"Antananarivo":[{"m":"Midi Madagasikara","l":"FR","r":"https://www.midi-madagasikara.mg/feed/","w":"https://www.midi-madagasikara.mg"},
+{"m":"Madagascar Tribune","l":"FR","r":"https://www.madagascar-tribune.com/spip.php?page=backend","w":"https://www.madagascar-tribune.com"},
+{"m":"NewsMada","l":"FR","r":"https://www.newsmada.com/feed/","w":"https://www.newsmada.com"}]},"Mauritius": {
+"Port Louis":[{"m":"Le Mauricien","l":"FR","r":"https://www.lemauricien.com/feed/","w":"https://www.lemauricien.com"},
+{"m":"Defimedia","l":"FR","r":"https://defimedia.info/rss.xml","w":"https://defimedia.info"},
+{"m":"ION News","l":"FR","r":"https://ionnews.mu/feed/","w":"https://ionnews.mu"}]},"Comoros": {
+"Moroni":[{"m":"Comores Infos","l":"FR","r":"https://www.comores-infos.net/feed/","w":"https://www.comores-infos.net"},
+{"m":"HabariZaComores","l":"FR","r":"https://www.habarizacomores.com/feeds/posts/default","w":"https://www.habarizacomores.com"}]},"Tanzania": {
+"Dodoma":[{"m":"Daily News","l":"EN","r":"https://dailynews.co.tz/feed/","w":"https://dailynews.co.tz"},
+{"m":"Habari Leo","l":"SW","r":"https://habarileo.co.tz/feed/","w":"https://habarileo.co.tz"}],
+"Dar es Salaam":[{"m":"The Chanzo","l":"EN","r":"https://thechanzo.com/feed/","w":"https://thechanzo.com"}],
+"Zanzibar":[{"m":"Google News – Zanzibar","l":"EN","r":"https://news.google.com/rss/search?q=Zanzibar&hl=en&gl=TZ&ceid=TZ:en","w":"https://news.google.com"}]},"Kenya": {
+"Nairobi":[{"m":"The Standard","l":"EN","r":"https://www.standardmedia.co.ke/rss/headlines.php","w":"https://www.standardmedia.co.ke"},
+{"m":"Capital FM News","l":"EN","r":"https://www.capitalfm.co.ke/news/feed/","w":"https://www.capitalfm.co.ke/news"}],
+"Mombasa":[{"m":"Google News – Mombasa","l":"EN","r":"https://news.google.com/rss/search?q=Mombasa&hl=en&gl=KE&ceid=KE:en","w":"https://news.google.com"}]},"Uganda": {
+"Kampala":[{"m":"The Observer","l":"EN","r":"https://observer.ug/feed","w":"https://observer.ug"},
+{"m":"Nile Post","l":"EN","r":"https://nilepost.co.ug/feed/","w":"https://nilepost.co.ug"}]},"Rwanda": {
+"Kigali":[{"m":"KT Press","l":"EN","r":"https://www.ktpress.rw/feed/","w":"https://www.ktpress.rw"}]},"Burundi": {
+"Gitega":[{"m":"ABP (Agence Burundaise de Presse)","l":"FR","r":"https://www.abpinfo.bi/feed/","w":"https://www.abpinfo.bi"},
+{"m":"Le Renouveau","l":"FR","r":"https://www.ppbdi.com/feed/","w":"https://www.ppbdi.com"}],
+"Bujumbura":[{"m":"IWACU","l":"FR","r":"https://www.iwacu-burundi.org/feed/","w":"https://www.iwacu-burundi.org"},
+{"m":"SOS Médias Burundi","l":"FR","r":"https://www.sosmediasburundi.org/feed/","w":"https://www.sosmediasburundi.org"}]},"Ethiopia": {
+"Addis Ababa":[{"m":"Fana Broadcasting","l":"EN","r":"https://www.fanabc.com/english/feed/","w":"https://www.fanabc.com/english/"},
+{"m":"Ethiopian Monitor","l":"EN","r":"https://ethiopianmonitor.com/feed/","w":"https://ethiopianmonitor.com"}]},"Eritrea": {
+"Asmara":[{"m":"Google News – Asmara","l":"EN","r":"https://news.google.com/rss/search?q=Asmara+Eritrea&hl=en&gl=ER&ceid=ER:en","w":"https://news.google.com"}]},"Djibouti": {
+"Djibouti":[{"m":"La Nation","l":"FR","r":"https://www.lanation.dj/feed/","w":"https://www.lanation.dj"},
+{"m":"Google News – Djibouti","l":"FR","r":"https://news.google.com/rss/search?q=Djibouti&hl=fr&gl=DJ&ceid=DJ:fr","w":"https://news.google.com"}]},"Somalia": {
+"Mogadishu":[{"m":"Somali Guardian","l":"EN","r":"https://somaliguardian.com/feed/","w":"https://somaliguardian.com"},
+{"m":"Goobjoog News","l":"EN","r":"https://goobjoog.com/feed/","w":"https://goobjoog.com"}],
+"Hargeysa":[{"m":"Somaliland Standard","l":"EN","r":"https://somalilandstandard.com/feed/","w":"https://somalilandstandard.com"}]},"Sudan": {
+"Khartoum":[{"m":"Radio Dabanga","l":"EN","r":"https://www.dabangasudan.org/en/all-news/feed","w":"https://www.dabangasudan.org/en"},
+{"m":"Sudan War Monitor","l":"EN","r":"https://sudanwarmonitor.com/feed","w":"https://sudanwarmonitor.com"}],
+"Port Sudan":[{"m":"Google News – Port Sudan","l":"EN","r":"https://news.google.com/rss/search?q=%22Port+Sudan%22&hl=en&gl=SD&ceid=SD:en","w":"https://news.google.com"}]},"South Sudan": {
+"Juba":[{"m":"Eye Radio","l":"EN","r":"https://www.eyeradio.org/feed/","w":"https://www.eyeradio.org"},
+{"m":"Radio Tamazuj","l":"EN","r":"https://www.radiotamazuj.org/en/rss","w":"https://www.radiotamazuj.org/en"},
+{"m":"Sudans Post","l":"EN","r":"https://sudanspost.com/feed/","w":"https://sudanspost.com"}]},"Cape Verde": {
+"Praia":[{"m":"A Nação","l":"PT","r":"https://anacao.cv/feed/","w":"https://anacao.cv"},
+{"m":"Expresso das Ilhas","l":"PT","r":"https://expressodasilhas.cv/rss","w":"https://expressodasilhas.cv"}]},"Canada": {
+"Ottawa":[{"m":"Ottawa Citizen","l":"EN","r":"https://ottawacitizen.com/feed","w":"https://ottawacitizen.com"},
+{"m":"The Globe and Mail","l":"EN","r":"https://www.theglobeandmail.com/arc/outboundfeeds/rss/category/canada/","w":"https://www.theglobeandmail.com"},
+{"m":"Global News","l":"EN","r":"https://globalnews.ca/feed/","w":"https://globalnews.ca"}],
+"Montreal":[{"m":"La Presse","l":"FR","r":"https://www.lapresse.ca/actualites/rss","w":"https://www.lapresse.ca"},
+{"m":"Le Devoir","l":"FR","r":"https://www.ledevoir.com/rss/manchettes.xml","w":"https://www.ledevoir.com"}],
+"Vancouver":[{"m":"Vancouver Sun","l":"EN","r":"https://vancouversun.com/feed","w":"https://vancouversun.com"}],
+"Victoria BC":[{"m":"Times Colonist","l":"EN","r":"https://www.timescolonist.com/rss","w":"https://www.timescolonist.com"}],
+"Calgary":[{"m":"Calgary Herald","l":"EN","r":"https://calgaryherald.com/feed","w":"https://calgaryherald.com"}],
+"Edmonton":[{"m":"Edmonton Journal","l":"EN","r":"https://edmontonjournal.com/feed","w":"https://edmontonjournal.com"}],
+"Winnipeg":[{"m":"Winnipeg Free Press","l":"EN","r":"https://www.winnipegfreepress.com/rss/?path=local","w":"https://www.winnipegfreepress.com"}],
+"Halifax":[{"m":"The Chronicle Herald (SaltWire)","l":"EN","r":"https://www.saltwire.com/feed/","w":"https://www.saltwire.com"}]},"United States": {
+"Washington":[{"m":"The Washington Post","l":"EN","r":"https://feeds.washingtonpost.com/rss/national","w":"https://www.washingtonpost.com"},
+{"m":"The Washington Post – Local","l":"EN","r":"https://feeds.washingtonpost.com/rss/local","w":"https://www.washingtonpost.com/local/"},
+{"m":"Politico","l":"EN","r":"https://rss.politico.com/politics-news.xml","w":"https://www.politico.com"},
+{"m":"The Hill","l":"EN","r":"https://thehill.com/feed/","w":"https://thehill.com"},
+{"m":"NPR News","l":"EN","r":"https://feeds.npr.org/1001/rss.xml","w":"https://www.npr.org"},
+{"m":"WTOP","l":"EN","r":"https://wtop.com/feed/","w":"https://wtop.com"}],
+"New York":[{"m":"The New York Times","l":"EN","r":"https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml","w":"https://www.nytimes.com"},
+{"m":"The New York Times – NY Region","l":"EN","r":"https://rss.nytimes.com/services/xml/rss/nyt/NYRegion.xml","w":"https://www.nytimes.com/section/nyregion"},
+{"m":"The Wall Street Journal","l":"EN","r":"https://feeds.a.dj.com/rss/RSSWorldNews.xml","w":"https://www.wsj.com"},
+{"m":"CNN","l":"EN","r":"http://rss.cnn.com/rss/cnn_topstories.rss","w":"https://www.cnn.com"},
+{"m":"New York Post","l":"EN","r":"https://nypost.com/feed/","w":"https://nypost.com"},
+{"m":"Gothamist","l":"EN","r":"https://gothamist.com/feed","w":"https://gothamist.com"},
+{"m":"ABC News","l":"EN","r":"https://abcnews.go.com/abcnews/topstories","w":"https://abcnews.go.com"},
+{"m":"CBS News","l":"EN","r":"https://www.cbsnews.com/latest/rss/main","w":"https://www.cbsnews.com"}],
+"Los Angeles":[{"m":"Los Angeles Times","l":"EN","r":"https://www.latimes.com/local/rss2.0.xml","w":"https://www.latimes.com"}],
+"Chicago":[{"m":"Chicago Sun-Times","l":"EN","r":"https://chicago.suntimes.com/rss/index.xml","w":"https://chicago.suntimes.com"}],
+"San Francisco":[{"m":"SFGATE","l":"EN","r":"https://www.sfgate.com/rss/feed/Bay-Area-News-429.php","w":"https://www.sfgate.com"}],
+"Boston":[{"m":"The Boston Globe","l":"EN","r":"https://www.bostonglobe.com/rss/bigpicture","w":"https://www.bostonglobe.com"},
+{"m":"WBUR","l":"EN","r":"https://www.wbur.org/feed","w":"https://www.wbur.org"}],
+"Seattle":[{"m":"The Seattle Times","l":"EN","r":"https://www.seattletimes.com/feed/","w":"https://www.seattletimes.com"}],
+"Las Vegas":[{"m":"Las Vegas Review-Journal","l":"EN","r":"https://www.reviewjournal.com/feed/","w":"https://www.reviewjournal.com"}],
+"Minneapolis":[{"m":"Star Tribune","l":"EN","r":"https://www.startribune.com/rss/","w":"https://www.startribune.com"}],
+"Honolulu":[{"m":"Honolulu Star-Advertiser","l":"EN","r":"https://www.staradvertiser.com/feed/","w":"https://www.staradvertiser.com"}]},"Mexico": {
+"Mexico City":[{"m":"Reforma","l":"ES","r":"https://www.reforma.com/rss/portada.xml","w":"https://www.reforma.com"},
+{"m":"La Jornada","l":"ES","r":"https://www.jornada.com.mx/rss/edicion.xml","w":"https://www.jornada.com.mx"},
+{"m":"Mexico News Daily","l":"EN","r":"https://mexiconewsdaily.com/feed/","w":"https://mexiconewsdaily.com"}],
+"Guadalajara":[{"m":"El Informador","l":"ES","r":"https://www.informador.mx/rss/ultimas-noticias.xml","w":"https://www.informador.mx"}],
+"Monterrey":[{"m":"El Norte","l":"ES","r":"https://www.elnorte.com/rss/portada.xml","w":"https://www.elnorte.com"}]},"Guatemala": {
+"Guatemala City":[{"m":"Prensa Libre","l":"ES","r":"https://www.prensalibre.com/feed/","w":"https://www.prensalibre.com"},
+{"m":"La Hora","l":"ES","r":"https://lahora.gt/feed/","w":"https://lahora.gt"},
+{"m":"República","l":"ES","r":"https://republica.gt/feed","w":"https://republica.gt"}]},"Belize": {
+"Belmopan":[{"m":"Amandala","l":"EN","r":"https://amandala.com.bz/news/feed/","w":"https://amandala.com.bz"},
+{"m":"Breaking Belize News","l":"EN","r":"https://www.breakingbelizenews.com/feed/","w":"https://www.breakingbelizenews.com"}],
+"Belize City":[{"m":"The Reporter","l":"EN","r":"https://reporter.bz/feed/","w":"https://reporter.bz"}]},"Honduras": {
+"Tegucigalpa":[{"m":"Proceso Digital","l":"ES","r":"https://proceso.hn/feed/","w":"https://proceso.hn"}]},"El Salvador": {
+"San Salvador":[{"m":"El Diario de Hoy (elsalvador.com)","l":"ES","r":"https://www.elsalvador.com/feed/","w":"https://www.elsalvador.com"}]},"Nicaragua": {
+"Managua":[{"m":"Confidencial","l":"ES","r":"https://www.confidencial.digital/feed/","w":"https://www.confidencial.digital"}]},"Costa Rica": {
+"San José":[{"m":"La Nación","l":"ES","r":"https://www.nacion.com/rss/","w":"https://www.nacion.com"},
+{"m":"The Tico Times","l":"EN","r":"https://ticotimes.net/feed","w":"https://ticotimes.net"},
+{"m":"Semanario Universidad","l":"ES","r":"https://semanariouniversidad.com/feed/","w":"https://semanariouniversidad.com"}]},"Panama": {
+"Panama City":[{"m":"TVN Noticias","l":"ES","r":"https://www.tvn-2.com/rss","w":"https://www.tvn-2.com"}]},"Cuba": {
+"Havana":[{"m":"Granma","l":"ES","r":"https://www.granma.cu/feed","w":"https://www.granma.cu"},
+{"m":"14ymedio (unabhängig)","l":"ES","r":"https://www.14ymedio.com/rss/","w":"https://www.14ymedio.com"},
+{"m":"CiberCuba","l":"ES","r":"https://www.cibercuba.com/rss.xml","w":"https://www.cibercuba.com"},
+{"m":"OnCuba News","l":"ES","r":"https://oncubanews.com/feed/","w":"https://oncubanews.com"}]},"Dominican Republic": {
+"Santo Domingo":[{"m":"El Día","l":"ES","r":"https://eldia.com.do/feed/","w":"https://eldia.com.do"},
+{"m":"Dominican Today","l":"EN","r":"https://dominicantoday.com/feed/","w":"https://dominicantoday.com"}]},"Haiti": {
+"Port-au-Prince":[{"m":"Le Nouvelliste","l":"FR","r":"https://lenouvelliste.com/rss","w":"https://lenouvelliste.com"}]},"Jamaica": {
+"Kingston":[{"m":"Jamaica Observer","l":"EN","r":"https://www.jamaicaobserver.com/feed/","w":"https://www.jamaicaobserver.com"}]},"Bahamas": {
+"Nassau":[{"m":"Eyewitness News Bahamas","l":"EN","r":"https://ewnews.com/feed","w":"https://ewnews.com"}]},"Barbados": {
+"Bridgetown":[{"m":"Barbados Today","l":"EN","r":"https://barbadostoday.bb/feed/","w":"https://barbadostoday.bb"}]},"Trinidad and Tobago": {
+"Port of Spain":[{"m":"Newsday","l":"EN","r":"https://newsday.co.tt/feed/","w":"https://newsday.co.tt"}]},"Saint Lucia": {
+"Castries":[{"m":"St. Lucia Times","l":"EN","r":"https://stluciatimes.com/feed/","w":"https://stluciatimes.com"},
+{"m":"The Voice","l":"EN","r":"https://thevoiceslu.com/feed/","w":"https://thevoiceslu.com"}]},"Saint Vincent and the Grenadines": {
+"Kingstown":[{"m":"iWitness News","l":"EN","r":"https://www.iwnsvg.com/feed/","w":"https://www.iwnsvg.com"},
+{"m":"Searchlight","l":"EN","r":"https://www.searchlight.vc/feed","w":"https://www.searchlight.vc"}]},"Grenada": {
+"St. George's":[{"m":"NOW Grenada","l":"EN","r":"https://www.nowgrenada.com/feed/","w":"https://www.nowgrenada.com"}]},"Saint Kitts and Nevis": {
+"Basseterre":[{"m":"St. Kitts Nevis Observer","l":"EN","r":"https://www.thestkittsnevisobserver.com/feed/","w":"https://www.thestkittsnevisobserver.com"}]},"Dominica": {
+"Roseau":[{"m":"Dominica News Online","l":"EN","r":"https://dominicanewsonline.com/news/feed/","w":"https://dominicanewsonline.com"},
+{"m":"Emonews","l":"EN","r":"https://emonewsdm.com/feed/","w":"https://emonewsdm.com"}]},"Colombia": {
+"Bogotá":[{"m":"El Tiempo","l":"ES","r":"https://www.eltiempo.com/rss/bogota.xml","w":"https://www.eltiempo.com"}]},"Venezuela": {
+"Caracas":[{"m":"El Nacional","l":"ES","r":"https://www.elnacional.com/feed/","w":"https://www.elnacional.com"},
+{"m":"Efecto Cocuyo","l":"ES","r":"https://efectococuyo.com/feed/","w":"https://efectococuyo.com"},
+{"m":"Tal Cual","l":"ES","r":"https://talcualdigital.com/feed/","w":"https://talcualdigital.com"}]},"Ecuador": {
+"Quito":[{"m":"El Comercio","l":"ES","r":"https://www.elcomercio.com/feed/","w":"https://www.elcomercio.com"}],
+"Guayaquil":[{"m":"Expreso","l":"ES","r":"https://www.expreso.ec/rss","w":"https://www.expreso.ec"}]},"Peru": {
+"Lima":[{"m":"El Comercio","l":"ES","r":"https://elcomercio.pe/arcio/rss/","w":"https://elcomercio.pe"},
+{"m":"RPP Noticias","l":"ES","r":"https://rpp.pe/feed","w":"https://rpp.pe"},
+{"m":"Gestión","l":"ES","r":"https://gestion.pe/arcio/rss/","w":"https://gestion.pe"},
+{"m":"Andina (Agencia de Noticias)","l":"ES","r":"https://andina.pe/agencia/rss","w":"https://andina.pe"}],
+"Cusco":[{"m":"Google News – Cusco","l":"ES","r":"https://news.google.com/rss/search?q=Cusco&hl=es-419&gl=PE&ceid=PE:es-419","w":"https://news.google.com"}],
+"Arequipa":[{"m":"El Pueblo (Arequipa)","l":"ES","r":"https://elpueblo.com.pe/feed/","w":"https://elpueblo.com.pe"}]},"Bolivia": {
+"La Paz":[{"m":"La Razón","l":"ES","r":"https://www.la-razon.com/feed/","w":"https://www.la-razon.com"}],
+"Cochabamba":[{"m":"Opinión","l":"ES","r":"https://www.opinion.com.bo/rss","w":"https://www.opinion.com.bo"}]},"Chile": {
+"Santiago":[{"m":"Cooperativa","l":"ES","r":"https://www.cooperativa.cl/noticias/site/tax/port/all/rss_1___1.xml","w":"https://www.cooperativa.cl"}]},"Argentina": {
+"Buenos Aires":[{"m":"Clarín","l":"ES","r":"https://www.clarin.com/rss/lo-ultimo/","w":"https://www.clarin.com"},
+{"m":"Ámbito","l":"ES","r":"https://www.ambito.com/rss/pages/home.xml","w":"https://www.ambito.com"},
+{"m":"Buenos Aires Times","l":"EN","r":"https://www.batimes.com.ar/feed","w":"https://www.batimes.com.ar"}],
+"Rosario":[{"m":"La Capital","l":"ES","r":"https://www.lacapital.com.ar/rss/home.xml","w":"https://www.lacapital.com.ar"}]},"Uruguay": {
+"Montevideo":[{"m":"la diaria","l":"ES","r":"https://ladiaria.com.uy/feeds/articulos/","w":"https://ladiaria.com.uy"}]},"Paraguay": {
+"Asunción":[{"m":"Hoy","l":"ES","r":"https://www.hoy.com.py/rss","w":"https://www.hoy.com.py"},
+{"m":"IP (Agencia de Información Paraguaya)","l":"ES","r":"https://www.ip.gov.py/ip/feed/","w":"https://www.ip.gov.py"}]},"Brazil": {
+"Brasília":[{"m":"Agência Brasil","l":"PT","r":"https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml","w":"https://agenciabrasil.ebc.com.br"},
+{"m":"Metrópoles","l":"PT","r":"https://www.metropoles.com/feed","w":"https://www.metropoles.com"},
+{"m":"Poder360","l":"PT","r":"https://www.poder360.com.br/feed/","w":"https://www.poder360.com.br"},
+{"m":"G1 – Distrito Federal","l":"PT","r":"https://g1.globo.com/rss/g1/distrito-federal/","w":"https://g1.globo.com/df/"}],
+"São Paulo":[{"m":"Folha de S.Paulo","l":"PT","r":"https://feeds.folha.uol.com.br/emcimadahora/rss091.xml","w":"https://www.folha.uol.com.br"},
+{"m":"G1 (Globo)","l":"PT","r":"https://g1.globo.com/rss/g1/","w":"https://g1.globo.com"},
+{"m":"UOL Notícias","l":"PT","r":"https://rss.uol.com.br/feed/noticias.xml","w":"https://noticias.uol.com.br"}],
+"Rio de Janeiro":[{"m":"Extra","l":"PT","r":"https://extra.globo.com/rss.xml","w":"https://extra.globo.com"},
+{"m":"The Rio Times","l":"EN","r":"https://www.riotimesonline.com/feed/","w":"https://www.riotimesonline.com"}],
+"Salvador":[{"m":"A Tarde","l":"PT","r":"https://atarde.com.br/rss","w":"https://atarde.com.br"}]},"Guyana": {
+"Georgetown":[{"m":"Kaieteur News","l":"EN","r":"https://www.kaieteurnewsonline.com/feed/","w":"https://www.kaieteurnewsonline.com"},
+{"m":"Guyana Chronicle","l":"EN","r":"https://guyanachronicle.com/feed/","w":"https://guyanachronicle.com"}]},"Suriname": {
+"Paramaribo":[{"m":"De Ware Tijd","l":"NL","r":"https://dwtonline.com/rss","w":"https://dwtonline.com"},
+{"m":"Suriname Herald","l":"NL","r":"https://www.srherald.com/feed/","w":"https://www.srherald.com"},
+{"m":"Waterkant","l":"NL","r":"https://www.waterkant.net/feed/","w":"https://www.waterkant.net"}]},"Australia": {
+"Canberra":[{"m":"The Canberra Times","l":"EN","r":"https://www.canberratimes.com.au/rss.xml","w":"https://www.canberratimes.com.au"},
+{"m":"ABC News","l":"EN","r":"https://www.abc.net.au/news/feed/51120/rss.xml","w":"https://www.abc.net.au/news"},
+{"m":"ABC News – Canberra","l":"EN","r":"https://www.abc.net.au/news/feed/6910/rss.xml","w":"https://www.abc.net.au/news/act"},
+{"m":"The Guardian Australia","l":"EN","r":"https://www.theguardian.com/australia-news/rss","w":"https://www.theguardian.com/au"},
+{"m":"SBS News","l":"EN","r":"https://www.sbs.com.au/news/feed","w":"https://www.sbs.com.au/news"},
+{"m":"The Conversation AU","l":"EN","r":"https://theconversation.com/au/articles.atom","w":"https://theconversation.com/au"}],
+"Sydney":[{"m":"The Sydney Morning Herald","l":"EN","r":"https://www.smh.com.au/rss/feed.xml","w":"https://www.smh.com.au"}],
+"Melbourne":[{"m":"The Age","l":"EN","r":"https://www.theage.com.au/rss/feed.xml","w":"https://www.theage.com.au"}],
+"Brisbane":[{"m":"Brisbane Times","l":"EN","r":"https://www.brisbanetimes.com.au/rss/feed.xml","w":"https://www.brisbanetimes.com.au"}],
+"Perth":[{"m":"The West Australian","l":"EN","r":"https://thewest.com.au/rss","w":"https://thewest.com.au"},
+{"m":"WAtoday","l":"EN","r":"https://www.watoday.com.au/rss/feed.xml","w":"https://www.watoday.com.au"}],
+"Darwin":[{"m":"ABC News – Northern Territory","l":"EN","r":"https://www.abc.net.au/news/feed/1052/rss.xml","w":"https://www.abc.net.au/news/nt"}]},"New Zealand": {
+"Wellington":[{"m":"The Post","l":"EN","r":"https://www.thepost.co.nz/rss","w":"https://www.thepost.co.nz"},
+{"m":"RNZ (Radio New Zealand)","l":"EN","r":"https://www.rnz.co.nz/rss/national.xml","w":"https://www.rnz.co.nz"},
+{"m":"Stuff","l":"EN","r":"https://www.stuff.co.nz/rss","w":"https://www.stuff.co.nz"},
+{"m":"Newsroom","l":"EN","r":"https://www.newsroom.co.nz/feed","w":"https://www.newsroom.co.nz"},
+{"m":"The Spinoff","l":"EN","r":"https://thespinoff.co.nz/feed","w":"https://thespinoff.co.nz"}],
+"Auckland":[{"m":"NZ Herald","l":"EN","r":"https://rss.nzherald.co.nz/rss/xml/nzhrsscid_000000001.xml","w":"https://www.nzherald.co.nz"},
+{"m":"NZ Herald – Auckland","l":"EN","r":"https://rss.nzherald.co.nz/rss/xml/nzhrsscid_000000004.xml","w":"https://www.nzherald.co.nz/nz/auckland/"}],
+"Christchurch":[{"m":"The Press","l":"EN","r":"https://www.thepress.co.nz/rss","w":"https://www.thepress.co.nz"}],
+"Hamilton NZ":[{"m":"Waikato Times","l":"EN","r":"https://www.waikatotimes.co.nz/rss","w":"https://www.waikatotimes.co.nz"}]},"Papua New Guinea": {
+"Port Moresby":[{"m":"Post-Courier","l":"EN","r":"https://www.postcourier.com.pg/feed/","w":"https://www.postcourier.com.pg"}]},"Fiji": {
+"Suva":[{"m":"FBC News","l":"EN","r":"https://www.fbcnews.com.fj/feed/","w":"https://www.fbcnews.com.fj"}]},"Solomon Islands": {
+"Honiara":[{"m":"Island Sun","l":"EN","r":"https://theislandsun.com.sb/feed/","w":"https://theislandsun.com.sb"}]},"Vanuatu": {
+"Port Vila":[{"m":"VBTC","l":"EN","r":"https://vbtc.vu/feed/","w":"https://vbtc.vu"},
+{"m":"Google News – Port Vila","l":"EN","r":"https://news.google.com/rss/search?q=%22Port+Vila%22&hl=en&gl=VU&ceid=VU:en","w":"https://news.google.com"}]},"Tonga": {
+"Nuku'alofa":[{"m":"Matangi Tonga","l":"EN","r":"https://matangitonga.to/rss.xml","w":"https://matangitonga.to"},
+{"m":"Tonga Independent","l":"EN","r":"https://tongaindependent.com/feed/","w":"https://tongaindependent.com"}]},"Kiribati": {
+"South Tarawa":[{"m":"Google News – Kiribati","l":"EN","r":"https://news.google.com/rss/search?q=Kiribati&hl=en&gl=KI&ceid=KI:en","w":"https://news.google.com"},
+{"m":"RNZ Pacific","l":"EN","r":"https://www.rnz.co.nz/rss/pacific.xml","w":"https://www.rnz.co.nz/international"}]},"Tuvalu": {
+"Funafuti":[{"m":"Google News – Tuvalu","l":"EN","r":"https://news.google.com/rss/search?q=Tuvalu&hl=en&gl=TV&ceid=TV:en","w":"https://news.google.com"},
+{"m":"RNZ Pacific","l":"EN","r":"https://www.rnz.co.nz/rss/pacific.xml","w":"https://www.rnz.co.nz/international"}]},"Nauru": {
+"Yaren":[{"m":"Google News – Nauru","l":"EN","r":"https://news.google.com/rss/search?q=Nauru&hl=en&gl=NR&ceid=NR:en","w":"https://naurugov.nr"},
+{"m":"RNZ Pacific","l":"EN","r":"https://www.rnz.co.nz/rss/pacific.xml","w":"https://www.rnz.co.nz/international"}]},"Palau": {
+"Ngerulmud":[{"m":"Island Times","l":"EN","r":"https://islandtimes.org/feed/","w":"https://islandtimes.org"}],
+"Koror":[{"m":"Pacific Island Times","l":"EN","r":"https://www.pacificislandtimes.com/blog-feed.xml","w":"https://www.pacificislandtimes.com"}]},"Marshall Islands": {
+"Majuro":[{"m":"Marshall Islands Journal","l":"EN","r":"https://marshallislandsjournal.com/feed/","w":"https://marshallislandsjournal.com"},
+{"m":"RNZ Pacific","l":"EN","r":"https://www.rnz.co.nz/rss/pacific.xml","w":"https://www.rnz.co.nz/international"}]},"Micronesia": {
+"Palikir":[{"m":"Pacific Island Times","l":"EN","r":"https://www.pacificislandtimes.com/blog-feed.xml","w":"https://www.pacificislandtimes.com"},
+{"m":"Google News – FSM","l":"EN","r":"https://news.google.com/rss/search?q=Micronesia+Pohnpei&hl=en&gl=FM&ceid=FM:en","w":"https://news.google.com"}]}}

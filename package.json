@@ -1,0 +1,42 @@
+{
+  "name": "global-news",
+  "version": "1.0.0",
+  "description": "Global News — an interactive world map of live local news, aggregated from hundreds of verified media outlets worldwide.",
+  "type": "module",
+  "main": "server/index.js",
+  "engines": {
+    "node": ">=20.6.0"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "build:catalog": "node scripts/build-catalog.js",
+    "ingest": "node scripts/ingest-once.js",
+    "check:feeds": "node scripts/check-feeds.js",
+    "import:media": "node scripts/import-media-list.mjs",
+    "test": "node --test test/"
+  },
+  "keywords": [
+    "news",
+    "rss",
+    "world-map",
+    "maplibre",
+    "aggregator",
+    "open-source",
+    "journalism"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OWNER/Global-News.git"
+  },
+  "dependencies": {
+    "compression": "^1.8.1",
+    "express": "^4.21.2",
+    "fast-xml-parser": "^4.5.1",
+    "world-countries": "^5.1.0"
+  },
+  "devDependencies": {
+    "jsdom": "^25.0.1"
+  }
+}

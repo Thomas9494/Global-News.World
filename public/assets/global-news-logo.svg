@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="250" height="72" viewBox="0 0 250 72" role="img" aria-label="Global News Logo">
+  <text x="18" y="42" font-family="Inter, sans-serif" font-size="30" font-weight="800" letter-spacing="-1" fill="#0f172a">gl<tspan fill="#0052cc">o</tspan>bal news</text>
+  <path d="M 52 30 A 8.4 8.4 0 0 1 68.8 30" fill="none" stroke="#dc2626" stroke-width="3" stroke-linecap="round"></path>
+  <line x1="18" y1="56" x2="120" y2="56" stroke="#0052cc" stroke-width="4"></line>
+  <line x1="126" y1="56" x2="140" y2="56" stroke="#dc2626" stroke-width="4"></line>
+</svg>

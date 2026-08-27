@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.local
+*.log
+data/cache/
+data/store.json
+data/feed-report.json
+coverage/
+.DS_Store
+Thumbs.db
+
+data/city-sources-rejected.json

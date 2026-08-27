@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 💬 Questions and ideas
+    url: https://github.com/OWNER/Global-News/discussions
+    about: Ask anything, or float an idea before building it.
+  - name: 📖 How to contribute
+    url: https://github.com/OWNER/Global-News/blob/main/CONTRIBUTING.md
+    about: There is a lane for you whether or not you write code.

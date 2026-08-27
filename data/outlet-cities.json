@@ -1,0 +1,462 @@
+{
+ "104": {
+  "dvb": "Yangon",
+  "myanmar gazette": "Yangon",
+  "thit htoo": "Yangon"
+ },
+ "124": {
+  "cbc": "Toronto",
+  "radio-canada": "Montreal",
+  "ctvnews": "Toronto",
+  "national post": "Toronto",
+  "financial post": "Toronto",
+  "lapresse": "Montreal",
+  "the province": "Vancouver"
+ },
+ "152": {
+  "emol": "Santiago",
+  "mercurio": "Santiago"
+ },
+ "156": {
+  "xinhua": "Beijing"
+ },
+ "158": {
+  "focus taiwan": "Taipei",
+  "cna": "Taipei"
+ },
+ "170": {
+  "tiempo": "Bogotá"
+ },
+ "203": {
+  "čtk": "Prague",
+  "české noviny": "Prague",
+  "ceskenoviny": "Prague"
+ },
+ "208": {
+  "dr": "Copenhagen"
+ },
+ "246": {
+  "yle": "Helsinki"
+ },
+ "250": {
+  "le monde": "Paris",
+  "le figaro": "Paris",
+  "mediapart": "Paris",
+  "obs": "Paris",
+  "franceinfo": "Paris",
+  "huffington": "Paris",
+  "rfi": "Paris",
+  "france24": "Paris",
+  "ouest-france": "Rennes",
+  "dépêche": "Toulouse",
+  "depeche": "Toulouse",
+  "sudouest": "Bordeaux",
+  "essentiel": "Bordeaux",
+  "diplomatie": "Paris"
+ },
+ "276": {
+  "tagesschau": "Hamburg",
+  "spiegel": "Hamburg",
+  "zeit online": "Hamburg",
+  "faz": "Frankfurt",
+  "süddeutsche": "Munich",
+  "sueddeutsche": "Munich",
+  "handelsblatt": "Düsseldorf",
+  "focus": "Munich",
+  "deutsche welle": "Bonn",
+  "taz": "Berlin",
+  "münchner": "Munich",
+  "muenchner": "Munich",
+  "wdr": "Cologne",
+  "rbb24": "Berlin",
+  "ndr": "Hamburg",
+  "abendblatt": "Hamburg"
+ },
+ "300": {
+  "kathimerini": "Athens"
+ },
+ "344": {
+  "hong kong free press": "Hong Kong",
+  "hkfp": "Hong Kong",
+  "the standard": "Hong Kong",
+  "headline": "Hong Kong",
+  "hket": "Hong Kong",
+  "hongkongnews": "Hong Kong"
+ },
+ "348": {
+  "hungary today": "Budapest",
+  "mti": "Budapest"
+ },
+ "356": {
+  "the hindu": "Chennai",
+  "times of india": "Mumbai",
+  "ndtv": "New Delhi",
+  "indian express": "New Delhi",
+  "india today": "New Delhi",
+  "economic times": "Mumbai",
+  "business-standard": "New Delhi",
+  "business line": "Chennai",
+  "dnaindia": "Mumbai",
+  "firstpost": "Mumbai",
+  "theprint": "New Delhi",
+  "scroll": "New Delhi",
+  "moneycontrol": "Mumbai",
+  "deccan chronicle": "Hyderabad",
+  "gujarat samachar": "Ahmedabad",
+  "divya": "Ahmedabad",
+  "maharashtra times": "Mumbai",
+  "loksatta": "Mumbai",
+  "navbharat": "New Delhi",
+  "amar ujala": "Lucknow",
+  "outlook": "New Delhi",
+  "free press journal": "Mumbai",
+  "financial express": "New Delhi",
+  "sebi": "Mumbai",
+  "news18": "New Delhi",
+  "oneindia": "Bangalore",
+  "opindia": "New Delhi",
+  "swarajya": "Bangalore",
+  "patrika": "Jaipur",
+  "jansatta": "New Delhi",
+  "livehindustan": "New Delhi",
+  "bhaskar": "Bhopal",
+  "press trust": "New Delhi"
+ },
+ "360": {
+  "republika": "Jakarta",
+  "tribunnews": "Jakarta",
+  "merdeka": "Jakarta",
+  "suara": "Jakarta"
+ },
+ "364": {
+  "yjc": "Tehran",
+  "tabnak": "Tehran",
+  "isna": "Tehran",
+  "mehr": "Tehran",
+  "khabaronline": "Tehran",
+  "tasnim": "Tehran",
+  "asriran": "Tehran"
+ },
+ "372": {
+  "rté": "Dublin",
+  "rte": "Dublin",
+  "thejournal": "Dublin",
+  "irish mirror": "Dublin",
+  "the42": "Dublin",
+  "breakingnews": "Cork",
+  "irishexaminer": "Cork",
+  "irishcentral": "Dublin"
+ },
+ "376": {
+  "times of israel": "Jerusalem",
+  "haaretz": "Tel Aviv"
+ },
+ "380": {
+  "ansa": "Rome",
+  "corriere": "Milan",
+  "il post": "Milan",
+  "libero": "Milan",
+  "mattino": "Naples",
+  "adnkronos": "Rome",
+  "fanpage": "Naples",
+  "internazionale": "Rome",
+  "panorama": "Milan",
+  "milan news": "Milan",
+  "diariodelweb": "Turin"
+ },
+ "392": {
+  "nhk": "Tokyo",
+  "japan times": "Tokyo",
+  "kyodo": "Tokyo",
+  "japan today": "Tokyo",
+  "asahi": "Tokyo",
+  "livedoor": "Tokyo",
+  "newsonjapan": "Tokyo",
+  "bridge": "Tokyo"
+ },
+ "404": {
+  "nation": "Nairobi",
+  "daily nation": "Nairobi"
+ },
+ "410": {
+  "yonhap": "Seoul"
+ },
+ "484": {
+  "universal": "Mexico City",
+  "excélsior": "Mexico City",
+  "excelsior": "Mexico City",
+  "reforma": "Mexico City",
+  "financiero": "Mexico City",
+  "elnorte": "Monterrey",
+  "informador": "Guadalajara",
+  "siglo de torreón": "Torreón",
+  "debate": "Culiacán",
+  "24 horas": "Mexico City",
+  "mexico news daily": "Mexico City",
+  "quequi": "Cancún",
+  "8 columnas": "Guadalajara",
+  "vanguardia": "Monterrey"
+ },
+ "528": {
+  "nrc": "Amsterdam",
+  "parool": "Amsterdam",
+  "nos": "Amsterdam"
+ },
+ "554": {
+  "rnz": "Wellington",
+  "radio new zealand": "Wellington",
+  "nz herald": "Auckland",
+  "stuff": "Wellington"
+ },
+ "566": {
+  "premium times": "Abuja",
+  "guardian nigeria": "Lagos",
+  "daily post": "Lagos",
+  "legit": "Lagos",
+  "the nation": "Lagos",
+  "tribune": "Ibadan",
+  "sahara": "Lagos",
+  "nigerianeye": "Lagos",
+  "information nigeria": "Lagos",
+  "nigerian bulletin": "Lagos"
+ },
+ "578": {
+  "nrk": "Oslo"
+ },
+ "586": {
+  "express tribune": "Karachi",
+  "the nation": "Lahore",
+  "jang": "Karachi",
+  "the news international": "Karachi",
+  "urdupoint": "Islamabad",
+  "express": "Karachi",
+  "newsnblogs": "Islamabad"
+ },
+ "608": {
+  "inquirer": "Manila",
+  "manila times": "Manila",
+  "manila standard": "Manila",
+  "philstar": "Manila",
+  "gma": "Quezon City",
+  "businessworld": "Quezon City",
+  "businessmirror": "Manila",
+  "philippine news agency": "Manila",
+  "philippine information agency": "Manila",
+  "interaksyon": "Manila",
+  "eagle news": "Quezon City",
+  "abante": "Manila",
+  "tempo": "Manila",
+  "current ph": "Manila",
+  "top gear": "Manila",
+  "unbox": "Manila",
+  "techpinas": "Manila",
+  "philnews": "Manila",
+  "sunstar": "Cebu"
+ },
+ "616": {
+  "pap": "Warsaw",
+  "newsweek": "Warsaw",
+  "dziennik": "Warsaw",
+  "rp.pl": "Warsaw",
+  "gazetaprawna": "Warsaw",
+  "rmf24": "Kraków",
+  "wirtualnemedia": "Warsaw",
+  "polityce": "Warsaw",
+  "polska agencja": "Warsaw"
+ },
+ "620": {
+  "público": "Lisbon",
+  "publico": "Lisbon"
+ },
+ "634": {
+  "al jazeera": "Doha"
+ },
+ "643": {
+  "tass": "Moscow",
+  "lenta": "Moscow",
+  "вести": "Moscow",
+  "газета": "Moscow",
+  "московский": "Moscow",
+  "российская": "Moscow",
+  "newsru": "Moscow",
+  "rt -": "Moscow",
+  "meduza": "Moscow",
+  "moscow times": "Moscow",
+  "коммерсант": "Moscow",
+  "pravda": "Moscow",
+  "russia insider": "Moscow"
+ },
+ "682": {
+  "arab news": "Riyadh"
+ },
+ "702": {
+  "straits times": "Singapore",
+  "channel newsasia": "Singapore",
+  "cna": "Singapore"
+ },
+ "710": {
+  "news24": "Cape Town",
+  "daily maverick": "Cape Town",
+  "sowetan": "Johannesburg",
+  "timeslive": "Johannesburg",
+  "moneyweb": "Johannesburg",
+  "the citizen": "Johannesburg",
+  "eyewitness": "Johannesburg",
+  "techcentral": "Johannesburg",
+  "iol": "Cape Town",
+  "the south african": "Cape Town"
+ },
+ "724": {
+  "país": "Madrid",
+  "pais": "Madrid",
+  "efe": "Madrid",
+  "confidencial": "Madrid",
+  "españa": "Madrid",
+  "eldiario": "Madrid",
+  "expansion": "Madrid",
+  "periódico": "Barcelona",
+  "periodico": "Barcelona",
+  "huffingtonpost": "Madrid",
+  "euro weekly": "Málaga"
+ },
+ "752": {
+  "svt": "Stockholm"
+ },
+ "756": {
+  "nzz": "Zurich",
+  "tages-anzeiger": "Zurich",
+  "20 minuten": "Zurich",
+  "blick": "Zurich",
+  "srf": "Zurich",
+  "rts": "Geneva",
+  "le temps": "Geneva",
+  "admin.ch": "Bern",
+  "keystone": "Bern",
+  "swissinfo": "Bern",
+  "zentralplus": "Lucerne",
+  "basler": "Basel",
+  "24 heures": "Lausanne",
+  "tribune de genève": "Geneva"
+ },
+ "764": {
+  "bangkok post": "Bangkok",
+  "khaosod": "Bangkok",
+  "prachatai": "Bangkok"
+ },
+ "784": {
+  "the national": "Abu Dhabi"
+ },
+ "792": {
+  "anadolu": "Ankara"
+ },
+ "804": {
+  "kyiv independent": "Kyiv",
+  "ukrinform": "Kyiv",
+  "unian": "Kyiv",
+  "унian": "Kyiv",
+  "правда": "Kyiv",
+  "цензор": "Kyiv",
+  "tsn": "Kyiv",
+  "нв": "Kyiv",
+  "еспресо": "Kyiv",
+  "gazeta.ua": "Kyiv",
+  "телеграф": "Kyiv",
+  "гордон": "Kyiv",
+  "вести": "Kyiv",
+  "корреспондент": "Kyiv",
+  "korrespondent": "Kyiv"
+ },
+ "818": {
+  "ahram": "Cairo"
+ },
+ "826": {
+  "bbc": "London",
+  "guardian": "London",
+  "financial times": "London",
+  "economist": "London",
+  "mail online": "London",
+  "independent": "London",
+  "daily express": "London"
+ },
+ "840": {
+  "washington post": "Washington",
+  "wall street journal": "New York",
+  "wsj": "New York",
+  "bloomberg": "New York",
+  "new york times": "New York",
+  "huffpost": "New York",
+  "fox news": "New York",
+  "latimes": "Los Angeles",
+  "world & nation": "Los Angeles",
+  "cnbc": "New York",
+  "politico": "Washington",
+  "playbook": "Washington",
+  "npr": "Washington",
+  "cnn": "Atlanta",
+  "yahoo": "New York"
+ },
+ "_readme": [
+  "Where a newsroom actually sits. Zooming the map onto a city shows that city's own",
+  "press, so we need to know that the NZZ is a Zurich paper and the Luzerner Zeitung a",
+  "Lucerne one.",
+  "",
+  "Keys are ISO 3166-1 numeric country codes; inside each country, a lowercase substring",
+  "of the outlet name maps to a city in data/cities.json. Scoping by country keeps",
+  "ambiguous names apart — 'The Nation' is a Lahore paper in Pakistan and a Lagos paper",
+  "in Nigeria.",
+  "",
+  "Outlets whose name already contains their city (Luzerner Zeitung, Toronto Star,",
+  "Bangkok Post) are matched automatically and do not need an entry here.",
+  "",
+  "Adding your local paper is a one-line pull request — see CONTRIBUTING.md."
+ ],
+ "040": {
+  "orf": "Vienna",
+  "der standard": "Vienna",
+  "die presse": "Vienna",
+  "kurier": "Vienna",
+  "kleine zeitung": "Graz"
+ },
+ "036": {
+  "abc news": "Sydney",
+  "the age": "Melbourne",
+  "herald sun": "Melbourne",
+  "daily telegraph": "Sydney",
+  "courier mail": "Brisbane",
+  "perthnow": "Perth",
+  "the mercury": "Hobart",
+  "crikey": "Melbourne",
+  "indaily": "Adelaide",
+  "michael west": "Sydney",
+  "business news": "Perth",
+  "independent australia": "Sydney"
+ },
+ "076": {
+  "folha": "São Paulo",
+  "globo": "Rio de Janeiro",
+  "uol": "São Paulo",
+  "r7": "São Paulo",
+  "ebc": "Brasília",
+  "rio times": "Rio de Janeiro",
+  "brasil wire": "São Paulo"
+ },
+ "032": {
+  "nación": "Buenos Aires",
+  "nacion": "Buenos Aires",
+  "clarín": "Buenos Aires",
+  "clarin": "Buenos Aires"
+ },
+ "056": {
+  "vrt": "Brussels"
+ },
+ "050": {
+  "daily star": "Dhaka",
+  "prothom": "Dhaka",
+  "bdnews24": "Dhaka",
+  "jugantor": "Dhaka",
+  "kalerkantho": "Dhaka",
+  "jagonews": "Dhaka",
+  "banglanews": "Dhaka",
+  "bd24live": "Dhaka"
+ }
+}
