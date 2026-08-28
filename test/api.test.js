@@ -105,7 +105,13 @@ test("GET /api/bootstrap returns everything the map needs to draw", async () => 
   assert.equal(body.categoryCounts.Politics, 3);
   assert.equal(body.news["756"].name, "Switzerland");
   assert.equal(body.news["756"].articles.length, 3);
-  assert.deepEqual(body.regions["756"], { ll: [8.23, 46.8], z: 6.6, min: 5.2 });
+  assert.deepEqual(body.regions["756"], {
+    ll: [8.23, 46.8],
+    z: 6.6,
+    min: 5.2,
+    // the outline is what lets the client tell which country the reader is over
+    bbox: [5.97, 45.83, 10.49, 47.81],
+  });
   assert.deepEqual(body.world, { center: [10, 25], zoom: 1.6 });
   assert.ok(body.reader.lang);
   assert.equal(body.langNames.nl, "Nederlands");

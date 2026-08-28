@@ -6,7 +6,7 @@
 
 [Why this exists](#why-this-exists) · [How it works](#how-it-works) · [Quick start](#quick-start) · [API](#http-api) · [Write a plugin](#writing-a-news-plugin) · [Contributing](CONTRIBUTING.md)
 
-![license](https://img.shields.io/badge/license-MIT-0052cc) ![node](https://img.shields.io/badge/node-%E2%89%A520.6-0d9488) ![countries](https://img.shields.io/badge/countries-192%2F194%20UN%20members-0052cc) ![outlets](https://img.shields.io/badge/outlets-1034-0d9488) ![cities](https://img.shields.io/badge/cities-440%20live-0052cc) ![tests](https://img.shields.io/badge/tests-120-0d9488)
+![license](https://img.shields.io/badge/license-MIT-0052cc) ![node](https://img.shields.io/badge/node-%E2%89%A520.6-0d9488) ![countries](https://img.shields.io/badge/countries-192%2F194%20UN%20members-0052cc) ![outlets](https://img.shields.io/badge/outlets-1034-0d9488) ![cities](https://img.shields.io/badge/cities-440%20live-0052cc) ![tests](https://img.shields.io/badge/tests-124-0d9488)
 
 </div>
 
@@ -153,6 +153,13 @@ Then the article gets **two** places, which is what makes the city zoom work:
   and is listed
 
 A story with neither sits at the country centroid.
+
+**Know which country you are over.** The map decides the focused country from the
+country outlines that ship with `world-countries`, not from whichever centre is nearest.
+Nearest-centre is the wrong question: over Munich, Austria's centre is closer than
+Germany's, and over Lagos, Benin's, Togo's and Niger's all beat Nigeria's. Where two
+outlines overlap, the nearest known town settles it. If the reader is over a country but
+still zoomed too far out for it, the map shows nothing rather than a neighbour.
 
 **Share out fairly.** A country is capped at 200 stories, but Zurich publishes far more
 than Chur and would otherwise take every slot. So the cap is filled by round-robin over
@@ -470,7 +477,7 @@ behaviour lives in `public/app.js`.
 npm test
 ```
 
-120 tests, no network required:
+124 tests, no network required:
 
 - **pipeline** — parsers for all four feed formats, charset decoding, entity-heavy feeds, date shapes, language identification, topic classification, place resolution, de-duplication, reader-language detection
 - **api** — every endpoint, including all three search intents, city filtering and the sources contract

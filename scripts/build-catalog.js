@@ -11,7 +11,7 @@
  * The ten regions that were hand-tuned in the design keep their exact values so
  * the map behaves identically to the reference implementation.
  */
-import { writeFileSync, readFileSync } from "node:fs";
+import { writeFileSync, readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -50,6 +50,98 @@ const NAME_ALIASES = {
   "Hong Kong": "Hong Kong",
 };
 
+/**
+ * Bounding box and mainland centre, read from the country outlines that ship
+ * with world-countries.
+ *
+ * The box is what lets the map answer "which country am I looking at?" — asking
+ * which centroid is nearest gets it wrong for any city near a border, because a
+ * small neighbour's centre is often closer than your own country's.
+ *
+ * The centre comes from the largest landmass, so France is not dragged into the
+ * Atlantic by its overseas départements.
+ */
+function geometryFor(cca3) {
+  const path = join(ROOT, `node_modules/world-countries/data/${cca3.toLowerCase()}.geo.json`);
+  if (!existsSync(path)) return null;
+
+  let doc;
+  try {
+    doc = JSON.parse(readFileSync(path, "utf8"));
+  } catch {
+    return null;
+  }
+
+  /** @type {number[][][]} every outer ring in the country */
+  const rings = [];
+  for (const feature of doc.features || []) {
+    const g = feature.geometry;
+    if (!g) continue;
+    if (g.type === "Polygon") rings.push(g.coordinates[0]);
+    else if (g.type === "MultiPolygon") for (const poly of g.coordinates) rings.push(poly[0]);
+  }
+  if (!rings.length) return null;
+
+  let minLng = 180, minLat = 90, maxLng = -180, maxLat = -90;
+  let biggest = null;
+  let biggestArea = -1;
+
+  for (const ring of rings) {
+    // shoelace area, in degrees² — only ever compared against itself
+    let area = 0;
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      area += ring[j][0] * ring[i][1] - ring[i][0] * ring[j][1];
+    }
+    area = Math.abs(area / 2);
+    if (area > biggestArea) {
+      biggestArea = area;
+      biggest = ring;
+    }
+    for (const [lng, lat] of ring) {
+      if (lng < minLng) minLng = lng;
+      if (lng > maxLng) maxLng = lng;
+      if (lat < minLat) minLat = lat;
+      if (lat > maxLat) maxLat = lat;
+    }
+  }
+
+  // centroid of the largest ring
+  let cx = 0, cy = 0, a2 = 0;
+  for (let i = 0, j = biggest.length - 1; i < biggest.length; j = i++) {
+    const f = biggest[j][0] * biggest[i][1] - biggest[i][0] * biggest[j][1];
+    a2 += f;
+    cx += (biggest[j][0] + biggest[i][0]) * f;
+    cy += (biggest[j][1] + biggest[i][1]) * f;
+  }
+  const centre = a2 ? [cx / (3 * a2), cy / (3 * a2)] : null;
+
+  const round2 = (n) => Number(n.toFixed(2));
+  const full = [minLng, minLat, maxLng, maxLat];
+
+  // A country with territory either side of the antimeridian — the United
+  // States with the Aleutians, Russia with Chukotka, New Zealand, Fiji — gets a
+  // box spanning the whole globe, which would match every point on earth. Fall
+  // back to the box around its main landmass, which is the part a reader is
+  // almost certainly looking at.
+  let box = full;
+  if (maxLng - minLng > 180) {
+    let a = 180, b = 90, c2 = -180, d = -90;
+    for (const [lng, lat] of biggest) {
+      if (lng < a) a = lng;
+      if (lng > c2) c2 = lng;
+      if (lat < b) b = lat;
+      if (lat > d) d = lat;
+    }
+    box = c2 - a > 180 ? null : [a, b, c2, d];
+  }
+
+  return {
+    bbox: box ? box.map(round2) : null,
+    fullBbox: full.map(round2),
+    centre: centre ? centre.map(round2) : null,
+  };
+}
+
 const round1 = (n) => Math.round(n * 10) / 10;
 const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
 
@@ -72,22 +164,28 @@ const regions = {};
 const byName = {};
 const tldToCcn3 = {};
 
+let withGeometry = 0;
 for (const c of countries) {
   const id = c.ccn3;
   if (!id) continue;
   const name = c.name.common;
   const design = DESIGN_REGIONS[id];
+  const geo = geometryFor(c.cca3);
+  if (geo) withGeometry++;
   const ll = design
     ? design.ll
-    : c.latlng && c.latlng.length === 2
-      ? [round1(c.latlng[1] * 100) / 100, round1(c.latlng[0] * 100) / 100]
-      : null;
+    : geo?.centre
+      ? geo.centre
+      : c.latlng && c.latlng.length === 2
+        ? [round1(c.latlng[1] * 100) / 100, round1(c.latlng[0] * 100) / 100]
+        : null;
   if (!ll) continue;
   const z = design ? design.z : zoomForArea(c.area);
   regions[id] = {
     name,
     cca2: c.cca2,
     ll: [Number(ll[0].toFixed(2)), Number(ll[1].toFixed(2))],
+    bbox: geo?.bbox || null,
     z,
     min: design ? design.min : round1(0.8 * z),
     region: c.region || "",
@@ -132,5 +230,6 @@ writeFileSync(join(ROOT, "server/catalog/countries.json"), JSON.stringify(out, n
 
 console.log(`regions: ${Object.keys(regions).length}`);
 console.log(`country tlds: ${Object.keys(tldToCcn3).length}`);
+console.log(`outlines read: ${withGeometry}`);
 console.log(`source keys mapped: ${Object.keys(sourceKeyToCcn3).length}`);
 if (unresolved.length) console.log(`UNRESOLVED source keys: ${unresolved.join(", ")}`);

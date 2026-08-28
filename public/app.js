@@ -251,12 +251,15 @@ function renderCityDots() {
   if (!focusedId) return;
   const seen = {};
   filteredArticles(focusedId).forEach((a) => {
-    if (a.city && a.ll && !seen[a.city]) {
-      seen[a.city] = 1;
+    // the place the story is about, else the town its newsroom sits in — both
+    // are worth a dot, because both are somewhere the reader can zoom into
+    const place = a.city || a.srcCity;
+    if (place && a.ll && !seen[place]) {
+      seen[place] = 1;
       const el = document.createElement("div");
       el.className = "cdot";
       el.dataset.ll = a.ll.join(",");
-      el.innerHTML = `<span class="l">${esc(a.city)}</span><span class="d"></span>`;
+      el.innerHTML = `<span class="l">${esc(place)}</span><span class="d"></span>`;
       el.onclick = () => openPanel(focusedId, a);
       markerLayer.appendChild(el);
     }
@@ -283,30 +286,30 @@ function onView() {
     return;
   }
   if (cityFocus) {
+    // leaving a town: its cards and its dot go with it
     cityFocus = null;
     focusedId = null;
     cardsLayer.innerHTML = "";
+    markerLayer.querySelectorAll(".cdot").forEach((e) => e.remove());
   }
 
   const z = map.getZoom();
-  let target = null,
-    best = 1e18;
-  regionIds.forEach((id) => {
-    const r = REGION[id];
-    if (!r || z < r.min) return;
-    const [x, y] = project(r.ll);
-    const dx = x - W() / 2,
-      dy = y - H() / 2,
-      d2 = dx * dx + dy * dy;
-    if (Math.sqrt(d2) < Math.min(W(), H()) * 0.6 && d2 < best) {
-      best = d2;
-      target = id;
-    }
-  });
-  // Zoomed in far enough that no country centre is still on screen: fall back
-  // to the country the reader is actually over.
-  if (!target && z >= CITY_ZOOM) target = nearestCountry();
-  setFocus(target);
+
+  // Which country the reader is over, regardless of how far out they are.
+  const over = countryUnderView(regionIds);
+
+  if (over) {
+    // Standing over a country: show it, or — if the reader is still too far out
+    // for it — show nothing. Never a neighbour. A card headed "Niger" while the
+    // reader is looking at Lagos is worse than an empty map.
+    setFocus(z >= REGION[over].min ? over : null);
+    return;
+  }
+
+  // Over open water, or over a country we have no outline for: the design's
+  // original rule, the nearest country centre still on screen.
+  const focusable = regionIds.filter((id) => REGION[id] && z >= REGION[id].min);
+  setFocus(nearestCountryOnScreen(focusable));
 }
 
 function setCityFocus(city) {
@@ -376,28 +379,72 @@ function cityArticles(city) {
   );
 }
 
+/** Great-circle-ish distance in degrees, good enough for picking a neighbour. */
+function degreesBetween(lng1, lat1, lng2, lat2) {
+  const dx = (lng1 - lng2) * Math.cos(((lat1 + lat2) / 2) * (Math.PI / 180));
+  return Math.hypot(dx, lat1 - lat2);
+}
+
 /**
- * The country the reader is looking at when they are zoomed in past the point
- * where the country's own centre is still on screen. Without this, zooming
- * deep into a corner of a country leaves the map blank.
+ * The country whose outline the reader is standing over.
+ *
+ * Nearest-centre is the wrong question: over Munich, Austria's centre is closer
+ * than Germany's; over Lagos, Benin's, Togo's and Niger's all beat Nigeria's.
+ * So ask which countries' bounding boxes contain the point, and let the nearest
+ * known town settle it — towns are dense and unambiguous where borders are not.
+ *
+ * @param {string[]} candidates ccn3 codes worth considering at this zoom
  */
-function nearestCountry() {
+function countryUnderView(candidates) {
+  if (!candidates.length) return null;
   const c = map.getCenter();
+
+  const inside = candidates.filter((id) => {
+    const b = REGION[id]?.bbox;
+    return b && c.lng >= b[0] && c.lng <= b[2] && c.lat >= b[1] && c.lat <= b[3];
+  });
+  if (!inside.length) return null;
+  if (inside.length === 1) return inside[0];
+
+  // boxes overlap here — the closest town decides
+  const allowed = new Set(inside);
   let best = null;
   let bestD = Infinity;
-  for (const id of regionIds) {
-    const r = REGION[id];
-    if (!r) continue;
-    const dx = (r.ll[0] - c.lng) * Math.cos((c.lat * Math.PI) / 180);
-    const dy = r.ll[1] - c.lat;
-    const d = Math.hypot(dx, dy);
+  for (const city of CITIES) {
+    if (!allowed.has(city.ccn3)) continue;
+    const d = degreesBetween(city.ll[0], city.ll[1], c.lng, c.lat);
+    if (d < bestD) {
+      bestD = d;
+      best = city.ccn3;
+    }
+  }
+  if (best) return best;
+
+  for (const id of inside) {
+    const d = degreesBetween(REGION[id].ll[0], REGION[id].ll[1], c.lng, c.lat);
     if (d < bestD) {
       bestD = d;
       best = id;
     }
   }
-  // roughly "the reader is inside or beside this country", not two borders away
-  return bestD <= 12 ? best : null;
+  return best;
+}
+
+/** The design's original rule: the nearest country centre still on screen. */
+function nearestCountryOnScreen(candidates) {
+  let target = null;
+  let best = 1e18;
+  for (const id of candidates) {
+    const [x, y] = project(REGION[id].ll);
+    const dx = x - W() / 2;
+    const dy = y - H() / 2;
+    const d2 = dx * dx + dy * dy;
+    if (Math.sqrt(d2) < Math.min(W(), H()) * 0.6 && d2 < best) {
+      best = d2;
+      target = id;
+    }
+  }
+  return target;
 }
 
 /** The town nearest the middle of the screen, if the reader is close enough. */

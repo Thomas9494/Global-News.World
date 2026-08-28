@@ -80,6 +80,30 @@ function seed() {
     )
   );
   store.setCountry("756", "Switzerland", ch);
+  store.setCountry("276", "Germany", [
+    normalizeItem(
+      raw({
+        link: "https://demo.example/de/1",
+        title: "Stadtrat beschliesst Ausbau der Trambahn",
+        summary: "Die Entscheidung fiel am Mittwoch.",
+        categories: ["Politik"],
+        src: "Münchner Merkur",
+        sourceKey: "Germany",
+      })
+    ),
+  ]);
+  store.setCountry("040", "Austria", [
+    normalizeItem(
+      raw({
+        link: "https://demo.example/at/1",
+        title: "Nationalrat debattiert das Budget",
+        summary: "Die Sitzung dauerte bis in die Nacht.",
+        categories: ["Politik"],
+        src: "Der Standard",
+        sourceKey: "Austria",
+      })
+    ),
+  ]);
   store.setCountry("764", "Thailand", [
     normalizeItem(
       raw({
@@ -226,9 +250,8 @@ test("topic chips are built from the API taxonomy, All active", () => {
 
 test("a country marker is drawn for every covered country", () => {
   const dots = $$("#markers .mdot");
-  assert.equal(dots.length, 2);
   const labels = dots.map((d) => d.textContent).sort();
-  assert.deepEqual(labels, ["Switzerland", "Thailand"]);
+  assert.deepEqual(labels, ["Austria", "Germany", "Switzerland", "Thailand"]);
 });
 
 test("the dropdown lists covered countries first and marks them LIVE", () => {
@@ -299,6 +322,51 @@ test("a topic chip filters the cards on screen", async () => {
 });
 
 /* -------------------------------------------------------- article panel -- */
+
+/* ------------------------------------------------- which country am I over -- */
+
+test("the country under the view wins, not the one with the nearest centre", async () => {
+  // Munich sits closer to Austria's centre than to Germany's, and Austria is a
+  // small country whose centre stays on screen far longer. Picking by distance
+  // therefore labelled Munich "Austria" — the map has to read the outline.
+  win.__map.flyTo({ center: [11.58, 48.14], zoom: 6.5 });
+  await flush(320);
+  assert.match($("#cards .countrytag").textContent, /Germany/);
+
+  // and the other way round: over Vienna it really is Austria
+  win.__map.flyTo({ center: [16.37, 48.21], zoom: 6.5 });
+  await flush(320);
+  assert.match($("#cards .countrytag").textContent, /Austria/);
+});
+
+test("too far out for the country underneath shows nothing, never a neighbour", async () => {
+  // Switzerland only focuses from zoom 5.2; at 4 the reader is still looking at
+  // a continent, and a card headed "Germany" over Zurich would be wrong.
+  win.__map.flyTo({ center: [8.54, 47.37], zoom: 4 });
+  await flush(320);
+  assert.equal($$("#cards .newscard").length, 0);
+  assert.equal($("#cards .countrytag"), null);
+});
+
+test("a country's towns are marked so the reader knows where to zoom", async () => {
+  win.__map.flyTo({ center: [8.23, 46.8], zoom: 6 });
+  await flush(320);
+  const labels = $$("#markers .cdot .l").map((e) => e.textContent);
+  assert.ok(labels.includes("Lucerne"), `expected Lucerne among ${labels}`);
+  assert.ok(labels.includes("Zurich"));
+  assert.ok(labels.length >= 2, "a dot per town with local news, not just one");
+});
+
+test("leaving a town takes its dot with it", async () => {
+  win.__map.flyTo({ center: [8.31, 47.05], zoom: 9 });
+  await flush(320);
+  assert.equal($$("#markers .cdot").length, 1, "in a town, only that town is marked");
+
+  win.__map.flyTo({ center: [-30, 30], zoom: 3 }); // mid-Atlantic
+  await flush(320);
+  assert.equal($$("#markers .cdot").length, 0);
+  assert.equal($$("#cards .newscard").length, 0);
+});
 
 /* ------------------------------------------------------------ city zoom -- */
 

@@ -91,7 +91,7 @@ api.get("/bootstrap", async (req, res) => {
   const regions = {};
   for (const ccn3 of Object.keys(news)) {
     const r = REGIONS[ccn3];
-    if (r) regions[ccn3] = { ll: r.ll, z: r.z, min: r.min };
+    if (r) regions[ccn3] = { ll: r.ll, z: r.z, min: r.min, bbox: r.bbox || null };
   }
 
   // Cities the reader can zoom into: every place a bundled story is anchored to,
