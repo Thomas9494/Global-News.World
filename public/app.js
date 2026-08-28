@@ -40,6 +40,82 @@ const msheet = document.getElementById("msheet");
 const mhead = document.getElementById("mhead");
 const mstrip = document.getElementById("mstrip");
 
+/**
+ * The hint tells the reader how to zoom. A phone has no mouse wheel, so on a
+ * touch device it has to describe the gesture that device actually has.
+ */
+if (matchMedia("(pointer:coarse)").matches) {
+  const hintText = document.getElementById("hinttext");
+  if (hintText) {
+    hintText.textContent =
+      "Pinch to zoom in and out. Once you're close enough to a country, the " +
+      "latest stories from its local newspapers pop up — no country " +
+      "restrictions, translated on tap.";
+  }
+}
+
+/**
+ * Mobile bottom sheet: drag-to-dismiss.
+ *
+ * The sheet is opened from a dozen places by toggling .open, so rather than
+ * route every one of them through a helper we mirror that class onto <body>.
+ * CSS uses it to move the hint out from under the sheet.
+ */
+new MutationObserver(() =>
+  document.body.classList.toggle("msheet-open", msheet.classList.contains("open"))
+).observe(msheet, { attributes: true, attributeFilter: ["class"] });
+
+(() => {
+  const grab = document.getElementById("mgrabwrap");
+  if (!grab) return;
+
+  const CLOSE_AFTER_PX = 60; // past this the sheet is dismissed, not sprung back
+  let startY = 0;
+  let dy = 0;
+  let dragging = false;
+
+  const move = (y) => {
+    // Downward only — dragging up must not tear the sheet off its edge.
+    dy = Math.max(0, y - startY);
+    msheet.style.transform = `translateY(${dy}px)`;
+  };
+
+  const end = () => {
+    if (!dragging) return;
+    dragging = false;
+    msheet.classList.remove("dragging");
+    msheet.style.transform = "";
+    if (dy > CLOSE_AFTER_PX) msheet.classList.remove("open");
+    dy = 0;
+  };
+
+  grab.addEventListener("touchstart", (e) => {
+    if (!msheet.classList.contains("open")) return;
+    dragging = true;
+    dy = 0;
+    startY = e.touches[0].clientY;
+    msheet.classList.add("dragging");
+  }, { passive: true });
+
+  grab.addEventListener("touchmove", (e) => {
+    if (!dragging) return;
+    e.preventDefault(); // we own this gesture; don't let the page scroll too
+    move(e.touches[0].clientY);
+  }, { passive: false });
+
+  grab.addEventListener("touchend", end, { passive: true });
+  grab.addEventListener("touchcancel", end, { passive: true });
+
+  // A plain tap on the handle closes it, and keyboards get the same affordance.
+  grab.addEventListener("click", () => msheet.classList.remove("open"));
+  grab.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      msheet.classList.remove("open");
+    }
+  });
+})();
+
 let countries = [];
 let focusedId = null;
 let activeCat = "All";
@@ -211,6 +287,8 @@ function initMap() {
     map.flyTo({ center: WORLD.center, zoom: WORLD.zoom, duration: 1400 });
 
   addEventListener("resize", () => {
+    measureMarkers(); // pill widths change with orientation / text scaling
+    positionMarkers();
     if (topic) renderTopicCards();
     else if (cityFocus) renderCityCards();
     else if (focusedId) renderCards(focusedId);
@@ -228,19 +306,65 @@ function drawRegionMarkers() {
     el.onclick = () => zoomTo(id);
     markerLayer.appendChild(el);
   });
+  measureMarkers();
   positionMarkers();
 }
+
+/**
+ * One batched read of the pill sizes. positionMarkers runs on every map move,
+ * so it must do its overlap maths from cached numbers and never touch layout.
+ */
+function measureMarkers() {
+  markerLayer.querySelectorAll(".mdot").forEach((el) => {
+    el._w = el.offsetWidth;
+    el._h = el.offsetHeight;
+  });
+}
+
+/** Breathing room so surviving pills don't sit edge to edge. */
+const PILL_GAP = 4;
 
 function positionMarkers() {
   if (!map) return;
   const z = map.getZoom();
-  markerLayer.querySelectorAll(".mdot").forEach((el) => {
+  const hideAll = z > 2.8;
+
+  /**
+   * A phone shows the same ~190 pills as a desktop in a third of the width, so
+   * they pile into an unreadable heap. Thin them by overlap, keeping whichever
+   * country has the most stories — the reader loses the label, never the news,
+   * since the country is still reachable by tapping the map or searching.
+   */
+  const thin = mqMobile.matches && !hideAll;
+  const placed = [];
+
+  let pills = [...markerLayer.querySelectorAll(".mdot")];
+  if (thin) {
+    pills.sort(
+      (a, b) => (NEWS[b.dataset.rid]?.total || 0) - (NEWS[a.dataset.rid]?.total || 0)
+    );
+  }
+
+  pills.forEach((el) => {
     const region = REGION[el.dataset.rid];
     if (!region) return;
     const [x, y] = project(region.ll);
     el.style.left = x + "px";
     el.style.top = y + "px";
-    const hide = z > 2.8;
+
+    let hide = hideAll;
+    if (thin) {
+      // .mdot is translate(-50%,-50%), so its box straddles the projected point.
+      const w = (el._w || 0) / 2 + PILL_GAP;
+      const h = (el._h || 0) / 2 + PILL_GAP;
+      const box = { l: x - w, r: x + w, t: y - h, b: y + h };
+      if (placed.some((p) => box.l < p.r && box.r > p.l && box.t < p.b && box.b > p.t)) {
+        hide = true;
+      } else {
+        placed.push(box);
+      }
+    }
+
     el.style.opacity = hide ? 0 : 1;
     el.style.pointerEvents = hide ? "none" : "auto";
   });
