@@ -88,8 +88,18 @@
   .dropdown.open{opacity:1;transform:translateY(0);pointer-events:auto}
   .dropdown .dhead{font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;
     letter-spacing:.06em;padding:12px 18px 6px}
-  .dropdown .dlist{overflow-y:auto;max-height:min(370px,52vh);max-height:min(370px,52dvh);
+  /* Budgeted off the container rather than given a second hard number: the two
+     caps used to be set independently (380 vs 370) with the ~31px .dhead
+     unaccounted for, so on a phone the list ran 21px past its own container and
+     .dropdown{overflow:hidden} silently ate the last row. Deriving it means they
+     cannot drift apart again. overflow-x is pinned because a lone overflow-y:auto
+     computes the other axis to auto too — the same trap as .panel .pscroll. */
+  .dropdown .dlist{overflow-y:auto;overflow-x:hidden;max-height:calc(100% - 2.2rem);
     padding-bottom:8px;-webkit-overflow-scrolling:touch}
+  /* A row's text must be allowed to shrink, or a long country name refuses to
+     go below its min-content width and wraps to three lines in a 264px menu. */
+  .drow .dtext{min-width:0;flex:1}
+  .drow .dname,.drow .dsub{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .drow{display:flex;align-items:center;gap:12px;width:100%;border:none;background:#fff;font:inherit;
     text-align:left;padding:9px 18px;cursor:pointer;transition:background .2s,transform .2s}
   .drow:hover{background:#f6f9fe;transform:translateX(4px)}
@@ -113,7 +123,10 @@
   /* ---- chips ---- */
   /* ---- topic text filters in header ---- */
   .chipshell{display:flex;align-items:center;gap:4px;margin-top:6px;padding-top:5px;overflow-x:auto;scrollbar-width:none;
-    cursor:grab;-webkit-overflow-scrolling:touch;border-top:1px solid rgba(15,23,42,.06)}
+    cursor:grab;-webkit-overflow-scrolling:touch;border-top:1px solid rgba(15,23,42,.06);
+    /* Claim the horizontal axis so the JS drag-scroll and native momentum stop
+       fighting over the same gesture. */
+    touch-action:pan-x}
   .chipshell.dragging{cursor:grabbing;scroll-behavior:auto}
   .chipshell.dragging .tab{pointer-events:none}
   .chipshell::-webkit-scrollbar{display:none}
@@ -260,7 +273,9 @@
   .panel .porig{display:inline-flex;align-items:center;gap:8px;margin-top:6px;background:var(--primary);color:#fff;
     font-size:13.5px;font-weight:600;border-radius:8px;padding:12px 20px;transition:background .25s}
   .panel .porig:hover{background:var(--primary-dark);color:#fff}
-  .pmeta{display:flex;gap:14px;margin:0 0 16px;font-size:12px;color:var(--fg-4)}
+  /* wrap: the only row in the article body that structurally could not, so a long
+     country name had nowhere to go but shrink. */
+  .pmeta{display:flex;flex-wrap:wrap;gap:4px 14px;margin:0 0 16px;font-size:12px;color:var(--fg-4)}
   /* translation toggle */
   .ptrans{display:none;margin:0 0 16px;background:#f6f9fe;border:1px solid rgba(0,82,204,.14);border-radius:12px;padding:12px 14px}
   .ptrans.show{display:block}
@@ -310,10 +325,18 @@
   .mhead .mcnt{font-size:12px;color:var(--fg-4)}
   .mhead .msrc{margin-left:auto;border:1px solid rgba(13,148,136,.25);background:#fff;color:var(--teal);
     font:inherit;font-size:11.5px;font-weight:600;border-radius:16px;padding:4px 10px;cursor:pointer}
-  .mstrip{display:flex;gap:12px;overflow-x:auto;padding:2px 16px 6px;scroll-snap-type:x mandatory;
+  /* Card width lives in a custom property so the centring padding below can be
+     derived from the same number instead of guessing at it. */
+  .mstrip{--card:min(78vw,300px);
+    display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+    /* Half the leftover width on each side, so the first and last card can
+       reach the middle of the screen too. With a fixed 16px inset and
+       snap-align:start the card sat ~29px left of centre at 390px, and further
+       out as the screen grew — 154px off at the 640px breakpoint. */
+    padding:2px calc((100% - var(--card)) / 2) 6px;
     -webkit-overflow-scrolling:touch;scrollbar-width:none}
   .mstrip::-webkit-scrollbar{display:none}
-  .mstrip .newscard{position:static;flex:none;width:78vw;max-width:300px;scroll-snap-align:start;
+  .mstrip .newscard{position:static;flex:none;width:var(--card);scroll-snap-align:center;
     animation:none;opacity:1;transform:none}
   .mstrip .mnone{font-size:12.5px;color:var(--fg-3);padding:10px 4px 14px}
 
@@ -327,7 +350,12 @@
     .searchwrap{justify-content:stretch}
     .searchbox{width:100%}
     .search{height:38px;padding:0 6px 0 12px}
-    .search input{font-size:14px}
+    /* 16px is a hard floor, not a taste choice: iOS Safari force-zooms the whole
+       page when a focused field is smaller, and it stays zoomed after the
+       keyboard closes — which is what "content too big", "cut off on both sides"
+       and the sideways scrolling all were. Never drop either field below 16px. */
+    .search input{font-size:16px}
+    .trow select{font-size:16px}
     .search .kbd{display:none}
     .dropdown{max-height:min(380px,52vh);max-height:min(380px,52dvh)}
     .msheet{display:block}
@@ -350,13 +378,34 @@
     .ptrans{padding:10px;margin-bottom:12px}
     .trow{gap:6px}
     .tseg{display:flex;flex-wrap:wrap;width:100%}
-    .tseg button{flex:1 1 auto;padding:6px 10px;white-space:nowrap}
+    /* The label is built at runtime as "Original · <language>", so a long
+       language name has to be allowed to wrap rather than clip out of the pill. */
+    .tseg button{flex:1 1 auto;padding:6px 10px;white-space:normal}
+    .srcrow{flex-wrap:wrap;gap:6px 10px}
     .trow select{width:100%;max-width:100%}
+    /* Only 4 of 14 categories fit a phone, the scrollbar is suppressed and there
+       was no fade — so nothing told the reader the other ten existed. The mask
+       feathers the right edge while there is more to scroll to. */
+    .chipshell{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent);
+      mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent)}
+    /* ~30px tall was half a fingertip. */
+    .tab{padding:9px 14px;font-size:13.5px}
     .mdot{font-size:11px;padding:4px 10px 4px 7px}
     /* Tapping a country pill is the main way in on a phone, but the pill itself
        is ~24px tall — half a fingertip. Widen the hit area, not the artwork. */
     .mdot::after{content:"";position:absolute;left:0;right:0;top:50%;
       height:44px;transform:translateY(-50%)}
+  }
+  /* A touch device has no pointer to move away, so :hover latches on after a tap
+     and stays until the reader taps something else. A highlighted chip then looks
+     selected when it isn't, and a lifted card stays lifted. Neutralise the ones
+     that move or change fill; the no-op resets can stay as they are. */
+  @media (hover:none){
+    .tab:hover{background:transparent;color:var(--fg-3)}
+    .tab.active:hover{background:var(--primary);color:#fff}
+    .drow:hover{background:#fff;transform:none}
+    .drow:hover .dgo{color:var(--fg-4)}
+    .newscard:hover{transform:none!important;box-shadow:var(--shadow-menu);z-index:auto!important}
   }
   @media (prefers-reduced-motion: reduce){
     .newscard,.countrytag,.noresult,.morechip{animation:none;opacity:1;transform:none}
