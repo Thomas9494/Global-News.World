@@ -41,6 +41,31 @@ const mhead = document.getElementById("mhead");
 const mstrip = document.getElementById("mstrip");
 
 /**
+ * The full placeholder needs about 290px of text space. On a phone the field
+ * gets roughly 155px once the wordmark, the icon and the dropdown button have
+ * taken their share, so the sentence was being cut mid-word — which reads as a
+ * broken, overflowing search box rather than as text that simply doesn't fit.
+ * Swap in the short version while the viewport is narrow.
+ */
+const searchInput = document.getElementById("q");
+const SEARCH_PLACEHOLDER_FULL = searchInput?.placeholder || "";
+const SEARCH_PLACEHOLDER_SHORT =
+  searchInput?.dataset.placeholderNarrow || SEARCH_PLACEHOLDER_FULL;
+
+/** Call this instead of assigning the placeholder, so boot can't undo the swap. */
+function applySearchPlaceholder() {
+  if (!searchInput) return;
+  searchInput.placeholder = mqMobile.matches
+    ? SEARCH_PLACEHOLDER_SHORT
+    : SEARCH_PLACEHOLDER_FULL;
+}
+
+applySearchPlaceholder();
+// Covers rotation and desktop windows dragged narrow.
+if (mqMobile.addEventListener) mqMobile.addEventListener("change", applySearchPlaceholder);
+else if (mqMobile.addListener) mqMobile.addListener(applySearchPlaceholder);
+
+/**
  * The hint tells the reader how to zoom. A phone has no mouse wheel, so on a
  * touch device it has to describe the gesture that device actually has.
  */
@@ -53,6 +78,47 @@ if (matchMedia("(pointer:coarse)").matches) {
       "restrictions, translated on tap.";
   }
 }
+
+/**
+ * Phone back gesture.
+ *
+ * Both panels cover the entire screen on a phone, so the platform back gesture
+ * has to close them. Without this it leaves the site altogether and the reader
+ * loses their place on the map.
+ *
+ * One history entry covers "a panel is open", regardless of which one, because
+ * opening Sources from an article swaps one for the other rather than stacking.
+ * Back then always means "return to the map", which is what a reader expects.
+ */
+let overlayPushed = false;
+
+const anyOverlayOpen = () =>
+  !!(panel?.classList.contains("open") || spanel?.classList.contains("open"));
+
+/** Call after opening a panel, so the back gesture has an entry to consume. */
+function syncOverlayHistory() {
+  if (anyOverlayOpen() && !overlayPushed) {
+    overlayPushed = true;
+    history.pushState({ overlay: true }, "");
+  }
+}
+
+/** Closes a panel and hands the history entry back if nothing is left open. */
+function dismissOverlay(el) {
+  if (!el?.classList.contains("open")) return;
+  el.classList.remove("open");
+  if (!anyOverlayOpen() && overlayPushed) {
+    overlayPushed = false;
+    history.back();
+  }
+}
+
+addEventListener("popstate", () => {
+  if (!overlayPushed) return;
+  overlayPushed = false;
+  spanel?.classList.remove("open");
+  panel?.classList.remove("open");
+});
 
 /**
  * Mobile bottom sheet: drag-to-dismiss.
@@ -1183,11 +1249,12 @@ function openSources(name) {
     .join("");
   panel.classList.remove("open");
   spanel.classList.add("open");
+  syncOverlayHistory();
   spanel.querySelector(".pscroll").scrollTop = 0;
 }
-document.getElementById("s-close").onclick = () => spanel.classList.remove("open");
+document.getElementById("s-close").onclick = () => dismissOverlay(spanel);
 addEventListener("keydown", (e) => {
-  if (e.key === "Escape") spanel.classList.remove("open");
+  if (e.key === "Escape") dismissOverlay(spanel);
 });
 
 /* ------------------------------------- article panel + reader translation -- */
@@ -1316,6 +1383,7 @@ function openPanel(countryId, a) {
 
   renderPanelContent();
   panel.classList.add("open");
+  syncOverlayHistory();
   panel.querySelector(".pscroll").scrollTop = 0;
 
   loadArticle(a, READER.lang, token);
@@ -1342,9 +1410,9 @@ tTarget.onchange = () => {
   renderPanelContent();
   if (curArticle) loadArticle(curArticle, to, panelToken);
 };
-document.getElementById("p-close").onclick = () => panel.classList.remove("open");
+document.getElementById("p-close").onclick = () => dismissOverlay(panel);
 addEventListener("keydown", (e) => {
-  if (e.key === "Escape") panel.classList.remove("open");
+  if (e.key === "Escape") dismissOverlay(panel);
 });
 
 mqMobile.addEventListener("change", () => {
@@ -1376,7 +1444,7 @@ async function boot() {
   TRANSLATE = data.translate || TRANSLATE;
   regionIds = Object.keys(NEWS);
 
-  qEl.placeholder = "Pick a country or search topics, outlets …";
+  applySearchPlaceholder();
   buildChips();
   buildTargetOptions();
   buildDropdown();

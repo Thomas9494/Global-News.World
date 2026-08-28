@@ -155,6 +155,60 @@ test("the hint describes the gesture a touch device actually has", () => {
   assert.match(text, /translated on tap/, "and taps, not clicks");
 });
 
+test("the search placeholder is the short one that fits a phone field", () => {
+  const input = $("#q");
+  assert.equal(input.placeholder, "Search a country or topic");
+  // The long copy is kept so a rotation back to a wide viewport restores it.
+  assert.equal(
+    input.dataset.placeholderNarrow,
+    "Search a country or topic",
+    "the short string stays available on the element"
+  );
+  assert.ok(
+    input.placeholder.length < 30,
+    `placeholder must fit ~155px of field, got ${input.placeholder.length} chars`
+  );
+});
+
+test("the back gesture closes an open panel instead of leaving the site", async () => {
+  const panel = $("#panel");
+  const startLength = win.history.length;
+
+  // Opening a panel is what pushes the entry the back gesture will consume.
+  panel.classList.add("open");
+  win.eval("syncOverlayHistory()");
+  assert.ok(
+    win.history.length > startLength,
+    "opening a panel should add a history entry to spend on back"
+  );
+
+  win.history.back();
+  await flush(60); // popstate is async in jsdom
+
+  assert.equal(
+    panel.classList.contains("open"),
+    false,
+    "back closes the panel rather than navigating away"
+  );
+});
+
+test("closing a panel by its button gives the history entry back", async () => {
+  const panel = $("#panel");
+  panel.classList.add("open");
+  win.eval("syncOverlayHistory()");
+  const withPanel = win.history.length;
+
+  $("#p-close").dispatchEvent(new win.Event("click", { bubbles: true }));
+  await flush(60);
+
+  assert.equal(panel.classList.contains("open"), false, "panel closes");
+  assert.equal(
+    win.history.length,
+    withPanel,
+    "no entry is stranded — a second back must not be needed to leave"
+  );
+});
+
 test("country pills are rendered for every country with news", () => {
   assert.equal(pills().length, 3, "Switzerland, Austria, Liechtenstein");
 });
