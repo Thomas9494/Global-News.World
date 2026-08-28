@@ -234,8 +234,8 @@ indexed online press. They are a standing invitation: if you know an outlet ther
 ## Quick start
 
 ```bash
-git clone https://github.com/<you>/Global-News.git
-cd Global-News
+git clone https://github.com/Thomas9494/Global-News.World.git
+cd Global-News.World
 npm install
 npm run build:catalog     # derives country centroids and zoom levels
 npm run ingest            # first fetch — about 80 s for 358 outlets

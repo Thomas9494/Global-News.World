@@ -153,8 +153,8 @@ run this for a newsroom or a classroom — all welcome.
 ## Working on it
 
 ```bash
-git clone https://github.com/<you>/Global-News.git
-cd Global-News
+git clone https://github.com/Thomas9494/Global-News.World.git
+cd Global-News.World
 npm install
 npm run build:catalog
 npm run ingest          # real feeds, ~80 s

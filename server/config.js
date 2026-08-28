@@ -28,7 +28,7 @@ export const config = {
     routeGlobalFeeds: bool(process.env.ROUTE_GLOBAL_FEEDS, true),
     userAgent:
       process.env.FEED_USER_AGENT ||
-      "Mozilla/5.0 (compatible; GlobalNewsBot/1.0; +https://github.com/global-news)",
+      "Mozilla/5.0 (compatible; GlobalNewsBot/1.0; +https://github.com/Thomas9494/Global-News.World)",
   },
 
   plugins: {
