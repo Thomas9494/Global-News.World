@@ -1054,9 +1054,26 @@ async function runSearch(raw) {
 /* ------------------------------------------------------------- topic dock -- */
 const chipsEl = document.getElementById("chips");
 
+/** Brings a chip to the middle of the row — most of them are off-screen on a phone. */
+function centreChip(el) {
+  if (!el) return;
+  chipsEl.scrollTo({
+    left: el.offsetLeft - chipsEl.clientWidth / 2 + el.offsetWidth / 2,
+    behavior: "smooth",
+  });
+}
+
 function selectCat(c) {
   activeCat = c;
-  [...chipsEl.children].forEach((x) => x.classList.toggle("active", x.dataset.cat === c));
+  let active = null;
+  [...chipsEl.children].forEach((x) => {
+    const on = x.dataset.cat === c;
+    x.classList.toggle("active", on);
+    if (on) active = x;
+  });
+  // Centring used to live only in the click handler, so it scrolled a chip the
+  // reader could already see and did nothing for any programmatic selection.
+  centreChip(active);
   refresh();
 }
 
@@ -1068,10 +1085,7 @@ function buildChips() {
     b.dataset.cat = c;
     b.title = c;
     b.innerHTML = `<span class="tlbl">${esc(c)}</span>`;
-    b.onclick = () => {
-      selectCat(c);
-      chipsEl.scrollTo({ left: b.offsetLeft - chipsEl.clientWidth / 2 + b.offsetWidth / 2, behavior: "smooth" });
-    };
+    b.onclick = () => selectCat(c); // selectCat centres the chip itself now
     chipsEl.appendChild(b);
   });
   selectCat("All");
@@ -1098,10 +1112,19 @@ function buildChips() {
     }
     if (moved) chipsEl.scrollLeft = startL - dx;
   });
-  addEventListener("pointerup", () => {
+  const endDrag = () => {
     down = false;
     setTimeout(() => chipsEl.classList.remove("dragging"), 0);
-  });
+  };
+  addEventListener("pointerup", endDrag);
+  /**
+   * pointercancel, not just pointerup: when iOS hands the gesture to native
+   * scrolling it fires cancel *instead of* up. Without this `down` stayed true
+   * forever, and the next pointermove anywhere on the page — panning the map,
+   * say — yanked the chip row to `startL - dx` off a stale startX. The row
+   * jumped for no reason the reader could see.
+   */
+  addEventListener("pointercancel", endDrag);
   chipsEl.addEventListener(
     "wheel",
     (e) => {
@@ -1155,7 +1178,7 @@ function buildDropdown(filter) {
     const b = document.createElement("button");
     b.className = "drow";
     b.innerHTML = `<span class="thumb">${regionThumb()}</span>
-      <span><div class="dname">${esc(r.name)}${n ? ' <span class="dlive">LIVE</span>' : ""}</div><div class="dsub">${esc(sub)}</div></span>
+      <span class="dtext"><div class="dname">${esc(r.name)}${n ? ' <span class="dlive">LIVE</span>' : ""}</div><div class="dsub">${esc(sub)}</div></span>
       <span class="dgo"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"></path></svg></span>`;
     b.onclick = () => {
       qEl.value = r.name;

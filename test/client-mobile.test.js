@@ -148,6 +148,88 @@ const $ = (sel) => win.document.querySelector(sel);
 const pills = () => [...win.document.querySelectorAll("#markers .mdot")];
 const shown = (el) => el.style.opacity !== "0";
 
+/**
+ * jsdom's getComputedStyle ignores @media entirely and will not expand var()
+ * inside calc(), so it reports desktop values on a phone viewport. These
+ * helpers walk the CSSOM instead and apply the phone media queries by hand —
+ * which is what we actually want to assert: that the rule is written, since a
+ * one-character edit is all it takes to reintroduce the zoom bug.
+ */
+const PHONE_WIDTH = 390;
+
+/** Media queries that a 390px phone matches. */
+const phoneMatches = (condition) => {
+  const max = /max-width:\s*(\d+)px/.exec(condition);
+  if (max) return PHONE_WIDTH <= Number(max[1]);
+  if (/hover:\s*none|pointer:\s*coarse/.test(condition)) return true;
+  if (/hover:\s*hover|pointer:\s*fine|prefers-reduced-motion/.test(condition)) return false;
+  return false;
+};
+
+/** Every style rule that applies on a phone, outermost first. */
+function phoneRules() {
+  const out = [];
+  const walk = (rules) => {
+    for (const rule of rules) {
+      if (rule.media) {
+        if (phoneMatches(rule.conditionText || rule.media.mediaText)) walk(rule.cssRules);
+      } else if (rule.selectorText) {
+        out.push(rule);
+      }
+    }
+  };
+  for (const sheet of win.document.styleSheets) walk(sheet.cssRules);
+  return out;
+}
+
+/**
+ * Last value `property` gets on `selector` through the phone cascade.
+ * Only getPropertyValue is used: jsdom's CSSStyleDeclaration is neither
+ * iterable nor indexable by .item() in this version.
+ */
+function declaredValue(selector, property) {
+  const want = selector.replace(/\s+/g, " ").trim();
+  let value = "";
+  for (const rule of phoneRules()) {
+    const hit = rule.selectorText
+      .split(",")
+      .some((s) => s.replace(/\s+/g, " ").trim() === want);
+    if (!hit) continue;
+    const v = rule.style.getPropertyValue(property).trim();
+    if (v) value = v;
+  }
+  return value;
+}
+
+/** Resolves an element's font-size through the phone cascade. */
+function effectiveFontSize(el) {
+  let size = "16px"; // browser default for inputs is ~13.33px, but body sets none
+  for (const rule of phoneRules()) {
+    const value = rule.style.getPropertyValue("font-size").trim();
+    if (!value) continue;
+    try {
+      if (el.matches(rule.selectorText)) size = value;
+    } catch {
+      /* selector jsdom cannot parse — ignore */
+    }
+  }
+  return size;
+}
+
+/** Raw text of a media block, for asserting a rule exists at all. */
+function mediaBlock(condition) {
+  const norm = (s) => s.replace(/\s+/g, "");
+  for (const sheet of win.document.styleSheets) {
+    for (const rule of sheet.cssRules) {
+      const text = rule.conditionText || rule.media?.mediaText || "";
+      if (rule.cssRules && norm(text) === norm(condition)) {
+        return [...rule.cssRules].map((r) => r.cssText).join("\n");
+      }
+    }
+  }
+  return null;
+}
+
 test("the hint describes the gesture a touch device actually has", () => {
   const text = $("#hinttext").textContent;
   assert.match(text, /Pinch to zoom/, "should tell the reader to pinch");
@@ -168,6 +250,77 @@ test("the search placeholder is the short one that fits a phone field", () => {
     input.placeholder.length < 30,
     `placeholder must fit ~155px of field, got ${input.placeholder.length} chars`
   );
+});
+
+/**
+ * The single most important guard in this file.
+ *
+ * iOS Safari force-zooms the entire page when a focused form field is smaller
+ * than 16px, and it stays zoomed after the keyboard closes. That one detail
+ * produced a whole day of reports that read like unrelated layout bugs:
+ * "content too big", "cut off on both sides", "not centered", sideways
+ * scrolling. It is a one-character edit away from coming back.
+ */
+test("no form control is small enough to make iOS zoom the page", () => {
+  const controls = [...win.document.querySelectorAll("input, select, textarea")];
+  assert.ok(controls.length > 0, "there should be form controls to check");
+
+  const tooSmall = controls
+    .map((el) => ({
+      id: el.id || el.tagName.toLowerCase(),
+      size: parseFloat(effectiveFontSize(el)),
+    }))
+    .filter((c) => !(c.size >= 16));
+
+  assert.deepEqual(
+    tooSmall,
+    [],
+    "every control must be >= 16px at a phone viewport, or Safari zooms the page"
+  );
+});
+
+test("the news strip centres a card rather than pinning it left", () => {
+  assert.equal(
+    declaredValue(".mstrip .newscard", "scroll-snap-align"),
+    "center",
+    "a card must snap centred"
+  );
+
+  // The inline padding has to come from the card width so the first and last
+  // card can reach the middle too. A fixed inset is what pushed it off-centre.
+  const padding =
+    declaredValue(".mstrip", "padding-left") || declaredValue(".mstrip", "padding");
+  assert.match(
+    padding,
+    /calc/,
+    `inline padding must be derived from the card width, got "${padding}"`
+  );
+  assert.doesNotMatch(padding, /\b16px\b/, "a fixed 16px inset is the old bug");
+});
+
+test("the dropdown list is budgeted off its container, not a second hard number", () => {
+  const maxHeight = declaredValue(".dropdown .dlist", "max-height");
+
+  // The two caps used to be set independently (380 vs 370) with the ~31px
+  // header unaccounted for, so the last row was silently clipped on a phone.
+  assert.match(
+    maxHeight,
+    /calc/,
+    `.dlist must derive its cap from .dropdown, got "${maxHeight}"`
+  );
+  assert.equal(
+    declaredValue(".dropdown .dlist", "overflow-x"),
+    "hidden",
+    "a lone overflow-y:auto computes overflow-x to auto — pin it"
+  );
+});
+
+test("touch devices are not left in a stuck :hover state", () => {
+  // :hover latches after a tap on iOS, so the movement/fill rules need undoing.
+  const rules = mediaBlock("(hover:none)");
+  assert.ok(rules, "there must be a (hover:none) block");
+  assert.match(rules, /\.tab:hover/, "chip highlight must be neutralised");
+  assert.match(rules, /\.newscard:hover/, "card lift must be neutralised");
 });
 
 test("the back gesture closes an open panel instead of leaving the site", async () => {
