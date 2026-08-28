@@ -41,6 +41,31 @@ const mhead = document.getElementById("mhead");
 const mstrip = document.getElementById("mstrip");
 
 /**
+ * The full placeholder needs about 290px of text space. On a phone the field
+ * gets roughly 155px once the wordmark, the icon and the dropdown button have
+ * taken their share, so the sentence was being cut mid-word — which reads as a
+ * broken, overflowing search box rather than as text that simply doesn't fit.
+ * Swap in the short version while the viewport is narrow.
+ */
+const searchInput = document.getElementById("q");
+const SEARCH_PLACEHOLDER_FULL = searchInput?.placeholder || "";
+const SEARCH_PLACEHOLDER_SHORT =
+  searchInput?.dataset.placeholderNarrow || SEARCH_PLACEHOLDER_FULL;
+
+/** Call this instead of assigning the placeholder, so boot can't undo the swap. */
+function applySearchPlaceholder() {
+  if (!searchInput) return;
+  searchInput.placeholder = mqMobile.matches
+    ? SEARCH_PLACEHOLDER_SHORT
+    : SEARCH_PLACEHOLDER_FULL;
+}
+
+applySearchPlaceholder();
+// Covers rotation and desktop windows dragged narrow.
+if (mqMobile.addEventListener) mqMobile.addEventListener("change", applySearchPlaceholder);
+else if (mqMobile.addListener) mqMobile.addListener(applySearchPlaceholder);
+
+/**
  * The hint tells the reader how to zoom. A phone has no mouse wheel, so on a
  * touch device it has to describe the gesture that device actually has.
  */
@@ -1376,7 +1401,7 @@ async function boot() {
   TRANSLATE = data.translate || TRANSLATE;
   regionIds = Object.keys(NEWS);
 
-  qEl.placeholder = "Pick a country or search topics, outlets …";
+  applySearchPlaceholder();
   buildChips();
   buildTargetOptions();
   buildDropdown();

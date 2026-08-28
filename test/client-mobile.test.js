@@ -155,6 +155,21 @@ test("the hint describes the gesture a touch device actually has", () => {
   assert.match(text, /translated on tap/, "and taps, not clicks");
 });
 
+test("the search placeholder is the short one that fits a phone field", () => {
+  const input = $("#q");
+  assert.equal(input.placeholder, "Search a country or topic");
+  // The long copy is kept so a rotation back to a wide viewport restores it.
+  assert.equal(
+    input.dataset.placeholderNarrow,
+    "Search a country or topic",
+    "the short string stays available on the element"
+  );
+  assert.ok(
+    input.placeholder.length < 30,
+    `placeholder must fit ~155px of field, got ${input.placeholder.length} chars`
+  );
+});
+
 test("country pills are rendered for every country with news", () => {
   assert.equal(pills().length, 3, "Switzerland, Austria, Liechtenstein");
 });

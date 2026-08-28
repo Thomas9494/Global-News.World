@@ -312,6 +312,9 @@
     .topbar{padding:6px 12px}
     .tbrow{gap:10px}
     .brand svg{width:104px;height:30px}
+    /* The wordmark is flex:none, so every pixel it takes is a pixel the search
+       field loses. Below ~400px give some of it back. */
+    @media (max-width:400px){ .brand svg{width:88px;height:26px} .brand{margin-right:4px} }
     .searchwrap{justify-content:stretch}
     .searchbox{width:100%}
     .search{height:38px;padding:0 6px 0 12px}
@@ -369,7 +372,8 @@
     <div class="searchbox">
       <div class="search">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
-        <input id="q" type="text" placeholder="Pick a country or search topics, outlets …" autocomplete="off">
+        <input id="q" type="text" placeholder="Pick a country or search topics, outlets …"
+               data-placeholder-narrow="Search a country or topic" autocomplete="off">
         <button class="iconbtn" id="qclear" title="Clear search">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
         </button>
