@@ -14,7 +14,7 @@
     "ingest": "node scripts/ingest-once.js",
     "check:feeds": "node scripts/check-feeds.js",
     "import:media": "node scripts/import-media-list.mjs",
-    "test": "node --test test/"
+    "test": "node --test test/*.test.js"
   },
   "keywords": [
     "news",
