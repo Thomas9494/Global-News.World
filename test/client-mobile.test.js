@@ -315,6 +315,71 @@ test("the dropdown list is budgeted off its container, not a second hard number"
   );
 });
 
+test("a query takes over the header, clearing it gives the logo back", async () => {
+  const topbar = win.document.querySelector(".topbar");
+  const input = $("#q");
+
+  assert.equal(
+    topbar.classList.contains("searching"),
+    false,
+    "an empty field leaves the logo alone"
+  );
+
+  input.value = "Afghanistan";
+  input.dispatchEvent(new win.Event("input", { bubbles: true }));
+  await flush(40);
+  assert.ok(
+    topbar.classList.contains("searching"),
+    "a filled field collapses the wordmark and centres the box"
+  );
+
+  // Clearing through the × button, which is a separate code path from typing.
+  $("#qclear").dispatchEvent(new win.Event("click", { bubbles: true }));
+  await flush(40);
+  assert.equal(
+    topbar.classList.contains("searching"),
+    false,
+    "clearing restores the logo"
+  );
+  assert.equal(input.value, "", "and empties the field");
+});
+
+test("selecting a country from the dropdown also collapses the logo", async () => {
+  const topbar = win.document.querySelector(".topbar");
+  const input = $("#q");
+  input.value = "";
+  input.dispatchEvent(new win.Event("input", { bubbles: true }));
+  await flush(40);
+
+  const row = win.document.querySelector("#dlist .drow");
+  assert.ok(row, "the dropdown should list countries");
+  row.dispatchEvent(new win.Event("click", { bubbles: true }));
+  await flush(40);
+
+  // The row writes a country name into the field — a third path that must not
+  // leave the header out of sync with the input.
+  assert.equal(input.value.length > 0, true, "the row fills the field");
+  assert.ok(
+    topbar.classList.contains("searching"),
+    "so the header follows, as it does when typing"
+  );
+
+  // Selecting a row flies the map to that country. Put the view and the field
+  // back, or the pill-thinning tests below inherit a zoomed-in map.
+  $("#qclear").dispatchEvent(new win.Event("click", { bubbles: true }));
+  win.__map.flyTo({ center: [10, 25], zoom: 1.6 });
+  await flush(40);
+});
+
+test("the header refuses a pinch so zooming never rescales it", () => {
+  assert.equal(
+    declaredValue(".topbar", "touch-action"),
+    "pan-x pan-y",
+    "panning allowed, pinch-zoom refused — a map pinch landing on the header " +
+      "would otherwise let the browser scale the whole document"
+  );
+});
+
 test("touch devices are not left in a stuck :hover state", () => {
   // :hover latches after a tap on iOS, so the movement/fill rules need undoing.
   const rules = mediaBlock("(hover:none)");

@@ -1200,8 +1200,20 @@ function openDrop() {
 function closeDrop() {
   dropdown.classList.remove("open");
 }
+const topbarEl = document.querySelector(".topbar");
+
+/**
+ * Single place the field's filled/empty state reaches the chrome — every path
+ * that changes the value already calls this, so the header cannot fall out of
+ * sync with the input.
+ *
+ * A query takes the header over: the wordmark collapses and the field slides to
+ * the middle. Emptying the field puts the logo back.
+ */
 function syncClear() {
-  qClear.classList.toggle("show", qEl.value.length > 0);
+  const filled = qEl.value.length > 0;
+  qClear.classList.toggle("show", filled);
+  topbarEl?.classList.toggle("searching", filled);
 }
 
 qEl.addEventListener("focus", openDrop);
