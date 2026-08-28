@@ -14,6 +14,8 @@
 
 ## Why this exists
 
+https://global-news.world/
+
 Most people read the news through a single national lens. You learn what *your* country
 thinks about a place — rarely what the place thinks about itself.
 
