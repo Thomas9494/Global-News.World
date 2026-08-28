@@ -573,3 +573,71 @@ test("the hint disappears once the reader starts zooming", () => {
   win.__map.flyTo({ center: [8.23, 46.8], zoom: 6.6 });
   assert.ok($("#hint").classList.contains("hide"));
 });
+
+/* ----------------------------------------------- mobile sheet dismissal -- */
+
+/** Builds the TouchEvent shape the sheet's handlers read. */
+const touch = (type, clientY) => {
+  const e = new win.Event(type, { bubbles: true, cancelable: true });
+  e.touches = [{ clientY }];
+  return e;
+};
+
+test("the sheet's state is mirrored onto body, so CSS can move the hint", async () => {
+  const sheet = $("#msheet");
+
+  sheet.classList.add("open");
+  await flush(10); // MutationObserver delivers on a microtask
+  assert.ok(win.document.body.classList.contains("msheet-open"));
+
+  sheet.classList.remove("open");
+  await flush(10);
+  assert.equal(win.document.body.classList.contains("msheet-open"), false);
+});
+
+test("dragging the handle far enough dismisses the sheet", () => {
+  const sheet = $("#msheet");
+  const grab = $("#mgrabwrap");
+  sheet.classList.add("open");
+
+  grab.dispatchEvent(touch("touchstart", 500));
+  grab.dispatchEvent(touch("touchmove", 590)); // 90px — past the 60px threshold
+  assert.equal(sheet.style.transform, "translateY(90px)", "sheet tracks the finger");
+
+  grab.dispatchEvent(touch("touchend", 590));
+  assert.equal(sheet.classList.contains("open"), false, "sheet closes");
+  assert.equal(sheet.style.transform, "", "inline transform is handed back to CSS");
+});
+
+test("a short drag springs the sheet back instead of closing it", () => {
+  const sheet = $("#msheet");
+  const grab = $("#mgrabwrap");
+  sheet.classList.add("open");
+
+  grab.dispatchEvent(touch("touchstart", 500));
+  grab.dispatchEvent(touch("touchmove", 520)); // 20px — under the threshold
+  grab.dispatchEvent(touch("touchend", 520));
+
+  assert.ok(sheet.classList.contains("open"), "sheet stays open");
+  assert.equal(sheet.style.transform, "");
+});
+
+test("the sheet cannot be dragged upwards off its edge", () => {
+  const sheet = $("#msheet");
+  const grab = $("#mgrabwrap");
+  sheet.classList.add("open");
+
+  grab.dispatchEvent(touch("touchstart", 500));
+  grab.dispatchEvent(touch("touchmove", 400)); // upward
+  assert.equal(sheet.style.transform, "translateY(0px)", "clamped at the edge");
+
+  grab.dispatchEvent(touch("touchend", 400));
+  assert.ok(sheet.classList.contains("open"));
+});
+
+test("tapping the handle closes the sheet", () => {
+  const sheet = $("#msheet");
+  sheet.classList.add("open");
+  $("#mgrabwrap").dispatchEvent(new win.Event("click", { bubbles: true }));
+  assert.equal(sheet.classList.contains("open"), false);
+});

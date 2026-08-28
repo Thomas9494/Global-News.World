@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Global News — World Map</title>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" crossorigin="anonymous"></script>
 <script src="sources.js"></script>
@@ -21,7 +21,11 @@
     --ease:cubic-bezier(0.16,1,0.3,1);
   }
   *{box-sizing:border-box;margin:0;padding:0}
+  /* dvh repeats each vh/% height: mobile browsers size vh against the viewport
+     with the URL bar collapsed, so a pane measured in vh overflows the screen
+     while the bar is showing. Older engines drop the dvh line and keep the first. */
   html,body{height:100%;overflow:hidden}
+  html,body{height:100dvh}
   body{font-family:'Inter',system-ui,sans-serif;color:var(--fg-1);background:#f4f8fc}
   a{color:var(--primary);text-decoration:none}
   a:hover{color:var(--primary-dark)}
@@ -79,11 +83,13 @@
   /* country dropdown */
   .dropdown{position:absolute;top:56px;left:0;right:0;background:#fff;border:var(--border-card);
     border-radius:14px;box-shadow:var(--shadow-menu);overflow:hidden;opacity:0;transform:translateY(-6px);
-    pointer-events:none;transition:opacity .25s,transform .25s var(--ease);max-height:min(420px,60vh)}
+    pointer-events:none;transition:opacity .25s,transform .25s var(--ease);max-height:min(420px,60vh);
+    max-height:min(420px,60dvh)}
   .dropdown.open{opacity:1;transform:translateY(0);pointer-events:auto}
   .dropdown .dhead{font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;
     letter-spacing:.06em;padding:12px 18px 6px}
-  .dropdown .dlist{overflow-y:auto;max-height:min(370px,52vh);padding-bottom:8px}
+  .dropdown .dlist{overflow-y:auto;max-height:min(370px,52vh);max-height:min(370px,52dvh);
+    padding-bottom:8px;-webkit-overflow-scrolling:touch}
   .drow{display:flex;align-items:center;gap:12px;width:100%;border:none;background:#fff;font:inherit;
     text-align:left;padding:9px 18px;cursor:pointer;transition:background .2s,transform .2s}
   .drow:hover{background:#f6f9fe;transform:translateX(4px)}
@@ -219,7 +225,12 @@
   .morechip:hover{background:var(--primary-lighter)}
 
   /* ---- article panel ---- */
-  .panel{position:absolute;top:0;right:0;bottom:0;width:440px;max-width:92vw;background:#fff;z-index:60;
+  /* fixed, not absolute: a closed drawer is parked at translateX(105%), and an
+     absolutely positioned box out there widens the document. Desktop hides that
+     behind overflow:hidden, but iOS Safari ignores root overflow and lays the
+     whole page out at ~2x the screen — which shifts the topbar, search, chips
+     and map projection off to the right. Fixed boxes never extend the page. */
+  .panel{position:fixed;top:0;right:0;bottom:0;width:440px;max-width:92vw;background:#fff;z-index:60;
     box-shadow:-12px 0 40px rgba(15,23,42,.12);transform:translateX(105%);
     transition:transform .5s var(--ease);display:flex;flex-direction:column}
   .panel.open{transform:translateX(0)}
@@ -273,10 +284,17 @@
   .srcchip:hover{background:rgba(13,148,136,.08)}
 
   /* ---- mobile bottom sheet ---- */
-  .msheet{position:absolute;left:0;right:0;bottom:0;z-index:35;display:none;background:#fff;
-    border-radius:16px 16px 0 0;box-shadow:0 -8px 30px rgba(15,23,42,.16);padding:6px 0 10px;
-    transform:translateY(105%);transition:transform .45s var(--ease)}
+  /* fixed for the same reason as .panel — parked at translateY(105%) it would
+     otherwise add a screen's worth of page below the fold. */
+  .msheet{position:fixed;left:0;right:0;bottom:0;z-index:35;display:none;background:#fff;
+    border-radius:16px 16px 0 0;box-shadow:0 -8px 30px rgba(15,23,42,.16);
+    padding:6px 0 calc(10px + env(safe-area-inset-bottom,0px));
+    transform:translateY(105%);transition:transform .45s var(--ease);touch-action:pan-y}
   .msheet.open{transform:translateY(0)}
+  /* No transition while a finger is on the sheet — it must track the drag 1:1. */
+  .msheet.dragging{transition:none}
+  /* The handle is the drag target, so give it a finger-sized hit area. */
+  .mgrabwrap{padding:2px 0 6px;cursor:grab;touch-action:none}
   .mgrab{width:40px;height:4px;border-radius:2px;background:#cbd5e1;margin:4px auto 8px}
   .mhead{display:flex;align-items:center;gap:8px;padding:0 16px 8px}
   .mhead b{font-size:15px;font-weight:700;letter-spacing:-.01em}
@@ -299,18 +317,25 @@
     .search{height:38px;padding:0 6px 0 12px}
     .search input{font-size:14px}
     .search .kbd{display:none}
-    .dropdown{max-height:min(380px,52vh)}
+    .dropdown{max-height:min(380px,52vh);max-height:min(380px,52dvh)}
     .msheet{display:block}
     #cards .newscard, #cards .morechip{display:none}
     .countrytag{display:none}
     #cards .srcchip{display:none}
     .zoomctrl{right:12px;bottom:auto;top:calc(50% - 66px)}
-    .hint{left:12px;right:12px;bottom:12px;max-width:none}
+    .hint{left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));max-width:none}
+    /* Once the sheet is up it owns the bottom of the screen — get the hint out
+       of the way instead of letting the two stack on top of each other. */
+    body.msheet-open .hint{opacity:0;transform:translateY(10px);pointer-events:none}
     .panel{width:100vw;max-width:100vw}
     .panel img.phero{height:180px}
-    .panel .pbody{padding:18px 18px 30px}
+    .panel .pbody{padding:18px 18px calc(30px + env(safe-area-inset-bottom,0px))}
     .panel h2{font-size:19px}
     .mdot{font-size:11px;padding:4px 10px 4px 7px}
+    /* Tapping a country pill is the main way in on a phone, but the pill itself
+       is ~24px tall — half a fingertip. Widen the hit area, not the artwork. */
+    .mdot::after{content:"";position:absolute;left:0;right:0;top:50%;
+      height:44px;transform:translateY(-50%)}
   }
   @media (prefers-reduced-motion: reduce){
     .newscard,.countrytag,.noresult,.morechip{animation:none;opacity:1;transform:none}
@@ -323,7 +348,9 @@
 <div id="markers"></div>
 <div id="cards"></div>
 <div class="msheet" id="msheet">
-  <div class="mgrab"></div>
+  <div class="mgrabwrap" id="mgrabwrap" role="button" tabindex="0" aria-label="Close news panel">
+    <div class="mgrab"></div>
+  </div>
   <div class="mhead" id="mhead"></div>
   <div class="mstrip" id="mstrip"></div>
 </div>
@@ -369,7 +396,7 @@
 
 <div class="hint" id="hint">
   <h4>Zoom into a country</h4>
-  <p>Use the mouse wheel to zoom in and out. Once you're close enough to a country, the latest stories from its local newspapers pop up — no country restrictions, translated on click.</p>
+  <p id="hinttext">Use the mouse wheel to zoom in and out. Once you're close enough to a country, the latest stories from its local newspapers pop up — no country restrictions, translated on click.</p>
 </div>
 
 <aside class="panel" id="spanel">
