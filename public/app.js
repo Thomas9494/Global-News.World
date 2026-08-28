@@ -80,6 +80,47 @@ if (matchMedia("(pointer:coarse)").matches) {
 }
 
 /**
+ * Phone back gesture.
+ *
+ * Both panels cover the entire screen on a phone, so the platform back gesture
+ * has to close them. Without this it leaves the site altogether and the reader
+ * loses their place on the map.
+ *
+ * One history entry covers "a panel is open", regardless of which one, because
+ * opening Sources from an article swaps one for the other rather than stacking.
+ * Back then always means "return to the map", which is what a reader expects.
+ */
+let overlayPushed = false;
+
+const anyOverlayOpen = () =>
+  !!(panel?.classList.contains("open") || spanel?.classList.contains("open"));
+
+/** Call after opening a panel, so the back gesture has an entry to consume. */
+function syncOverlayHistory() {
+  if (anyOverlayOpen() && !overlayPushed) {
+    overlayPushed = true;
+    history.pushState({ overlay: true }, "");
+  }
+}
+
+/** Closes a panel and hands the history entry back if nothing is left open. */
+function dismissOverlay(el) {
+  if (!el?.classList.contains("open")) return;
+  el.classList.remove("open");
+  if (!anyOverlayOpen() && overlayPushed) {
+    overlayPushed = false;
+    history.back();
+  }
+}
+
+addEventListener("popstate", () => {
+  if (!overlayPushed) return;
+  overlayPushed = false;
+  spanel?.classList.remove("open");
+  panel?.classList.remove("open");
+});
+
+/**
  * Mobile bottom sheet: drag-to-dismiss.
  *
  * The sheet is opened from a dozen places by toggling .open, so rather than
@@ -1208,11 +1249,12 @@ function openSources(name) {
     .join("");
   panel.classList.remove("open");
   spanel.classList.add("open");
+  syncOverlayHistory();
   spanel.querySelector(".pscroll").scrollTop = 0;
 }
-document.getElementById("s-close").onclick = () => spanel.classList.remove("open");
+document.getElementById("s-close").onclick = () => dismissOverlay(spanel);
 addEventListener("keydown", (e) => {
-  if (e.key === "Escape") spanel.classList.remove("open");
+  if (e.key === "Escape") dismissOverlay(spanel);
 });
 
 /* ------------------------------------- article panel + reader translation -- */
@@ -1341,6 +1383,7 @@ function openPanel(countryId, a) {
 
   renderPanelContent();
   panel.classList.add("open");
+  syncOverlayHistory();
   panel.querySelector(".pscroll").scrollTop = 0;
 
   loadArticle(a, READER.lang, token);
@@ -1367,9 +1410,9 @@ tTarget.onchange = () => {
   renderPanelContent();
   if (curArticle) loadArticle(curArticle, to, panelToken);
 };
-document.getElementById("p-close").onclick = () => panel.classList.remove("open");
+document.getElementById("p-close").onclick = () => dismissOverlay(panel);
 addEventListener("keydown", (e) => {
-  if (e.key === "Escape") panel.classList.remove("open");
+  if (e.key === "Escape") dismissOverlay(panel);
 });
 
 mqMobile.addEventListener("change", () => {

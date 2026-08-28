@@ -235,12 +235,21 @@
     transition:transform .5s var(--ease);display:flex;flex-direction:column}
   .panel.open{transform:translateX(0)}
   .panel .phead{display:flex;align-items:center;gap:12px;padding:18px 22px;border-bottom:var(--border-card)}
-  .panel .phead .psrc{font-size:12px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.05em}
+  /* A long outlet name must ellipsis, not stretch the header past the screen. */
+  .panel .phead .psrc{font-size:12px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.05em;
+    min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .panel .phead .ptime{font-size:12px;color:var(--fg-4);white-space:nowrap}
   .panel .phead button.pclose{margin-left:auto;width:36px;height:36px;border:var(--border-card);background:#fff;
     border-radius:50%;font-size:16px;color:var(--fg-3);cursor:pointer;transition:background .2s;flex:none}
   .panel .phead button.pclose:hover{background:var(--primary-lighter);color:var(--primary)}
-  .panel .pscroll{overflow-y:auto;flex:1}
+  /* overflow-y:auto alone computes overflow-x to auto as well, so one too-wide
+     child turns the whole article into a sideways-scrolling pane — which reads
+     as the text being chopped off down its left edge. A reading panel scrolls
+     one way only. */
+  .panel .pscroll{overflow-y:auto;overflow-x:hidden;flex:1;-webkit-overflow-scrolling:touch}
+  /* Nothing inside may force the panel wider than the phone. */
+  .panel .pscroll *{max-width:100%}
+  .panel .pbody{overflow-wrap:anywhere}
   .panel img.phero{width:100%;height:220px;object-fit:cover;display:block;background:#dee7f2}
   .panel .pbody{padding:22px 26px 34px}
   .panel .pcat{display:inline-block;font-size:11px;font-weight:700;color:var(--teal);background:rgba(13,148,136,.08);
@@ -331,9 +340,18 @@
        of the way instead of letting the two stack on top of each other. */
     body.msheet-open .hint{opacity:0;transform:translateY(10px);pointer-events:none}
     .panel{width:100vw;max-width:100vw}
-    .panel img.phero{height:180px}
-    .panel .pbody{padding:18px 18px calc(30px + env(safe-area-inset-bottom,0px))}
-    .panel h2{font-size:19px}
+    .panel img.phero{height:150px}
+    .panel .pbody{padding:14px 14px calc(24px + env(safe-area-inset-bottom,0px))}
+    .panel h2{font-size:18px}
+    .panel .phead{padding:12px 14px}
+    /* The translation controls were laid out for a 440px desktop drawer. On a
+       phone the segmented pair alone is wider than the column, so let it wrap
+       and let the language select take a line of its own. */
+    .ptrans{padding:10px;margin-bottom:12px}
+    .trow{gap:6px}
+    .tseg{display:flex;flex-wrap:wrap;width:100%}
+    .tseg button{flex:1 1 auto;padding:6px 10px;white-space:nowrap}
+    .trow select{width:100%;max-width:100%}
     .mdot{font-size:11px;padding:4px 10px 4px 7px}
     /* Tapping a country pill is the main way in on a phone, but the pill itself
        is ~24px tall — half a fingertip. Widen the hit area, not the artwork. */
