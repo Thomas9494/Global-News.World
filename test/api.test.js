@@ -2,13 +2,23 @@ import test, { before, after } from "node:test";
 import assert from "node:assert/strict";
 
 import { createApp } from "../server/app.js";
+import { config } from "../server/config.js";
 import * as store from "../server/lib/store.js";
 import { normalizeItem } from "../server/ingest.js";
 
 /**
  * Boots the real app on an ephemeral port against a store seeded with a few
  * articles, then exercises every endpoint the frontend depends on.
+ *
+ * The two features that reach the open internet are switched off here: the free
+ * translation chain and the live city lookup. A test suite that depended on a
+ * volunteer-run mirror being up would fail for reasons that have nothing to do
+ * with this code. Their offline halves — the backend chain, place resolution —
+ * are still exercised below.
  */
+config.translate.provider = "none";
+config.plugins.liveCity = false;
+config.liveCity.geocode = false;
 let base;
 let server;
 
@@ -287,6 +297,45 @@ test("a category name is a topic search across every country", async () => {
   assert.equal(body.type, "topic");
   assert.equal(body.articles.length, 3);
   assert.deepEqual([...new Set(body.articles.map((a) => a.ccn3))].sort(), ["756", "764"]);
+});
+
+test("a section name in any language is a topic search, not a place", async () => {
+  // The chips are English, the readers are not: someone looking for the week's
+  // politics types "Politik", and must not be flown to a town called Politika.
+  for (const q of ["Politik", "politique", "Politics"]) {
+    const { body } = await get(`/api/search?q=${encodeURIComponent(q)}`);
+    assert.equal(body.type, "topic", q);
+    assert.equal(body.category, "Politics", q);
+    assert.equal(body.articles.length, 3, q);
+    assert.ok(
+      body.articles.every((a) => a.cat === "Politics"),
+      `${q} returns the whole section`
+    );
+  }
+
+  const sport = await get("/api/search?q=Sport");
+  assert.equal(sport.body.type, "topic");
+  assert.equal(sport.body.category, "Sports");
+
+  // an ordinary keyword is still an ordinary keyword
+  assert.equal((await get("/api/search?q=fondue")).body.category, "");
+});
+
+test("GET /api/city/live names the place a reader zoomed into", async () => {
+  const byName = await get("/api/city/live?name=Lucerne");
+  assert.equal(byName.status, 200);
+  assert.equal(byName.body.place.name, "Lucerne");
+  assert.equal(byName.body.place.ccn3, "756");
+  assert.equal(byName.body.place.via, "gazetteer");
+
+  // a point resolves to the town nearest it, without leaving the process
+  const byPoint = await get("/api/city/live?lat=47.05&lng=8.31");
+  assert.equal(byPoint.status, 200);
+  assert.equal(byPoint.body.place.name, "Lucerne");
+  assert.deepEqual(byPoint.body.place.ll, [8.31, 47.05]);
+
+  // mid-ocean, with the reverse geocoders switched off: no place, and it says so
+  assert.equal((await get("/api/city/live?lat=0&lng=-30")).status, 404);
 });
 
 test("topic results carry the coordinates the cards are pinned to", async () => {

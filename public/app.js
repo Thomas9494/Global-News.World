@@ -203,6 +203,53 @@ let topic = null; // { q, articles: [], total: number }
  */
 let cityFocus = null; // { name, ccn3, ll }
 
+/**
+ * How many stories a view puts on screen. This is the map's unit of "some
+ * news": zoom anywhere — a country, a town, a point in the middle of nowhere —
+ * and you get ten, topped up from further afield if the place itself is quiet.
+ */
+const PER_VIEW = 10;
+
+/** How deep a topped-up pool goes, so "New News" has somewhere to turn to. */
+const FILL_POOL = PER_VIEW * 3;
+
+/**
+ * From this zoom on, the reader has plainly zoomed *into* somewhere and must
+ * never be left facing an empty map. Below it the design's rule still holds:
+ * at continent range a card headed "Germany" over Zurich would just be wrong.
+ */
+const ALWAYS_NEWS_ZOOM = 5;
+
+/**
+ * Which page of its stories each view is showing — "New News" advances it.
+ * Keyed by view, so returning to a country the reader has already paged puts
+ * them back where they were instead of at the top of the pile again.
+ */
+const pageByView = new Map();
+let viewKey = "";   // the view currently on screen
+let viewTotal = 0;  // how many stories it can page through
+
+const viewKeyFor = (kind, name) =>
+  `${kind}:${name}:${activeCat}:${query.trim().toLowerCase()}`;
+
+const pageOf = (key) => pageByView.get(key) || 0;
+
+/**
+ * The slice of `list` this view is on, wrapping round at the end.
+ * Also records what is on screen, which is what the "New News" button pages.
+ */
+function paged(list, key, size = PER_VIEW) {
+  viewKey = key;
+  viewTotal = list.length;
+  const n = Math.max(1, size);
+  if (list.length <= n) {
+    pageByView.set(key, 0);
+    return list;
+  }
+  const pages = Math.ceil(list.length / n);
+  return list.slice((pageOf(key) % pages) * n, (pageOf(key) % pages) * n + n);
+}
+
 const esc = (s) =>
   String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
@@ -234,28 +281,40 @@ function placeholderImg(a) {
 const cardImage = (a) => (a.img ? a.img : placeholderImg(a));
 
 /* ------------------------------------------------------------- news cards -- */
-function newsCardEl(id, a, i) {
+/**
+ * @param {string} id    the country the card belongs to
+ * @param {object} a     the story
+ * @param {number} i     its place in the fan-out, for the stagger
+ * @param {string} [home] the country this view is about — a card from anywhere
+ *   else says so, because a topped-up view must not read as local reporting.
+ */
+function newsCardEl(id, a, i, home) {
   const el = document.createElement("div");
   el.className = "newscard";
   el.style.animationDelay = i * 90 + "ms";
   const c = a.orig;
+  const owner = a.ccn3 || id;
+  const from = home && owner !== home ? NEWS[owner]?.name || a.country || "" : "";
   el.innerHTML = `<img src="${esc(cardImage(a))}" alt="" loading="lazy"><div class="body">
-    <div class="src">${esc(a.src)}<span class="lang">${esc(a.lang.toUpperCase())}</span><span class="tag">${esc(a.time)}</span></div>
+    <div class="src">${esc(a.src)}<span class="lang">${esc(a.lang.toUpperCase())}</span>${
+      from ? `<span class="from">${esc(from)}</span>` : ""
+    }<span class="tag">${esc(a.time)}</span></div>
     <h3>${esc(c.title)}</h3><p>${esc(c.teaser)}</p></div>`;
   const img = el.querySelector("img");
   img.onerror = () => {
     img.onerror = null;
     img.src = placeholderImg(a);
   };
-  el.onclick = () => openPanel(id, a);
+  el.onclick = () => openPanel(owner, a);
   return el;
 }
 
-function renderSheet(id) {
-  const arts = filteredArticles(id);
+/** The phone's bottom sheet, showing one page of a country's stories. */
+function renderSheet(id, list, own) {
+  const arts = paged(list, viewKeyFor("country", id));
   const srcs = (window.NEWS_SOURCES && NEWS_SOURCES[NEWS[id].name]) || [];
   mhead.innerHTML =
-    `<b>${esc(NEWS[id].name)}</b><span class="mcnt">${arts.length} stories live</span>` +
+    `<b>${esc(NEWS[id].name)}</b><span class="mcnt">${countLabel(own, list.length, "stories live")}</span>` +
     (srcs.length ? `<button class="msrc" id="msrcbtn">◉ ${srcs.length} sources</button>` : "");
   const sb = document.getElementById("msrcbtn");
   if (sb) sb.onclick = () => openSources(NEWS[id].name);
@@ -266,9 +325,11 @@ function renderSheet(id) {
     n.textContent = "No stories match this filter — adjust search or category.";
     mstrip.appendChild(n);
   }
-  arts.forEach((a, i) => mstrip.appendChild(newsCardEl(id, a, i)));
+  arts.forEach((a, i) => mstrip.appendChild(newsCardEl(id, a, i, id)));
   mstrip.scrollLeft = 0;
   msheet.classList.add("open");
+  syncSheetOffset();
+  syncNewsButton(arts.length);
 }
 
 function project(ll) {
@@ -475,6 +536,10 @@ function onView() {
     setCityFocus(near);
     return;
   }
+  // Zoomed past town range with nothing in the gazetteer here: ask the server
+  // what place this is and what its press is reporting. Until that answers, the
+  // country view below still reads.
+  if (map.getZoom() >= CITY_ZOOM) discoverPlaceAt(map.getCenter());
   if (cityFocus) {
     // leaving a town: its cards and its dot go with it
     cityFocus = null;
@@ -491,15 +556,21 @@ function onView() {
   if (over) {
     // Standing over a country: show it, or — if the reader is still too far out
     // for it — show nothing. Never a neighbour. A card headed "Niger" while the
-    // reader is looking at Lagos is worse than an empty map.
-    setFocus(z >= REGION[over].min ? over : null);
+    // reader is looking at Lagos is worse than an empty map. Once they have
+    // zoomed properly in, though, the country under them always reads.
+    setFocus(z >= REGION[over].min || z >= ALWAYS_NEWS_ZOOM ? over : null);
     return;
   }
 
   // Over open water, or over a country we have no outline for: the design's
   // original rule, the nearest country centre still on screen.
   const focusable = regionIds.filter((id) => REGION[id] && z >= REGION[id].min);
-  setFocus(nearestCountryOnScreen(focusable));
+  let target = nearestCountryOnScreen(focusable);
+  // Nothing under the reader and nothing on screen either. Past this zoom they
+  // have clearly gone looking for somewhere, so the nearest covered country
+  // beats an empty map — and every card names the country it came from.
+  if (!target && z >= ALWAYS_NEWS_ZOOM) target = nearestLiveCountry(map.getCenter());
+  setFocus(target);
 }
 
 function setCityFocus(city) {
@@ -511,6 +582,8 @@ function setCityFocus(city) {
   focusedId = city.ccn3;
   hint.classList.add("hide");
   renderCityCards();
+  // A town the ingest has little or nothing for gets its own press fetched live.
+  if (cityArticles(city).length < PER_VIEW) ensureLivePlace(city);
 }
 
 function setFocus(id) {
@@ -522,8 +595,12 @@ function setFocus(id) {
   focusedId = id;
   cardsLayer.innerHTML = "";
   renderCityDots();
-  if (id) renderCards(id);
-  else msheet.classList.remove("open");
+  if (id) {
+    renderCards(id);
+  } else {
+    msheet.classList.remove("open");
+    syncNewsButton(0);
+  }
 }
 
 function zoomTo(id) {
@@ -567,6 +644,83 @@ function cityArticles(city) {
       (activeCat === "All" || a.cat === activeCat) &&
       (!q || searchable(a, group.name).includes(q))
   );
+}
+
+/* ------------------------------------------------- ten stories, everywhere -- */
+/**
+ * Tops a view up to PER_VIEW from the nearest countries that do have stories.
+ *
+ * The map promises that wherever you zoom in there is something to read, and a
+ * thinly covered country or a quiet town would otherwise leave the reader with
+ * one card or none. Borrowed stories keep their own country's name on the card,
+ * so nothing is passed off as local reporting.
+ *
+ * The pool is filled deeper than one screenful so that "New News" has real
+ * material to turn to here as well; only ten of it is ever on screen at once.
+ *
+ * @param {object[]} list  what the place itself has
+ * @param {[number,number]} ll  where the reader is looking
+ * @param {string[]} exclude  countries already accounted for
+ */
+function nearbyFill(list, ll, exclude = []) {
+  if (list.length >= PER_VIEW || !ll) return list;
+  const seen = new Set(list.map((a) => a.id));
+  const skip = new Set(exclude);
+  const near = regionIds
+    .filter((id) => REGION[id] && !skip.has(id))
+    .map((id) => ({ id, d: degreesBetween(REGION[id].ll[0], REGION[id].ll[1], ll[0], ll[1]) }))
+    .sort((a, b) => a.d - b.d);
+
+  const out = list.slice();
+  for (const { id } of near) {
+    for (const a of filteredArticles(id)) {
+      if (seen.has(a.id)) continue;
+      seen.add(a.id);
+      out.push({ ...a, ccn3: id });
+      if (out.length >= FILL_POOL) return out;
+    }
+  }
+  return out;
+}
+
+/** A country's own stories, topped up from its neighbours when it is thin. */
+function countryStories(id) {
+  const own = filteredArticles(id);
+  return { own: own.length, list: nearbyFill(own, REGION[id]?.ll, [id]) };
+}
+
+/**
+ * A town's stories: its own press first, then the rest of its country, then the
+ * nearest neighbours. Zooming into a quiet town is still zooming into somewhere.
+ */
+function cityStories(city) {
+  const own = cityArticles(city);
+  if (own.length >= PER_VIEW) return { own: own.length, list: own };
+  const seen = new Set(own.map((a) => a.id));
+  const list = own.concat(filteredArticles(city.ccn3).filter((a) => !seen.has(a.id)));
+  return { own: own.length, list: nearbyFill(list, city.ll, [city.ccn3]) };
+}
+
+/** "4 stories live", or "4 stories live · +13 nearby" once topped up. */
+function countLabel(own, total, noun) {
+  if (!own) return total ? `${total} ${total === 1 ? "story" : "stories"} from nearby` : `no ${noun}`;
+  if (total <= own) return `${own} ${noun}`;
+  return `${own} ${noun} · +${total - own} nearby`;
+}
+
+/** The covered country closest to a point, whatever the zoom. */
+function nearestLiveCountry(center) {
+  let best = null;
+  let bestD = Infinity;
+  for (const id of regionIds) {
+    if (!REGION[id]) continue;
+    const d = degreesBetween(REGION[id].ll[0], REGION[id].ll[1], center.lng, center.lat);
+    if (d < bestD) {
+      bestD = d;
+      best = id;
+    }
+  }
+  return best;
 }
 
 /** Great-circle-ish distance in degrees, good enough for picking a neighbour. */
@@ -654,25 +808,36 @@ function cityInView() {
   return best;
 }
 
+/* ---- card geometry, shared by the capacity maths and the layout ---- */
+const CARD_W = 250;
+const CARD_H = 210;
+const CARD_GAP = 22;
+const TOP_PAD = 108;
+const BOT_PAD = 40;
+/** Two columns a side at most — past that the map itself has disappeared. */
+const MAX_COLS = 4;
+
+const cardsPerColumn = () =>
+  Math.max(1, Math.floor((H() - TOP_PAD - BOT_PAD + CARD_GAP) / (CARD_H + CARD_GAP)));
+
+/** How many cards this viewport can hold around a point, capped at a full view. */
 function cardCapacity() {
-  const ch = 210,
-    gap = 22,
-    topPad = 108,
-    botPad = 40;
-  return 2 * Math.max(1, Math.floor((H() - topPad - botPad + gap) / (ch + gap)));
+  const cols = Math.max(2, Math.min(MAX_COLS, Math.floor((W() - 32) / (CARD_W + CARD_GAP))));
+  return Math.min(PER_VIEW, cardsPerColumn() * cols);
 }
 
 function renderCards(id) {
   cardsLayer.innerHTML = "";
+  const { own, list } = countryStories(id);
   if (mqMobile.matches) {
-    renderSheet(id);
+    renderSheet(id, list, own);
     return;
   }
   msheet.classList.remove("open");
-  const arts = filteredArticles(id);
+  const arts = paged(list, viewKeyFor("country", id), cardCapacity());
   const tag = document.createElement("div");
   tag.className = "countrytag";
-  tag.innerHTML = `${esc(NEWS[id].name)} <span>· ${arts.length} stories live</span>`;
+  tag.innerHTML = `${esc(NEWS[id].name)} <span>· ${countLabel(own, list.length, "stories live")}</span>`;
   cardsLayer.appendChild(tag);
   const srcs = (window.NEWS_SOURCES && NEWS_SOURCES[NEWS[id].name]) || [];
   if (srcs.length) {
@@ -682,25 +847,30 @@ function renderCards(id) {
     sc.onclick = () => openSources(NEWS[id].name);
     cardsLayer.appendChild(sc);
   }
-  if (!arts.length) {
+  if (!list.length) {
     const n = document.createElement("div");
     n.className = "noresult";
     n.textContent = "No stories match this filter — adjust search or category.";
     cardsLayer.appendChild(n);
   }
-  const cap = cardCapacity();
-  const shown = arts.slice(0, Math.min(6, cap));
-  shown.forEach((a, i) => cardsLayer.appendChild(newsCardEl(id, a, i)));
-  const rest = arts.length - shown.length;
-  if (rest > 0) {
-    const more = document.createElement("button");
-    more.className = "morechip";
-    more.textContent = `+${rest} more stories`;
-    more.onclick = () => openPanel(id, arts[shown.length]);
-    cardsLayer.appendChild(more);
-  }
+  arts.forEach((a, i) => cardsLayer.appendChild(newsCardEl(id, a, i, id)));
+  addMoreChip(list.length - arts.length, "more stories");
   positionCards(id);
   renderCityDots();
+  syncNewsButton(arts.length);
+}
+
+/**
+ * The "+N more" chip. It pages exactly like the New News button does, so the
+ * reader never meets a count they cannot get to.
+ */
+function addMoreChip(rest, noun) {
+  if (rest <= 0) return;
+  const more = document.createElement("button");
+  more.className = "morechip";
+  more.textContent = `+${rest} ${noun}`;
+  more.onclick = () => showNextPage();
+  cardsLayer.appendChild(more);
 }
 
 function positionCards(id) {
@@ -714,7 +884,14 @@ function positionCards(id) {
   layoutAround(cx, cy);
 }
 
-/** Places the cards in two columns either side of a point on the map. */
+/**
+ * Places the cards in columns either side of a point on the map.
+ *
+ * One column a side is the design, and it still is whenever six cards or fewer
+ * fit. A full ten-story view needs more than that on most screens, so columns
+ * are added outwards until every card has a slot; the innermost pair keeps its
+ * original distance from the place unless the outer columns need that space.
+ */
 function layoutAround(cx, cy) {
   const els = [...cardsLayer.querySelectorAll(".newscard")];
   const tag = cardsLayer.querySelector(".countrytag");
@@ -732,37 +909,46 @@ function layoutAround(cx, cy) {
     nores.style.left = cx - nores.offsetWidth / 2 + "px";
     nores.style.top = cy + 28 + "px";
   }
-  const cw = 250,
-    ch = 210,
-    gap = 22,
-    topPad = 108,
-    botPad = 40;
-  const perCol = Math.max(1, Math.floor((H() - topPad - botPad + gap) / (ch + gap)));
-  const rightEdge = W() - cw - 84; // keep clear of fixed zoom controls
+
   const railEdge = 16;
-  const spread = Math.min(W() * 0.26, 380);
-  const leftX = Math.max(railEdge, Math.min(cx - cw - spread, rightEdge));
-  const rightX = Math.max(railEdge, Math.min(cx + spread, rightEdge));
-  const nL = Math.ceil(els.length / 2),
-    nR = Math.floor(els.length / 2);
+  const rightEdge = W() - CARD_W - 84; // keep clear of the fixed zoom controls
+  const needed = Math.max(2, Math.min(MAX_COLS, Math.ceil(els.length / cardsPerColumn())));
+  const kL = Math.ceil(needed / 2);
+  const kR = needed - kL;
+  const sideWidth = (k) => (k ? k * CARD_W + (k - 1) * CARD_GAP : 0);
+
+  // The gap between the place and the first card, closed only as far as the
+  // extra columns actually demand.
+  let spread = Math.min(W() * 0.26, 380);
+  if (kL) spread = Math.min(spread, Math.max(24, cx - railEdge - sideWidth(kL)));
+  if (kR) spread = Math.min(spread, Math.max(24, rightEdge + CARD_W - cx - sideWidth(kR)));
+
+  // nearest columns first, so the stories nearest the place sit beside it
+  const colX = [];
+  for (let i = 0; i < Math.max(kL, kR); i++) {
+    if (i < kL) colX.push(cx - spread - CARD_W - i * (CARD_W + CARD_GAP));
+    if (i < kR) colX.push(cx + spread + i * (CARD_W + CARD_GAP));
+  }
+  const cols = colX.length;
+  const perColumn = colX.map((_, c) => Math.ceil((els.length - c) / cols));
+
   els.forEach((el, i) => {
-    const col = i % 2,
-      row = Math.floor(i / 2);
-    const n = col === 0 ? nL : nR;
-    const colH = n * ch + (n - 1) * gap;
-    const start = Math.max(topPad, Math.min(cy - colH / 2, H() - botPad - colH));
-    const x = col === 0 ? leftX : rightX;
-    const y = start + row * (ch + gap) + (col === 1 ? 26 : 0); // slight stagger on the right column
-    el.style.left = Math.max(16, Math.min(x, rightEdge)) + "px";
-    el.style.top = Math.max(topPad, Math.min(y, H() - botPad - ch)) + "px";
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const n = perColumn[col];
+    const colH = n * CARD_H + (n - 1) * CARD_GAP;
+    const start = Math.max(TOP_PAD, Math.min(cy - colH / 2, H() - BOT_PAD - colH));
+    const y = start + row * (CARD_H + CARD_GAP) + (col % 2 ? 26 : 0); // stagger the right side
+    el.style.left = Math.max(railEdge, Math.min(colX[col], rightEdge)) + "px";
+    el.style.top = Math.max(TOP_PAD, Math.min(y, H() - BOT_PAD - CARD_H)) + "px";
     el.style.zIndex = 20 + i;
   });
+
   const more = cardsLayer.querySelector(".morechip");
   if (more) {
     more.style.left = cx - more.offsetWidth / 2 + "px";
-    more.style.top = Math.min(cy + 64, H() - botPad) + "px";
+    more.style.top = Math.min(cy + 64, H() - BOT_PAD) + "px";
   }
-  void perCol;
 }
 
 /* ----------------------------------------------------------- city focus -- */
@@ -775,33 +961,46 @@ function renderCityCards() {
   cardsLayer.innerHTML = "";
   markerLayer.querySelectorAll(".cdot").forEach((e) => e.remove());
 
-  const arts = cityArticles(cityFocus);
+  const { own, list } = cityStories(cityFocus);
   const country = NEWS[cityFocus.ccn3]?.name || "";
+  // "2 local stories · +8 nearby", or plain "8 stories from nearby" for a town
+  // whose own press published nothing today — which is not a failure worth
+  // announcing, only a fact worth stating.
+  const local = `${own} local ${own === 1 ? "story" : "stories"}`;
+  const label = !own
+    ? `${list.length} ${list.length === 1 ? "story" : "stories"} from nearby`
+    : list.length > own
+      ? `${local} · +${list.length - own} nearby`
+      : local;
 
   if (mqMobile.matches) {
-    mhead.innerHTML =
-      `<b>${esc(cityFocus.name)}</b><span class="mcnt">${arts.length} local ${arts.length === 1 ? "story" : "stories"}</span>`;
+    const arts = paged(list, viewKeyFor("city", cityFocus.name));
+    mhead.innerHTML = `<b>${esc(cityFocus.name)}</b><span class="mcnt">${label}</span>`;
     mstrip.innerHTML = "";
-    if (!arts.length) {
+    if (!list.length) {
       const n = document.createElement("div");
       n.className = "mnone";
-      n.textContent = `Nothing local from ${cityFocus.name} right now — zoom out for ${country}.`;
+      n.textContent = `Nothing from ${cityFocus.name} right now — zoom out for ${country}.`;
       mstrip.appendChild(n);
     }
-    arts.forEach((a, i) => mstrip.appendChild(newsCardEl(cityFocus.ccn3, a, i)));
+    arts.forEach((a, i) => mstrip.appendChild(newsCardEl(cityFocus.ccn3, a, i, cityFocus.ccn3)));
     mstrip.scrollLeft = 0;
     msheet.classList.add("open");
+    syncSheetOffset();
+    syncNewsButton(arts.length);
     return;
   }
   msheet.classList.remove("open");
 
+  const arts = paged(list, viewKeyFor("city", cityFocus.name), cardCapacity());
+
   const tag = document.createElement("div");
   tag.className = "countrytag";
-  tag.innerHTML = `${esc(cityFocus.name)} <span>· ${arts.length} local ${arts.length === 1 ? "story" : "stories"}</span>`;
+  tag.innerHTML = `${esc(cityFocus.name)} <span>· ${label}</span>`;
   cardsLayer.appendChild(tag);
 
   // which newsrooms in this town are on screen
-  const outlets = [...new Set(arts.filter((a) => a.srcCity === cityFocus.name).map((a) => a.src))];
+  const outlets = [...new Set(list.filter((a) => a.srcCity === cityFocus.name).map((a) => a.src))];
   if (outlets.length) {
     const sc = document.createElement("button");
     sc.className = "srcchip";
@@ -811,25 +1010,16 @@ function renderCityCards() {
     cardsLayer.appendChild(sc);
   }
 
-  if (!arts.length) {
+  if (!list.length) {
     const n = document.createElement("div");
     n.className = "noresult";
-    n.textContent = `Nothing local from ${cityFocus.name} right now — zoom out for ${country}.`;
+    n.textContent = `Nothing from ${cityFocus.name} right now — zoom out for ${country}.`;
     cardsLayer.appendChild(n);
   }
 
-  const shown = arts.slice(0, Math.min(6, cardCapacity()));
-  shown.forEach((a, i) => cardsLayer.appendChild(newsCardEl(cityFocus.ccn3, a, i)));
-
-  const rest = arts.length - shown.length;
-  if (rest > 0) {
-    const next = arts[shown.length];
-    const more = document.createElement("button");
-    more.className = "morechip";
-    more.textContent = `+${rest} more from ${cityFocus.name}`;
-    more.onclick = () => openPanel(cityFocus.ccn3, next);
-    cardsLayer.appendChild(more);
-  }
+  arts.forEach((a, i) => cardsLayer.appendChild(newsCardEl(cityFocus.ccn3, a, i, cityFocus.ccn3)));
+  addMoreChip(list.length - arts.length, `more near ${cityFocus.name}`);
+  syncNewsButton(arts.length);
 
   const dot = document.createElement("div");
   dot.className = "cdot";
@@ -858,7 +1048,7 @@ function positionCityCards() {
 function topicCapacity() {
   const cols = Math.max(1, Math.floor((W() - 32) / 272));
   const rows = Math.max(1, Math.floor((H() - 148) / 232));
-  return Math.max(3, Math.min(cols * rows, 18));
+  return Math.max(3, Math.min(cols * rows, PER_VIEW));
 }
 
 function renderTopicCards() {
@@ -866,12 +1056,14 @@ function renderTopicCards() {
   cardsLayer.innerHTML = "";
   markerLayer.querySelectorAll(".cdot").forEach((e) => e.remove());
 
-  const arts = topic.articles.filter((a) => activeCat === "All" || a.cat === activeCat);
+  const all = topic.articles.filter((a) => activeCat === "All" || a.cat === activeCat);
+  const key = viewKeyFor("topic", topic.q.toLowerCase());
 
   if (mqMobile.matches) {
-    mhead.innerHTML = `<b>${esc(topic.q)}</b><span class="mcnt">${arts.length} stories worldwide</span>`;
+    const arts = paged(all, key);
+    mhead.innerHTML = `<b>${esc(topic.q)}</b><span class="mcnt">${all.length} stories worldwide</span>`;
     mstrip.innerHTML = "";
-    if (!arts.length) {
+    if (!all.length) {
       const n = document.createElement("div");
       n.className = "mnone";
       n.textContent = "No stories match this search — try another word or clear the filter.";
@@ -880,23 +1072,28 @@ function renderTopicCards() {
     arts.forEach((a, i) => mstrip.appendChild(newsCardEl(a.ccn3, a, i)));
     mstrip.scrollLeft = 0;
     msheet.classList.add("open");
+    syncSheetOffset();
+    syncNewsButton(arts.length);
     return;
   }
   msheet.classList.remove("open");
 
+  const shown = paged(all, key, topicCapacity());
+
   const tag = document.createElement("div");
   tag.className = "countrytag";
-  tag.innerHTML = `${esc(topic.q)} <span>· ${arts.length} of ${topic.total} stories worldwide</span>`;
+  tag.innerHTML =
+    `${esc(topic.q)} <span>· ${shown.length} of ${topic.total} ` +
+    `${topic.category ? `${esc(topic.category)} stories` : "stories"} worldwide</span>`;
   cardsLayer.appendChild(tag);
 
-  if (!arts.length) {
+  if (!all.length) {
     const n = document.createElement("div");
     n.className = "noresult";
     n.textContent = "No stories match this search — try another word or clear the filter.";
     cardsLayer.appendChild(n);
   }
 
-  const shown = arts.slice(0, topicCapacity());
   shown.forEach((a, i) => {
     const el = newsCardEl(a.ccn3, a, i);
     el.dataset.ll = (a.ll || REGION[a.ccn3]?.ll || [0, 0]).join(",");
@@ -911,15 +1108,8 @@ function renderTopicCards() {
     markerLayer.appendChild(dot);
   });
 
-  const rest = arts.length - shown.length;
-  if (rest > 0) {
-    const next = arts[shown.length];
-    const more = document.createElement("button");
-    more.className = "morechip";
-    more.textContent = `+${rest} more stories`;
-    more.onclick = () => openPanel(next.ccn3, next);
-    cardsLayer.appendChild(more);
-  }
+  addMoreChip(all.length - shown.length, "more stories");
+  syncNewsButton(shown.length);
 
   positionTopicCards();
   positionCityDots();
@@ -1047,7 +1237,13 @@ async function runSearch(raw) {
   cityFocus = null;
   msheet.classList.remove("open");
   hint.classList.add("hide");
-  topic = { q, articles: data.articles || [], total: data.total || (data.articles || []).length };
+  topic = {
+    q,
+    // set when the term named a whole section — "Politik", "Sport", "Wirtschaft"
+    category: data.category || "",
+    articles: data.articles || [],
+    total: data.total || (data.articles || []).length,
+  };
   renderTopicCards();
 }
 
@@ -1263,6 +1459,160 @@ function refresh() {
   else if (cityFocus) renderCityCards();
   else if (focusedId) renderCards(focusedId);
   else renderCityDots();
+}
+
+/* --------------------------------------------------------------- New News -- */
+/**
+ * One button, one promise: the stories on screen go, ten different ones arrive.
+ *
+ * Every view already knows how many stories it has behind the ten on show, so
+ * this is a page turn rather than a reload — instant, and it wraps round at the
+ * end so the button is never a dead end. When a country's bundle runs out, the
+ * rest of its stories are fetched before the page turns.
+ */
+const newsBtn = document.getElementById("newnews");
+
+/** The bottom sheet owns the bottom of a phone screen; ride above it. */
+function syncSheetOffset() {
+  if (!msheet) return;
+  document.documentElement.style.setProperty("--msheet-h", msheet.offsetHeight + "px");
+}
+
+function syncNewsButton(shown) {
+  if (!newsBtn) return;
+  newsBtn.classList.toggle("show", shown > 0);
+  const more = viewTotal - shown;
+  newsBtn.disabled = more <= 0;
+  newsBtn.title = newsBtn.disabled
+    ? "Every story from here is already on screen"
+    : `Swap these for the next ${Math.min(PER_VIEW, more)} stories`;
+}
+
+/**
+ * The bootstrap bundle carries the first 30 stories a country has. A reader who
+ * pages past them gets the rest, once, rather than everyone paying for them up
+ * front.
+ */
+const deepened = new Set();
+async function deepenCountry(id) {
+  if (!id || deepened.has(id) || !NEWS[id]) return;
+  if (NEWS[id].total <= NEWS[id].articles.length) return;
+  deepened.add(id);
+  try {
+    const res = await fetch(`/api/news?country=${encodeURIComponent(id)}&limit=200`);
+    const data = await res.json();
+    if ((data.articles || []).length > NEWS[id].articles.length) NEWS[id].articles = data.articles;
+  } catch (err) {
+    console.error("[global-news] could not load more stories", err);
+  }
+}
+
+/** Turns the page of whatever is on screen. */
+async function showNextPage() {
+  if (!viewKey) return;
+  if (!topic) await deepenCountry(cityFocus ? cityFocus.ccn3 : focusedId);
+
+  // let the ten on screen leave before their replacements arrive
+  const leaving = [...cardsLayer.querySelectorAll(".newscard"), ...mstrip.querySelectorAll(".newscard")];
+  leaving.forEach((el) => el.classList.add("out"));
+  if (leaving.length) await new Promise((r) => setTimeout(r, 180));
+
+  pageByView.set(viewKey, pageOf(viewKey) + 1);
+  refresh();
+}
+
+if (newsBtn) newsBtn.onclick = () => showNextPage();
+
+/* ------------------------------------------- live news for anywhere on earth -- */
+/**
+ * The gazetteer knows 573 towns; the world has rather more. When the reader is
+ * standing over a place the map has nothing for, the server names it — from its
+ * own gazetteer, or by reverse geocoding the point — and asks the key-less
+ * worldwide news indexes what is happening there. See server/lib/citylive.js.
+ */
+const liveAsked = new Set();
+
+/** Folds a live answer into the client's own state. */
+function mergeLive(data) {
+  const place = data?.place;
+  const arts = data?.articles || [];
+  if (!place?.ccn3 || !arts.length) return false;
+
+  const group = (NEWS[place.ccn3] ||= { name: place.country || place.name, total: 0, articles: [] });
+  const known = new Set(group.articles.map((a) => a.id));
+  const fresh = arts.filter((a) => !known.has(a.id));
+  group.articles = fresh.concat(group.articles);
+  group.total = group.articles.length;
+
+  // a country the bundle never carried still needs somewhere to be focused
+  REGION[place.ccn3] ||= { ll: place.ll, z: 5.2, min: 4.2, bbox: null };
+  if (!regionIds.includes(place.ccn3)) regionIds = Object.keys(NEWS);
+  if (!CITIES.some((c) => c.name === place.name)) {
+    CITIES.push({ name: place.name, ccn3: place.ccn3, ll: place.ll });
+  }
+  return fresh.length > 0;
+}
+
+/** Fetches the live press of a town we already have a name for. */
+async function ensureLivePlace(place) {
+  const key = `${place.ccn3 || ""}:${String(place.name).toLowerCase()}`;
+  if (liveAsked.has(key)) return;
+  liveAsked.add(key);
+
+  const params = new URLSearchParams({ name: place.name });
+  if (place.ccn3) params.set("country", place.ccn3);
+  if (place.ll) {
+    params.set("lng", place.ll[0]);
+    params.set("lat", place.ll[1]);
+  }
+  try {
+    const res = await fetch(`/api/city/live?${params}`);
+    if (!res.ok) return;
+    if (mergeLive(await res.json()) && cityFocus?.name === place.name) renderCityCards();
+  } catch (err) {
+    console.error("[global-news] live city lookup failed", err);
+  }
+}
+
+/** Names the place under a point, then reads it. One request in flight at a time. */
+let discovering = "";
+const discovered = new Map(); // rounded "lat,lng" → place | null
+
+async function discoverPlaceAt(center) {
+  const key = `${center.lat.toFixed(2)},${center.lng.toFixed(2)}`;
+  if (discovered.has(key)) {
+    const known = discovered.get(key);
+    if (known && !cityFocus && !topic) setCityFocus(known);
+    return;
+  }
+  if (discovering) return;
+  discovering = key;
+  try {
+    const res = await fetch(`/api/city/live?lat=${center.lat}&lng=${center.lng}`);
+    const data = res.ok ? await res.json() : null;
+    const p = data?.place;
+    const place = p ? { name: p.name, ccn3: p.ccn3, ll: p.ll } : null;
+    discovered.set(key, place);
+    if (!place) return;
+    mergeLive(data);
+    /**
+     * Register the town even when it had no stories of its own, and mark it as
+     * already asked. Without this the map would find nothing here on the next
+     * move, drop the town, rediscover it, and flicker between the town view and
+     * the country view for as long as the reader stood still.
+     */
+    if (!CITIES.some((c) => c.name === place.name)) CITIES.push({ ...place });
+    liveAsked.add(`${place.ccn3 || ""}:${place.name.toLowerCase()}`);
+    // still standing in the same spot? then this is the town they are looking at
+    const now = map.getCenter();
+    if (!topic && Math.abs(now.lat - center.lat) < 0.5 && Math.abs(now.lng - center.lng) < 0.5) {
+      setCityFocus(place);
+    }
+  } catch (err) {
+    discovered.set(key, null);
+  } finally {
+    discovering = "";
+  }
 }
 
 /* -------------------------------------------------------- sources panel -- */

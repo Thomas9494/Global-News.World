@@ -6,6 +6,11 @@ import { JSDOM } from "jsdom";
 
 import { createApp } from "../server/app.js";
 import { config } from "../server/config.js";
+
+// no live translation or live city lookups in a test run — see test/api.test.js
+config.translate.provider = "none";
+config.plugins.liveCity = false;
+config.liveCity.geocode = false;
 import * as store from "../server/lib/store.js";
 import { normalizeItem } from "../server/ingest.js";
 

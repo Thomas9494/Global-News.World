@@ -45,6 +45,33 @@ export function setCountry(ccn3, name, articles) {
   state.countries[ccn3] = { name, articles };
 }
 
+/**
+ * Adds articles to a country without disturbing what is already there.
+ *
+ * Used by the on-demand city lookup (lib/citylive.js): a reader zooming into a
+ * town the ingest has nothing for pulls live stories, and folding them in here
+ * means every other endpoint — the article panel, translation, search — treats
+ * them exactly like ingested ones. The next ingest cycle replaces the country
+ * wholesale, so nothing accumulates.
+ *
+ * @returns {number} how many were new
+ */
+export function addArticles(ccn3, name, articles) {
+  if (!ccn3 || !articles?.length) return 0;
+  const group = state.countries[ccn3] || { name, articles: [] };
+  const known = new Set(group.articles.map((a) => a.id));
+  const fresh = articles.filter((a) => a && !known.has(a.id));
+  if (!fresh.length) return 0;
+
+  group.articles = group.articles
+    .concat(fresh)
+    .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
+    .slice(0, config.ingest.maxPerCountry);
+  group.name = group.name || name;
+  state.countries[ccn3] = group;
+  return fresh.length;
+}
+
 export function setFeedHealth(url, health) {
   state.feeds[url] = { ...health, checkedAt: new Date().toISOString() };
 }

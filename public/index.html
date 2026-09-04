@@ -236,6 +236,12 @@
     text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
   .newscard .src .lang{flex:none;font-size:9.5px;font-weight:700;color:var(--teal);background:rgba(13,148,136,.08);
     border-radius:8px;padding:2px 6px;letter-spacing:.05em}
+  /* A view is topped up from elsewhere when the place itself is quiet, so a card
+     that did not come from the place in the tag has to say where it did come
+     from. Borrowed, never disguised. */
+  .newscard .src .from{flex:none;min-width:0;font-size:9.5px;font-weight:700;color:var(--fg-3);
+    background:rgba(15,23,42,.06);border-radius:8px;padding:2px 6px;letter-spacing:.03em;
+    text-transform:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .newscard .src .tag{margin-left:auto;color:var(--fg-4);font-weight:600;text-transform:none;letter-spacing:0;white-space:nowrap}
   .newscard h3{font-size:13.5px;font-weight:600;line-height:1.35;letter-spacing:-.01em;
     display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -251,6 +257,28 @@
     box-shadow:var(--shadow-md);cursor:pointer;opacity:0;animation:cardin .45s var(--ease) forwards;
     transition:background .2s}
   .morechip:hover{background:var(--primary-lighter)}
+  /* Cards leaving on a "New News" press. A second animation rather than a
+     transition, because .newscard's entry animation is animation-fill-mode
+     forwards and would otherwise keep winning over any plain declaration. */
+  @keyframes cardout{to{opacity:0;transform:translateY(8px) scale(.96)}}
+  .newscard.out{animation:cardout .18s var(--ease) forwards}
+
+  /* ---- New News ---- */
+  /* The one deliberate act of curation on the map: drop the ten stories on
+     screen and put up the next ten. Bottom centre is the only free strip of
+     chrome — the hint sits left, the zoom controls right — and on a phone it
+     rides above the bottom sheet. */
+  .newsbtn{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));
+    transform:translateX(-50%);z-index:40;display:none;align-items:center;gap:8px;
+    background:var(--primary);color:#fff;border:none;font:inherit;font-size:13.5px;font-weight:600;
+    border-radius:24px;padding:11px 20px;cursor:pointer;box-shadow:0 8px 20px rgba(0,82,204,.35);
+    transition:background .25s,box-shadow .25s,opacity .25s}
+  .newsbtn.show{display:inline-flex}
+  .newsbtn:hover{background:var(--primary-dark);box-shadow:0 10px 26px rgba(0,82,204,.45)}
+  .newsbtn:active{transform:translateX(-50%) scale(.97)}
+  .newsbtn:disabled{background:#fff;color:var(--fg-4);border:var(--border-card);
+    box-shadow:var(--shadow-sm);cursor:default}
+  .newsbtn svg{flex:none}
 
   /* ---- article panel ---- */
   /* fixed, not absolute: a closed drawer is parked at translateX(105%), and an
@@ -379,6 +407,9 @@
     #cards .srcchip{display:none}
     .zoomctrl{right:12px;bottom:auto;top:calc(50% - 66px)}
     .hint{left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));max-width:none}
+    /* The sheet's height changes with its content, so app.js measures it and
+       publishes it as --msheet-h rather than this guessing at a number. */
+    body.msheet-open .newsbtn{bottom:calc(var(--msheet-h,220px) + 10px)}
     /* Once the sheet is up it owns the bottom of the screen — get the hint out
        of the way instead of letting the two stack on top of each other. */
     body.msheet-open .hint{opacity:0;transform:translateY(10px);pointer-events:none}
@@ -424,6 +455,7 @@
   }
   @media (prefers-reduced-motion: reduce){
     .newscard,.countrytag,.noresult,.morechip{animation:none;opacity:1;transform:none}
+    .newscard.out{animation:none;opacity:0;transform:none}
     .glow{animation:none;opacity:0}
   }
 </style>
@@ -479,6 +511,11 @@
   <button id="zout" title="Zoom out">−</button>
   <button id="zreset" title="World view" style="font-size:14px">⌂</button>
 </div>
+
+<button class="newsbtn" id="newnews" type="button">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12a8.5 8.5 0 1 1-2.5-6"></path><path d="M20.5 3.5V6.5h-3"></path></svg>
+  New News
+</button>
 
 <div class="hint" id="hint">
   <h4>Zoom into a country</h4>

@@ -21,7 +21,14 @@ import { normalizeItem } from "../server/ingest.js";
  * MapLibre needs WebGL, which a headless DOM has no business providing, so the
  * map itself is a stub with an equirectangular projection — enough to assert
  * that cards land where their story happened.
+ *
+ * The two features that reach the open internet are switched off: the free
+ * translation chain and the live city lookup. Their offline halves are covered
+ * in test/api.test.js.
  */
+config.translate.provider = "none";
+config.plugins.liveCity = false;
+config.liveCity.geocode = false;
 
 let server;
 let base;
@@ -104,7 +111,12 @@ function seed() {
       })
     ),
   ]);
-  store.setCountry("764", "Thailand", [
+  /**
+   * Thailand deliberately carries more than one screenful. Ten stories is what
+   * a view puts up, so paging with "New News" can only be tested against a
+   * country that has an eleventh.
+   */
+  const th = [
     normalizeItem(
       raw({
         link: "https://demo.example/th/1",
@@ -117,7 +129,24 @@ function seed() {
         feedLang: "en",
       })
     ),
-  ]);
+  ];
+  for (let i = 2; i <= 11; i++) {
+    th.push(
+      normalizeItem(
+        raw({
+          link: `https://demo.example/th/${i}`,
+          title: `Cabinet reviews the trade budget, part ${i}`,
+          summary: "The finance ministry published its quarterly outlook.",
+          categories: ["Business"],
+          src: "Bangkok Post",
+          sourceKey: "Thailand",
+          catalogLang: "en",
+          feedLang: "en",
+        })
+      )
+    );
+  }
+  store.setCountry("764", "Thailand", th);
   store.finishIngest();
 }
 
@@ -271,14 +300,42 @@ test("zooming into a country renders its news cards around it", async () => {
   await flush(300); // the map debounces its focus check by 120ms
 
   const cards = $$("#cards .newscard");
-  assert.equal(cards.length, 4);
-  assert.match($("#cards .countrytag").textContent, /Switzerland · 4 stories live/);
+  // Ten stories is the promise the map makes wherever the reader zooms in.
+  // Switzerland has four of its own; the rest are borrowed from the nearest
+  // countries that do have news, and the tag says exactly that.
+  assert.equal(cards.length, 10);
+  assert.match($("#cards .countrytag").textContent, /Switzerland · 4 stories live · \+\d+ nearby/);
   assert.ok($("#cards .srcchip"), "sources chip is shown");
   assert.match($("#cards .srcchip").textContent, /verified sources/);
 
   for (const c of cards) {
     assert.ok(c.style.left.endsWith("px") && c.style.top.endsWith("px"), "cards are positioned");
     assert.ok(parseFloat(c.style.top) >= 108, "cards clear the top bar");
+  }
+});
+
+test("ten cards fit around the country without covering each other", () => {
+  const boxes = $$("#cards .newscard").map((c) => ({
+    x: parseFloat(c.style.left),
+    y: parseFloat(c.style.top),
+  }));
+  for (let i = 0; i < boxes.length; i++) {
+    for (let j = i + 1; j < boxes.length; j++) {
+      const over = Math.abs(boxes[i].x - boxes[j].x) < 250 && Math.abs(boxes[i].y - boxes[j].y) < 210;
+      assert.ok(!over, `cards ${i} and ${j} overlap`);
+    }
+  }
+});
+
+test("a borrowed story names the country it came from", () => {
+  const cards = $$("#cards .newscard");
+  // the country's own four lead, unlabelled; every other card says where it is from
+  assert.equal(cards.slice(0, 4).filter((c) => c.querySelector(".src .from")).length, 0);
+  const borrowed = cards.slice(4).map((c) => c.querySelector(".src .from")?.textContent);
+  assert.equal(borrowed.length, 6);
+  for (const from of borrowed) {
+    assert.ok(from, "a story from elsewhere must say so");
+    assert.notEqual(from, "Switzerland");
   }
 });
 
@@ -293,7 +350,7 @@ test("cards show the story in the language it was published in", () => {
 
 test("a story without a feed image still gets a card image", () => {
   const imgs = $$("#cards .newscard img");
-  assert.equal(imgs.length, 4);
+  assert.equal(imgs.length, 10);
   for (const i of imgs) assert.ok(i.getAttribute("src").length > 0);
 });
 
@@ -318,7 +375,7 @@ test("a topic chip filters the cards on screen", async () => {
 
   $$("#chips .tab").find((t) => t.dataset.cat === "All").dispatchEvent(new win.Event("click"));
   await flush(40);
-  assert.equal($$("#cards .newscard").length, 4);
+  assert.equal($$("#cards .newscard").length, 10);
 });
 
 /* -------------------------------------------------------- article panel -- */
@@ -370,16 +427,21 @@ test("leaving a town takes its dot with it", async () => {
 
 /* ------------------------------------------------------------ city zoom -- */
 
-test("zooming into a city shows that city's own press", async () => {
+/** How many of the cards on screen are the place's own, per the country tag. */
+const localCount = () => Number(/(\d+) local/.exec($("#cards .countrytag").textContent)[1]);
+
+test("zooming into a city leads with that city's own press", async () => {
   // Lucerne: one story that names it, one from the paper that is based there
   win.__map.flyTo({ center: [8.31, 47.05], zoom: 9 });
   await flush(320);
 
   assert.match($("#cards .countrytag").textContent, /Lucerne/);
-  assert.match($("#cards .countrytag").textContent, /local stor/);
+  assert.match($("#cards .countrytag").textContent, /2 local stories/);
   const cards = $$("#cards .newscard");
-  assert.equal(cards.length, 2);
-  for (const c of cards) assert.match(c.textContent, /Luzerner Zeitung/);
+  // A quiet town is still worth a full view — its own two first, then the rest
+  // of its country, then the nearest countries that have news.
+  assert.equal(cards.length, 10);
+  for (const c of cards.slice(0, 2)) assert.match(c.textContent, /Luzerner Zeitung/);
   assert.match($("#cards .srcchip").textContent, /local newsroom/);
 });
 
@@ -387,17 +449,24 @@ test("zooming into another city swaps the local press", async () => {
   win.__map.flyTo({ center: [8.54, 47.37], zoom: 9 });
   await flush(320);
   assert.match($("#cards .countrytag").textContent, /Zurich/);
-  const sources = $$("#cards .newscard .src").map((s) => s.textContent);
-  assert.ok(sources.some((s) => /SRF News|20 Minuten/.test(s)), `got ${sources}`);
-  assert.ok(!sources.some((s) => /Luzerner Zeitung/.test(s)), "Lucerne's paper is not Zurich news");
+  // only the leading cards are the town's own; what follows is openly a top-up
+  const lead = $$("#cards .newscard")
+    .slice(0, localCount())
+    .map((c) => c.querySelector(".src").textContent);
+  assert.ok(lead.length >= 1, "Zurich has local press");
+  assert.ok(lead.some((t) => /SRF News|20 Minuten/.test(t)), `got ${lead}`);
+  assert.ok(!lead.some((t) => /Luzerner Zeitung/.test(t)), "Lucerne's paper is not Zurich's own");
 });
 
-test("a city with no coverage at all falls back to the country view", async () => {
+test("a town the ingest has nothing for is still worth a full view", async () => {
   win.__map.flyTo({ center: [8.95, 46.0], zoom: 9 }); // Lugano — no outlet, no mention
-  await flush(320);
-  // the map never focuses a place it has nothing for; the country still reads
-  assert.match($("#cards .countrytag").textContent, /Switzerland/);
-  assert.ok($$("#cards .newscard").length >= 3);
+  await flush(400);
+  // The server names the place from its gazetteer even though not one stored
+  // story mentions it. In production its own press would be fetched live; here
+  // that is switched off, so the view is topped up instead. Either way the one
+  // thing that must not happen is an empty map.
+  assert.match($("#cards .countrytag").textContent, /Lugano · \d+ stories from nearby/);
+  assert.equal($$("#cards .newscard").length, 10);
 });
 
 test("a filter that empties a focused city says so rather than widening", async () => {
@@ -407,19 +476,20 @@ test("a filter that empties a focused city says so rather than widening", async 
 
   $$("#chips .tab").find((t) => t.dataset.cat === "Sports").dispatchEvent(new win.Event("click"));
   await flush(60);
+  // nothing anywhere matches, so there is nothing to top up with either
   assert.equal($$("#cards .newscard").length, 0);
-  assert.match($("#cards .noresult").textContent, /Nothing local from Lucerne/);
+  assert.match($("#cards .noresult").textContent, /Nothing from Lucerne/);
 
   $$("#chips .tab").find((t) => t.dataset.cat === "All").dispatchEvent(new win.Event("click"));
   await flush(60);
-  assert.equal($$("#cards .newscard").length, 2);
+  assert.equal($$("#cards .newscard").length, 10);
 });
 
 test("zooming back out returns to the country view", async () => {
   win.__map.flyTo({ center: [8.23, 46.8], zoom: 6.6 });
   await flush(320);
   assert.match($("#cards .countrytag").textContent, /Switzerland/);
-  assert.ok($$("#cards .newscard").length >= 3);
+  assert.equal($$("#cards .newscard").length, 10);
 });
 
 test("clicking a card opens the panel with the original text", async () => {
@@ -475,6 +545,50 @@ test("the sources chip opens the outlet list for that country", async () => {
   $("#s-close").dispatchEvent(new win.Event("click"));
   await flush(20);
   assert.ok(!$("#spanel").classList.contains("open"));
+});
+
+/* ------------------------------------------------------------- New News -- */
+
+const headlines = () => $$("#cards .newscard h3").map((h) => h.textContent);
+
+test("New News swaps the stories on screen for the next ones", async () => {
+  // Thailand carries eleven stories, so the button has somewhere to go
+  $$("#markers .mdot").find((d) => d.textContent === "Thailand").dispatchEvent(new win.Event("click"));
+  await flush(320);
+  assert.match($("#cards .countrytag").textContent, /Thailand/);
+
+  const btn = $("#newnews");
+  assert.ok(btn.classList.contains("show"), "the button is offered while stories are on screen");
+  assert.equal(btn.disabled, false, "there is more to read than fits");
+
+  const first = headlines();
+  assert.equal(first.length, 10);
+
+  btn.dispatchEvent(new win.Event("click"));
+  await flush(400); // the outgoing cards fade for 180ms before the new ones arrive
+
+  const second = headlines();
+  assert.ok(second.length >= 1, "the next stories arrived");
+  assert.equal(
+    second.filter((t) => first.includes(t)).length,
+    0,
+    "not one of the stories on screen is a repeat"
+  );
+});
+
+test("New News wraps round rather than becoming a dead end", async () => {
+  const btn = $("#newnews");
+  btn.dispatchEvent(new win.Event("click"));
+  await flush(400);
+  const back = headlines();
+  assert.equal(back.length, 10, "past the last page it starts again at the first");
+});
+
+test("the button goes away when there are no stories on screen", async () => {
+  win.__map.flyTo({ center: [-30, 30], zoom: 3 }); // mid-Atlantic, too far out to read
+  await flush(320);
+  assert.equal($$("#cards .newscard").length, 0);
+  assert.equal($("#newnews").classList.contains("show"), false);
 });
 
 /* --------------------------------------------------------------- search -- */
