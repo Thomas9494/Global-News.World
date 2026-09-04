@@ -2,7 +2,7 @@ import { Router } from "express";
 import { config } from "../config.js";
 import * as store from "../lib/store.js";
 import { loadSources, runIngest } from "../ingest.js";
-import { CATEGORIES } from "../lib/categorize.js";
+import { CATEGORIES, resolveCategory } from "../lib/categorize.js";
 import {
   REGIONS,
   CITIES,
@@ -15,6 +15,7 @@ import {
 import { pluginInfo } from "../plugins/index.js";
 import { translationStatus, supportedTargets } from "../lib/translate.js";
 import { translateArticle, translationCacheStats } from "../lib/articletranslate.js";
+import { resolvePlace, liveNewsFor, liveStats } from "../lib/citylive.js";
 import { resolveReader, LANG_NAMES, LANG_NAMES_EN } from "../lib/geoip.js";
 import { relativeTime } from "../lib/text.js";
 
@@ -22,8 +23,9 @@ export const api = Router();
 
 /**
  * How many articles per country travel in the map bundle. The map itself shows
- * at most six cards at a time; the rest is headroom for the topic and category
- * filters, which run client-side. Full text is fetched per article on open.
+ * at most ten cards at a time; the rest is headroom for paging with "New News"
+ * and for the topic and category filters, which run client-side. Full text is
+ * fetched per article on open.
  */
 const BUNDLE_PER_COUNTRY = 30;
 
@@ -279,12 +281,24 @@ function matchPlaces(needle) {
   );
 }
 
-function matchArticles(needle, limit) {
+/**
+ * Every story that answers a search term.
+ *
+ * A term that names a section — "Politics", but equally "Politik", "Sport" or
+ * "Wirtschaft" — returns that whole section from every country, because that is
+ * plainly what was meant. Everything else is matched as a keyword against the
+ * headline, the teaser, the outlet, the place and the country.
+ *
+ * @param {string} needle what the reader typed
+ * @param {number} limit  how many stories to return
+ * @param {string} [cat]  the section `needle` names, if it names one
+ */
+function matchArticles(needle, limit, cat = resolveCategory(needle)) {
   const n = deaccent(needle);
   const out = [];
   for (const [ccn3, group] of Object.entries(store.getState().countries)) {
     for (const a of group.articles) {
-      const inTopic = deaccent(a.cat) === n;
+      const inTopic = cat ? a.cat === cat : deaccent(a.cat) === n;
       const hay = deaccent(
         `${a.orig.title} ${a.orig.teaser} ${a.src} ${a.cat} ${a.city} ${group.name}`
       );
@@ -301,6 +315,42 @@ function matchArticles(needle, limit) {
   out.sort((a, b) => b.weight - a.weight || new Date(b.article.publishedAt) - new Date(a.article.publishedAt));
   return out.slice(0, limit).map((r) => ({ ccn3: r.ccn3, country: REGIONS[r.ccn3]?.name || "", ...toCard(r.article) }));
 }
+
+/**
+ * The local press of anywhere on earth, fetched live.
+ *
+ *   GET /api/city/live?name=Kanchanaburi&country=764
+ *   GET /api/city/live?lat=14.02&lng=99.53
+ *
+ * The stored city view below can only answer for towns the ingest happened to
+ * cover. This one names the place — from the gazetteer, or by reverse geocoding
+ * the point — and then asks the key-less worldwide indexes for its news, so a
+ * reader who zooms into a town nobody catalogued still gets something to read.
+ * Results are cached and folded into the store, so a second reader pays nothing.
+ */
+api.get("/city/live", async (req, res) => {
+  const place = await resolvePlace({
+    name: String(req.query.name || "").trim(),
+    ccn3: String(req.query.country || "").trim(),
+    lat: req.query.lat,
+    lng: req.query.lng,
+  });
+  if (!place) return res.status(404).json({ error: "no place at this location", articles: [] });
+
+  let articles = [];
+  try {
+    articles = await liveNewsFor(place);
+  } catch (err) {
+    return res.status(502).json({ place, error: String(err?.message || err), articles: [] });
+  }
+
+  res.json({
+    place,
+    outlets: [...new Set(articles.map((a) => a.src))],
+    total: articles.length,
+    articles: articles.map((a) => ({ ccn3: place.ccn3, country: place.country, ...toCard(a) })),
+  });
+});
 
 /**
  * The local press of one city: stories about it, plus stories from newsrooms
@@ -345,14 +395,17 @@ api.get("/search", (req, res) => {
   if (!q) return res.json({ q, type: "empty", countries: [], places: [], articles: [] });
 
   const limit = Math.min(Number(req.query.limit) || 24, 60);
+  const cat = resolveCategory(q);
   const countries = matchCountries(q).slice(0, 10);
   const places = matchPlaces(q).slice(0, 10);
-  const articles = matchArticles(q, limit);
+  const articles = matchArticles(q, limit, cat);
 
   // A country or a town wins only when the name really matches; anything else
   // is treated as a topic so the reader sees stories instead of a map jump.
+  // A section name always is one: "Sport" must not fly the map to Sportivnaya.
   let type = "topic";
-  if (countries[0]?.exact || (countries[0]?.startsWith && !places[0]?.exact)) type = "country";
+  if (cat) type = "topic";
+  else if (countries[0]?.exact || (countries[0]?.startsWith && !places[0]?.exact)) type = "country";
   else if (places[0]?.exact || places[0]?.startsWith) type = "place";
   else if (countries.length) type = "country";
   else if (!articles.length && places.length) type = "place";
@@ -360,6 +413,8 @@ api.get("/search", (req, res) => {
   res.json({
     q,
     type,
+    /** The section the term named, when it named one — else "". */
+    category: cat,
     country: type === "country" ? countries[0] : null,
     place: type === "place" ? places[0] : null,
     countries,
@@ -389,6 +444,7 @@ api.get("/health", (_req, res) => {
     stats: state.stats,
     plugins: pluginInfo(),
     translate: { ...translationStatus(), cache: translationCacheStats() },
+    liveCity: { enabled: config.plugins.liveCity, ...liveStats() },
     endpoints: {
       total: feeds.length,
       ok: ok.length,

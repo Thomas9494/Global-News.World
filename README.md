@@ -6,7 +6,7 @@
 
 [Why this exists](#why-this-exists) · [How it works](#how-it-works) · [Quick start](#quick-start) · [API](#http-api) · [Write a plugin](#writing-a-news-plugin) · [Contributing](CONTRIBUTING.md)
 
-![license](https://img.shields.io/badge/license-MIT-0052cc) ![node](https://img.shields.io/badge/node-%E2%89%A520.6-0d9488) ![countries](https://img.shields.io/badge/countries-192%2F194%20UN%20members-0052cc) ![outlets](https://img.shields.io/badge/outlets-1034-0d9488) ![cities](https://img.shields.io/badge/cities-440%20live-0052cc) ![tests](https://img.shields.io/badge/tests-124-0d9488)
+![license](https://img.shields.io/badge/license-MIT-0052cc) ![node](https://img.shields.io/badge/node-%E2%89%A520.6-0d9488) ![countries](https://img.shields.io/badge/countries-192%2F194%20UN%20members-0052cc) ![outlets](https://img.shields.io/badge/outlets-1034-0d9488) ![cities](https://img.shields.io/badge/cities-440%20live-0052cc) ![tests](https://img.shields.io/badge/tests-151-0d9488)
 
 </div>
 
@@ -78,10 +78,13 @@ world, you are being shown many, and which of them you trust is your call.
 |---|---|
 | 🗺️ **Zoom-to-read** | Get within range of a country and its live stories fan out around it, pinned to the city they are about. |
 | 🏙️ **Zoom again for the local paper** | Close in on Zurich and you get the NZZ and the Tages-Anzeiger; on Lucerne, the Lucerne press; on Lagos, Osaka or Kigali, theirs. A city shows stories written *about* it and stories written *there*. |
+| 🔟 **Ten stories, wherever you land** | Every view fills to ten. A town's own press leads; if it published nothing today the rest comes from its country and then its neighbours, and every borrowed card names the country it came from. |
+| 📍 **Any place on earth, not just the catalog** | Zoom into a town nobody catalogued and the server names the point and fetches its press live from the key-less worldwide indexes. Kanchanaburi, Iquique, Nakuru — all readable. |
+| 🔄 **New News** | One button. The ten stories on screen fade out and the next ten arrive — and it wraps round rather than becoming a dead end. |
 | 🌍 **192 of 194 UN member states** | 1 034 curated outlets — 377 national, 657 local in 335 towns — plus open key-less indexes for the rest. Every capital on earth is in the gazetteer. |
 | 🗣️ **Published language on the card** | Headlines stay in Thai, Ukrainian, Portuguese or German. That is what local reporting looks like. |
 | 🔤 **Translated when you open it** | The article panel opens in the language you read. Your language is inferred from where you are — a visitor from the Netherlands gets Dutch — and you can override it. |
-| 🔎 **One search box, three intents** | A country flies you there. A town flies you there. A topic or keyword keeps the map still and shows every matching story worldwide. |
+| 🔎 **One search box, three intents** | A country flies you there. A town flies you there. A topic or keyword keeps the map still and shows ten matching stories worldwide — and the topic may be typed in your own language: *Politik*, *Sport*, *Wirtschaft*, *politique* all bring up that whole section. |
 | 🏷️ **13 topic filters** | Politics, Business, Sports, Culture, Digital, Science, Health, Lifestyle, Society, Entertainment, Opinion, Video, Regional. |
 | 🔌 **Plugin-based ingest** | RSS/Atom/RDF/JSON Feed, OPML lists and Google News editions out of the box; GDELT, NewsAPI and GNews optional. Adding a source type is one file. |
 | 📊 **Honest health reporting** | `npm run check:feeds` and `GET /api/health` tell you exactly which outlets responded and which are down, by name. |
@@ -195,17 +198,30 @@ A visitor from the Netherlands is offered Dutch; from Brazil, Portuguese; from J
 Japanese. No IP address is stored — the lookup yields a country code that lives for the
 duration of the request, and the result is cached by country, not by person.
 
-Translation itself is pluggable and **disabled by default**, because it needs a service
-you control:
+Translation itself is pluggable, and it **works on a fresh clone with no signup and no
+key** — a map of foreign press that cannot translate is half a product:
 
 ```bash
-TRANSLATE_PROVIDER=libretranslate   # self-hosted or a public instance
+TRANSLATE_PROVIDER=auto             # default: the best thing that is actually configured
+TRANSLATE_PROVIDER=free             # the key-less public services, in order
+TRANSLATE_PROVIDER=mymemory         # MyMemory alone
+TRANSLATE_PROVIDER=libretranslate   # your own instance, or one you name
 TRANSLATE_PROVIDER=deepl            # DEEPL_KEY=…
-TRANSLATE_PROVIDER=none             # default: everything stays as published
+TRANSLATE_PROVIDER=none             # everything stays as published
 ```
 
-With no provider the panel says so and shows the original — it never silently pretends
-a translation happened.
+`auto` uses DeepL or your own LibreTranslate when a key is set, and otherwise falls to
+`free` — a chain rather than a single service, because no key-less endpoint is dependable
+on its own:
+
+| | |
+|---|---|
+| **LibreTranslate mirrors** | Tried first: a whole article goes in one request and there is no daily character budget. The public mirrors are volunteer-run, so there is a list of them ([the project's own](https://docs.libretranslate.com/community/mirrors/)) and `LIBRETRANSLATE_MIRRORS` to change it. |
+| **MyMemory** | The floor. No signup, no key, and it answers for every pair our feeds publish in. Its 500-byte request cap means article bodies are cut on sentence boundaries and stitched back together. `MYMEMORY_EMAIL` lifts the anonymous 5 000 characters a day to 50 000 — an address, not a credential. |
+
+A backend that fails is set aside for five minutes rather than retried for every article,
+and `GET /api/health` names the one that last worked. If every backend is down the panel
+says so and shows the original — it never silently pretends a translation happened.
 
 ### Reaching every country
 
@@ -232,8 +248,21 @@ order"* to Rwanda would be simply false. So an item survives only if:
 For place-scoped feeds the headline has to name the place, otherwise the story is kept
 as country news rather than pinned to a town it may have nothing to do with.
 
+### And every *town*, not just every country
+
+The gazetteer knows 573 towns; the world has rather more. So when a reader zooms into a
+place the ingest has nothing for, the server answers on demand — still with no API key:
+
+| | |
+|---|---|
+| **Naming the point** | The gazetteer first (instant, offline, and authoritative for the towns the map already knows). Failing that, [BigDataCloud](https://www.bigdatacloud.com/) reverse-geocodes the coordinate, with [OpenStreetMap Nominatim](https://nominatim.org/) behind it — rate-limited to its usage policy and cached for a day. Administrative labels are reduced to the name the press actually uses: *Amphoe Mueang Kanchanaburi* → *Kanchanaburi*. |
+| **Reading it** | Google News scoped to that place, in the country's own edition, plus GDELT's full-text index. Cached for fifteen minutes and folded into the store, so the second reader pays nothing and the article panel, search and translation treat these stories like any other. |
+
+`GET /api/city/live?lat=-20.22&lng=-70.15` → Iquique, Chile, twelve stories from the
+Chilean press. Turn the whole layer off with `PLUGIN_LIVE_CITY=false`.
+
 **Where this gets to:** **192 of 194 UN member states** and around 228 territories carry
-live news, across **440 towns and cities**. The handful that do not — Eritrea and
+live news, across **440 towns and cities** — and any point on land besides. The handful that do not — Eritrea and
 Micronesia, and on a quiet day one or two Caribbean microstates — have little or no
 indexed online press. They are a standing invitation: if you know an outlet there,
 [add it](CONTRIBUTING.md).
@@ -305,8 +334,9 @@ npm test               # 84 tests: pipeline, API and frontend
 | `GET /api/news?country=&cat=&q=&lang=&city=&limit=` | Filtered card list. |
 | `GET /api/article/:id?to=nl` | One article with full body, plus a translation into the reader's language. |
 | `POST /api/translate` | `{ ids: [...], to: "nl" }` — batch translation for headline previews. |
-| `GET /api/search?q=` | Returns `type: "country" \| "place" \| "topic"` and what to do with it. |
+| `GET /api/search?q=` | Returns `type: "country" \| "place" \| "topic"` and what to do with it. A section name in any language the map serves — `Politik`, `Sport`, `Wirtschaft`, `politique` — comes back as `type: "topic"` with `category` set, and returns that whole section rather than the stories that happen to spell the word out. |
 | `GET /api/city?name=Lucerne` | One town's own press: stories about it, plus stories from newsrooms based there. |
+| `GET /api/city/live?name=…&country=` · `?lat=&lng=` | The press of **anywhere**, fetched on demand. Names the place — gazetteer, else reverse geocoding — then asks the key-less worldwide indexes. Cached; see [above](#and-every-town-not-just-every-country). |
 | `GET /api/places?q=` | Town lookup from the gazetteer. |
 | `GET /api/sources[?country=]` | The outlet catalog, keyed by the country names the map uses. |
 | `GET /api/countries` | Which countries currently have coverage. |
@@ -459,7 +489,7 @@ server/
   config.js      every env var in one place
   plugins/       rss · citypress · opml · googlenews · gdelt · newsapi · gnews
   lib/           feedparser · http · text · lang · categorize · geo
-                 geoip · translate · articletranslate · store
+                 geoip · translate · articletranslate · store · citylive
   routes/api.js  the HTTP API
   catalog/       generated — do not edit by hand
 public/          index.html (the design) · app.js (the client) · assets/
@@ -479,12 +509,14 @@ behaviour lives in `public/app.js`.
 npm test
 ```
 
-124 tests, no network required:
+151 tests, no network required — the two features that reach the open internet, the free
+translation chain and the live city lookup, are switched off in the suite so it never
+fails for reasons that have nothing to do with this code:
 
 - **pipeline** — parsers for all four feed formats, charset decoding, entity-heavy feeds, date shapes, language identification, topic classification, place resolution, de-duplication, reader-language detection
-- **api** — every endpoint, including all three search intents, city filtering and the sources contract
+- **api** — every endpoint, including all three search intents, section names in several languages, place resolution for the live city lookup, city filtering and the sources contract
 - **coverage** — that every country has a region, every UN member has its capital in the gazetteer, every alias and every city in the catalog points at a real place, that a country's cap leaves room for its small towns, and that every plugin honours the contract
-- **client** — the real `index.html` and `app.js` in a DOM with a stubbed map: chips, country focus, **city focus**, card layout, city dots, the article panel and its translation toggle, the sources panel, search routing, zoom controls
+- **client** — the real `index.html` and `app.js` in a DOM with a stubbed map: chips, country focus, **city focus**, the ten-story rule and how a thin place is topped up, the **New News** page turn, card layout without overlap, city dots, the article panel and its translation toggle, the sources panel, search routing, zoom controls
 
 Feed health is checked separately, because it depends on the outside world:
 

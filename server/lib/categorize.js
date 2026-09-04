@@ -214,3 +214,71 @@ export function categorize(article = {}) {
   }
   return bestScore > 0 ? best : "Society";
 }
+
+/* ------------------------------------------------------------ topic words -- */
+/**
+ * What a reader types when they mean a whole subject rather than a place.
+ *
+ * The taxonomy above is English because the design's chips are, but nobody
+ * searching this map types in the taxonomy's language: a German reader looking
+ * for the politics of the week types "Politik", a French one "Politique". Each
+ * of these words names a section, so the search has to answer with the section
+ * and not with the handful of articles that happen to spell it out.
+ *
+ * Only whole-word section names belong here. Keywords that merely *suggest* a
+ * category ("election", "Bundesliga") stay in KEYWORDS above, where they label
+ * articles — turning them into section searches would swallow the ordinary
+ * keyword search the reader expects.
+ */
+const CATEGORY_WORDS = {
+  Politics: ["politics", "politik", "politique", "politica", "política", "polityka", "politiek",
+    "politica interna", "innenpolitik", "aussenpolitik", "außenpolitik", "politiikka"],
+  Business: ["business", "economy", "wirtschaft", "économie", "economie", "economia", "economía",
+    "finance", "finanzen", "finanza", "negocios", "ekonomi", "börse", "boerse"],
+  Sports: ["sport", "sports", "deporte", "deportes", "esporte", "esportes", "sportif",
+    "sportiv", "sporten", "urheilu", "спорт"],
+  Culture: ["culture", "kultur", "cultura", "kunst", "arts", "art", "cultuur", "kulttuuri"],
+  Digital: ["digital", "tech", "technology", "technik", "technologie", "tecnologia", "tecnología",
+    "it", "computer", "internet", "cyber", "digitaal"],
+  Science: ["science", "wissenschaft", "sciences", "ciencia", "ciência", "scienza", "wetenschap",
+    "forschung", "research"],
+  Health: ["health", "gesundheit", "santé", "sante", "salud", "saúde", "salute", "gezondheid",
+    "medizin", "medicine"],
+  Lifestyle: ["lifestyle", "leben", "living", "estilo de vida", "vie", "levensstijl", "reise",
+    "travel", "food", "essen"],
+  Society: ["society", "gesellschaft", "société", "societe", "sociedad", "sociedade", "società",
+    "panorama", "vermischtes", "maatschappij"],
+  Entertainment: ["entertainment", "unterhaltung", "divertissement", "entretenimiento",
+    "spettacoli", "people", "promis", "showbiz", "musik", "music", "film", "kino", "cinema"],
+  Opinion: ["opinion", "meinung", "kommentar", "comment", "editorial", "leitartikel", "opinión",
+    "opinione", "opinie", "debatte", "debate"],
+  Video: ["video", "videos", "tv", "watch", "sendung", "mediathek"],
+  Regional: ["regional", "region", "lokal", "local", "locales", "regionaal", "heimat"],
+};
+
+/** Every spelling above, flattened once: word → category. */
+const CATEGORY_BY_WORD = new Map();
+for (const [cat, words] of Object.entries(CATEGORY_WORDS)) {
+  for (const w of words) CATEGORY_BY_WORD.set(deaccent(w), cat);
+}
+for (const cat of CATEGORIES) if (cat !== "All") CATEGORY_BY_WORD.set(deaccent(cat), cat);
+
+/**
+ * The category a search term names, in any of the languages the map serves.
+ * Returns "" for anything that is not a section name, so an ordinary keyword
+ * search is left alone.
+ *
+ * @param {string} term what the reader typed
+ * @returns {string} a member of CATEGORIES, or "" — never "All"
+ */
+export function resolveCategory(term) {
+  const t = deaccent(term).trim().replace(/\s+/g, " ");
+  if (!t) return "";
+  return (
+    CATEGORY_BY_WORD.get(t) ||
+    // "sports" for Sport, "politiken" for Politik — one trailing inflection is
+    // the difference between a hit and a shrug in most of these languages
+    CATEGORY_BY_WORD.get(t.replace(/(s|e|en|er|s-)$/, "")) ||
+    ""
+  );
+}
