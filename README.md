@@ -6,7 +6,7 @@
 
 [Why this exists](#why-this-exists) · [How it works](#how-it-works) · [Quick start](#quick-start) · [API](#http-api) · [Write a plugin](#writing-a-news-plugin) · [Contributing](CONTRIBUTING.md)
 
-![license](https://img.shields.io/badge/license-MIT-0052cc) ![node](https://img.shields.io/badge/node-%E2%89%A520.6-0d9488) ![countries](https://img.shields.io/badge/countries-192%2F194%20UN%20members-0052cc) ![outlets](https://img.shields.io/badge/outlets-1034-0d9488) ![cities](https://img.shields.io/badge/cities-440%20live-0052cc) ![tests](https://img.shields.io/badge/tests-150-0d9488)
+![license](https://img.shields.io/badge/license-MIT-0052cc) ![node](https://img.shields.io/badge/node-%E2%89%A520.6-0d9488) ![countries](https://img.shields.io/badge/countries-192%2F194%20UN%20members-0052cc) ![outlets](https://img.shields.io/badge/outlets-1034-0d9488) ![cities](https://img.shields.io/badge/cities-440%20live-0052cc) ![tests](https://img.shields.io/badge/tests-151-0d9488)
 
 </div>
 
@@ -509,7 +509,7 @@ behaviour lives in `public/app.js`.
 npm test
 ```
 
-150 tests, no network required — the two features that reach the open internet, the free
+151 tests, no network required — the two features that reach the open internet, the free
 translation chain and the live city lookup, are switched off in the suite so it never
 fails for reasons that have nothing to do with this code:
 

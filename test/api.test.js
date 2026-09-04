@@ -321,6 +321,17 @@ test("a section name in any language is a topic search, not a place", async () =
   assert.equal((await get("/api/search?q=fondue")).body.category, "");
 });
 
+test("the page and its script are never served from a stale cache", async () => {
+  // No content hash in the names, so a cached app.js is indistinguishable from
+  // the current one — which is exactly how a reader ends up running last week's
+  // client against this week's API.
+  for (const path of ["/index.html", "/app.js"]) {
+    const res = await fetch(base + path);
+    assert.equal(res.status, 200, path);
+    assert.match(res.headers.get("cache-control") || "", /no-cache/, path);
+  }
+});
+
 test("GET /api/city/live names the place a reader zoomed into", async () => {
   const byName = await get("/api/city/live?name=Lucerne");
   assert.equal(byName.status, 200);

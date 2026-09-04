@@ -40,7 +40,16 @@ export function createApp() {
     express.static(config.paths.public, {
       extensions: ["html"],
       setHeaders(res, path) {
-        if (path.endsWith(".html")) res.setHeader("Cache-Control", "no-cache");
+        /**
+         * The page and its script carry no content hash in their names, so a
+         * cached copy is indistinguishable from the current one and a reader
+         * can sit on a version of app.js from days ago without knowing it.
+         * `no-cache` still lets the browser keep the file — it just has to ask
+         * first, which costs one 304 and removes the whole class of problem.
+         * Images and fonts are content that does not change under a name, so
+         * they keep the default.
+         */
+        if (/\.(html|js|css)$/.test(path)) res.setHeader("Cache-Control", "no-cache");
       },
     })
   );

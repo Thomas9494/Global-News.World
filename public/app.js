@@ -221,13 +221,19 @@ const FILL_POOL = PER_VIEW * 3;
 const ALWAYS_NEWS_ZOOM = 5;
 
 /**
- * Which page of its stories each view is showing — "New News" advances it.
+ * How far into its stories each view has been paged — "New News" advances it.
+ *
+ * An offset in *stories*, not in pages: how many fit on screen depends on the
+ * window, so a page number would start repeating or skipping the moment the
+ * reader resized between one press and the next.
+ *
  * Keyed by view, so returning to a country the reader has already paged puts
  * them back where they were instead of at the top of the pile again.
  */
 const pageByView = new Map();
 let viewKey = "";   // the view currently on screen
 let viewTotal = 0;  // how many stories it can page through
+let viewShown = 0;  // how many of them are on screen right now
 
 const viewKeyFor = (kind, name) =>
   `${kind}:${name}:${activeCat}:${query.trim().toLowerCase()}`;
@@ -235,19 +241,22 @@ const viewKeyFor = (kind, name) =>
 const pageOf = (key) => pageByView.get(key) || 0;
 
 /**
- * The slice of `list` this view is on, wrapping round at the end.
- * Also records what is on screen, which is what the "New News" button pages.
+ * The slice of `list` this view is on. Also records what is on screen, which is
+ * what the "New News" button then pages past.
  */
 function paged(list, key, size = PER_VIEW) {
   viewKey = key;
   viewTotal = list.length;
   const n = Math.max(1, size);
-  if (list.length <= n) {
+  let from = pageOf(key);
+  // the list can shrink under us — a category filter, a fresh ingest
+  if (from >= list.length) {
+    from = 0;
     pageByView.set(key, 0);
-    return list;
   }
-  const pages = Math.ceil(list.length / n);
-  return list.slice((pageOf(key) % pages) * n, (pageOf(key) % pages) * n + n);
+  const out = list.slice(from, from + n);
+  viewShown = out.length;
+  return out;
 }
 
 const esc = (s) =>
@@ -810,20 +819,87 @@ function cityInView() {
 
 /* ---- card geometry, shared by the capacity maths and the layout ---- */
 const CARD_W = 250;
-const CARD_H = 210;
 const CARD_GAP = 22;
 const TOP_PAD = 108;
 const BOT_PAD = 40;
 /** Two columns a side at most — past that the map itself has disappeared. */
 const MAX_COLS = 4;
 
+/** The design's card: a 110px image over a headline and a two-line teaser. */
+const CARD_H_MAX = 227;
+/** Below this a card is no longer a card, so the view gives up stories instead. */
+const CARD_H_MIN = 164;
+/** What the body needs under the image, with a two- and a one-line teaser. */
+const BODY_H = 117;
+const BODY_H_TIGHT = 100;
+
+/**
+ * The card height that lets a full view of ten fit in `cols` columns.
+ *
+ * Ten stories is the promise the map makes, and on a 768-tall laptop ten
+ * full-height cards simply do not fit. So the cards give up height before the
+ * map gives up stories — the image shrinks first, then the teaser drops to one
+ * line — down to a floor below which a headline stops being readable and the
+ * view honestly shows fewer.
+ *
+ * @param {number} cols  columns available
+ * @param {number} avail vertical room, one gap already added back
+ * @param {number} gap   space between rows
+ */
+function cardMetrics(cols, avail, gap = CARD_GAP) {
+  const rows = Math.max(1, Math.ceil(PER_VIEW / Math.max(1, cols)));
+  const h = Math.max(CARD_H_MIN, Math.min(CARD_H_MAX, Math.floor(avail / rows) - gap));
+  const teaser = h >= 200 ? 2 : 1;
+  return { h, img: Math.max(60, h - (teaser === 2 ? BODY_H : BODY_H_TIGHT)), teaser };
+}
+
+/**
+ * Publishes the metrics to CSS, so the cards really take that height rather
+ * than the layout believing one number while the DOM uses another.
+ */
+function applyCardMetrics(m) {
+  cardsLayer.style.setProperty("--card-h", m.h + "px");
+  cardsLayer.style.setProperty("--card-img", m.img + "px");
+  cardsLayer.style.setProperty("--card-teaser", String(m.teaser));
+}
+
+/** Breathing space between the place on the map and the nearest card. */
+const MIN_SPREAD = 24;
+const railEdge = () => 16;
+const rightEdge = () => W() - CARD_W - 84; // keep clear of the fixed zoom controls
+
+/** How many columns fit in a horizontal band, counted in whole cards. */
+const columnsIn = (room) => Math.max(0, Math.floor((room + CARD_GAP) / (CARD_W + CARD_GAP)));
+
+/**
+ * Columns available around the focus point, per side.
+ *
+ * Counted per side rather than across the window, because the cards sit either
+ * side of a place and the map has to stay visible between them. Measuring the
+ * whole width instead let a narrow window promise a column that had nowhere to
+ * go; it was clamped against the rail and landed on top of its neighbour.
+ *
+ * Measured from the middle of the screen, not from wherever the country
+ * happens to be, so the capacity maths and the layout below can never disagree
+ * about how many columns there are — the layout slides its anchor instead.
+ */
+function columnSides() {
+  const left = Math.min(2, columnsIn(W() / 2 - MIN_SPREAD - railEdge()));
+  const right = Math.min(2, columnsIn(rightEdge() + CARD_W - W() / 2 - MIN_SPREAD));
+  return { left, right, total: Math.max(1, Math.min(MAX_COLS, left + right)) };
+}
+
+const columnsThatFit = () => columnSides().total;
+
+const aroundRoom = () => H() - TOP_PAD - BOT_PAD + CARD_GAP;
+const aroundMetrics = () => cardMetrics(columnsThatFit(), aroundRoom());
+
 const cardsPerColumn = () =>
-  Math.max(1, Math.floor((H() - TOP_PAD - BOT_PAD + CARD_GAP) / (CARD_H + CARD_GAP)));
+  Math.max(1, Math.floor(aroundRoom() / (aroundMetrics().h + CARD_GAP)));
 
 /** How many cards this viewport can hold around a point, capped at a full view. */
 function cardCapacity() {
-  const cols = Math.max(2, Math.min(MAX_COLS, Math.floor((W() - 32) / (CARD_W + CARD_GAP))));
-  return Math.min(PER_VIEW, cardsPerColumn() * cols);
+  return Math.min(PER_VIEW, cardsPerColumn() * columnsThatFit());
 }
 
 function renderCards(id) {
@@ -910,24 +986,42 @@ function layoutAround(cx, cy) {
     nores.style.top = cy + 28 + "px";
   }
 
-  const railEdge = 16;
-  const rightEdge = W() - CARD_W - 84; // keep clear of the fixed zoom controls
-  const needed = Math.max(2, Math.min(MAX_COLS, Math.ceil(els.length / cardsPerColumn())));
-  const kL = Math.ceil(needed / 2);
-  const kR = needed - kL;
+  const metrics = aroundMetrics();
+  applyCardMetrics(metrics);
+  const cardH = metrics.h;
+
+  const rail = railEdge();
+  const right = rightEdge();
   const sideWidth = (k) => (k ? k * CARD_W + (k - 1) * CARD_GAP : 0);
+
+  const sides = columnSides();
+  const needed = Math.min(sides.total, Math.max(1, Math.ceil(els.length / cardsPerColumn())));
+  // Split evenly, but never ask a side for a column it has no room for.
+  let kR = Math.min(sides.right, needed - Math.min(sides.left, Math.ceil(needed / 2)));
+  const kL = Math.max(needed - kR > sides.left ? sides.left : needed - kR, 0);
+  kR = needed - kL;
+
+  /**
+   * Where the columns are hung from. Normally the place itself — but a country
+   * sitting near an edge does not leave room for its own cards, so the anchor
+   * slides inwards until both sides fit. Cards drifting off the country beats
+   * cards landing on each other.
+   */
+  const minCx = rail + sideWidth(kL) + MIN_SPREAD;
+  const maxCx = right + CARD_W - sideWidth(kR) - MIN_SPREAD;
+  const ax = maxCx >= minCx ? Math.max(minCx, Math.min(cx, maxCx)) : (minCx + maxCx) / 2;
 
   // The gap between the place and the first card, closed only as far as the
   // extra columns actually demand.
   let spread = Math.min(W() * 0.26, 380);
-  if (kL) spread = Math.min(spread, Math.max(24, cx - railEdge - sideWidth(kL)));
-  if (kR) spread = Math.min(spread, Math.max(24, rightEdge + CARD_W - cx - sideWidth(kR)));
+  if (kL) spread = Math.min(spread, Math.max(MIN_SPREAD, ax - rail - sideWidth(kL)));
+  if (kR) spread = Math.min(spread, Math.max(MIN_SPREAD, right + CARD_W - ax - sideWidth(kR)));
 
   // nearest columns first, so the stories nearest the place sit beside it
   const colX = [];
   for (let i = 0; i < Math.max(kL, kR); i++) {
-    if (i < kL) colX.push(cx - spread - CARD_W - i * (CARD_W + CARD_GAP));
-    if (i < kR) colX.push(cx + spread + i * (CARD_W + CARD_GAP));
+    if (i < kL) colX.push(ax - spread - CARD_W - i * (CARD_W + CARD_GAP));
+    if (i < kR) colX.push(ax + spread + i * (CARD_W + CARD_GAP));
   }
   const cols = colX.length;
   const perColumn = colX.map((_, c) => Math.ceil((els.length - c) / cols));
@@ -936,11 +1030,20 @@ function layoutAround(cx, cy) {
     const col = i % cols;
     const row = Math.floor(i / cols);
     const n = perColumn[col];
-    const colH = n * CARD_H + (n - 1) * CARD_GAP;
-    const start = Math.max(TOP_PAD, Math.min(cy - colH / 2, H() - BOT_PAD - colH));
-    const y = start + row * (CARD_H + CARD_GAP) + (col % 2 ? 26 : 0); // stagger the right side
-    el.style.left = Math.max(railEdge, Math.min(colX[col], rightEdge)) + "px";
-    el.style.top = Math.max(TOP_PAD, Math.min(y, H() - BOT_PAD - CARD_H)) + "px";
+    const colH = n * cardH + (n - 1) * CARD_GAP;
+    /**
+     * The stagger belongs to the column's starting point, not to each card.
+     * Added per card it survived the bottom clamp, which then pulled the last
+     * card of a staggered column back up onto the one above it — a 26px
+     * overlap that only showed on a short window, where the column already
+     * reached the floor. Folded into `start` it is simply given up when there
+     * is no room for it.
+     */
+    const stagger = col % 2 ? 26 : 0;
+    const start = Math.max(TOP_PAD, Math.min(cy - colH / 2 + stagger, H() - BOT_PAD - colH));
+    const y = start + row * (cardH + CARD_GAP);
+    el.style.left = Math.max(rail, Math.min(colX[col], right)) + "px";
+    el.style.top = Math.max(TOP_PAD, Math.min(y, H() - BOT_PAD - cardH)) + "px";
     el.style.zIndex = 20 + i;
   });
 
@@ -1045,10 +1148,20 @@ function positionCityCards() {
  * each other, and the count is capped to what the viewport can show without
  * turning into a wall of paper.
  */
+/* The topic grid spans the whole viewport rather than hugging a point. */
+const TOPIC_GAP = 16;
+const TOPIC_TOP = 108;
+const TOPIC_BOT = 24;
+const TOPIC_SIDE = 16;
+
+const topicCols = () =>
+  Math.max(1, Math.floor((W() - 2 * TOPIC_SIDE) / (CARD_W + TOPIC_GAP)));
+const topicRoom = () => H() - TOPIC_TOP - TOPIC_BOT + TOPIC_GAP;
+const topicMetrics = () => cardMetrics(topicCols(), topicRoom(), TOPIC_GAP);
+
 function topicCapacity() {
-  const cols = Math.max(1, Math.floor((W() - 32) / 272));
-  const rows = Math.max(1, Math.floor((H() - 148) / 232));
-  return Math.max(3, Math.min(cols * rows, PER_VIEW));
+  const rows = Math.max(1, Math.floor(topicRoom() / (topicMetrics().h + TOPIC_GAP)));
+  return Math.max(3, Math.min(topicCols() * rows, PER_VIEW));
 }
 
 function renderTopicCards() {
@@ -1117,16 +1230,18 @@ function renderTopicCards() {
 
 function positionTopicCards() {
   if (!topic || mqMobile.matches || !map) return;
-  const cw = 250,
-    ch = 210,
-    cellW = 266,
-    cellH = 226,
-    topPad = 108,
-    botPad = 24,
-    sidePad = 16;
+  const metrics = topicMetrics();
+  applyCardMetrics(metrics);
+  const cw = CARD_W,
+    ch = metrics.h,
+    cellW = CARD_W + TOPIC_GAP,
+    cellH = metrics.h + TOPIC_GAP,
+    topPad = TOPIC_TOP,
+    botPad = TOPIC_BOT,
+    sidePad = TOPIC_SIDE;
 
-  const cols = Math.max(1, Math.floor((W() - 2 * sidePad) / cellW));
-  const rows = Math.max(1, Math.floor((H() - topPad - botPad) / cellH));
+  const cols = topicCols();
+  const rows = Math.max(1, Math.floor(topicRoom() / cellH));
   const taken = new Set();
 
   const cells = [...cardsLayer.querySelectorAll(".newscard")].map((el) => {
@@ -1517,7 +1632,10 @@ async function showNextPage() {
   leaving.forEach((el) => el.classList.add("out"));
   if (leaving.length) await new Promise((r) => setTimeout(r, 180));
 
-  pageByView.set(viewKey, pageOf(viewKey) + 1);
+  // Advance past exactly what was on screen, and start again once the last
+  // story has been read — the button must never be a dead end.
+  const next = pageOf(viewKey) + viewShown;
+  pageByView.set(viewKey, next >= viewTotal ? 0 : next);
   refresh();
 }
 
